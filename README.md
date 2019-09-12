@@ -65,6 +65,11 @@ _Node.js_
 * 处理文件上传框架 `multipart/form-data` https://github.com/expressjs/multer
 * 开发环境工具 nodemon
 * 进程守护工具 pm2
+* 数据库连接工具 mongoose
+
+### 数据库
+
+_Mongodb_
 
 ### 服务器
 
