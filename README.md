@@ -50,6 +50,9 @@
 
 _JavaScript_
 
+* bundler webpack
+* 开发环境 webpack-dev-server
+* 测试框架 jest
 * 底层框架 react
 * ui 框架 ant.design
 * 路由框架 react-router
@@ -60,6 +63,8 @@ _Node.js_
 
 * 底层框架 Express.js
 * 处理文件上传框架 `multipart/form-data` https://github.com/expressjs/multer
+* 开发环境工具 nodemon
+* 进程守护工具 pm2
 
 ### 服务器
 
