@@ -8,6 +8,8 @@ import './app.less'
 const FILE_MAX_SIZE = 10 * 1024 * 1024
 const FILE_TYPE_ALLOWED = ['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp']
 
+const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/1.0.0/image' : '/api/1.0.0/image'
+
 function App () {
   const [fileList, setFileList] = React.useState([])
 
@@ -90,7 +92,7 @@ function App () {
               multiple
               onChange={handleChange}
               accept='.png, .jpg, .jpeg, .svg, .webp'
-              action='/api/1.0.0/image'
+              action={uploadUrl}
             >
               <p className='mt-4'>点击或者是拖拽文件到这里来上传</p>
               <small className='d-block mb-4'>允许 .png, .jpg, .jpeg, .svg, .webp 后缀的文件</small>
