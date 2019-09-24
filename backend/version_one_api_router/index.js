@@ -1,5 +1,6 @@
 const express = require('express')
 const multer = require('multer')
+const { TuChuangSpaceError } = require('./errors')
 const { FILE_MAX_SIZE, FILE_TYPE_ALLOWED, MAX_FILES } = require('../../shared/constants')
 
 const API_VERSION = '1.0.0'
@@ -8,7 +9,18 @@ const ApiRouter = express.Router()
 
 const VersionOneApiRouter = express.Router()
 
-const uploadMiddleware = multer({ dest: 'upload_images/', limits: { files: MAX_FILES, fileSize: FILE_MAX_SIZE } }).fields([
+const uploadMiddleware = multer({
+  dest: 'upload_images/',
+  limits: { files: MAX_FILES, fileSize: FILE_MAX_SIZE },
+  fileFilter: (req, file, callback) => {
+    const { mimetype } = file
+
+    if (!FILE_TYPE_ALLOWED.includes(mimetype)) {
+      callback(new TuChuangSpaceError(TuChuangSpaceError.errors.MIMETYPE_NOT_SUPPORT))
+    }
+    callback(null, true)
+  }
+}).fields([
   { name: 'images' }
 ])
 
@@ -31,6 +43,16 @@ const uploadGuardMiddleware = (req, res, next) => {
         res.statusCode = 403
         res.json({
           errorMsg: '图片尺寸超出上限'
+        })
+        return
+      } else {
+        throw new Error(error)
+      }
+    } else if (error instanceof TuChuangSpaceError) {
+      if (error.code === TuChuangSpaceError.errors.MIMETYPE_NOT_SUPPORT) {
+        res.statusCode = 403
+        res.json({
+          errorMsg: '文件格式不支持'
         })
         return
       } else {
