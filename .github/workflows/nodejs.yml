@@ -19,6 +19,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: yarn install, and test
       run: |
+        cd ./backend
+        yarn install
+        yarn run test
+        cd ../frondend
         yarn install
         yarn run test
       env:
