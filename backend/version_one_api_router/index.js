@@ -8,7 +8,7 @@ const ApiRouter = express.Router()
 
 const VersionOneApiRouter = express.Router()
 
-const uploadMiddleware = multer({ dest: 'upload_images/', limits: { files: MAX_FILES } }).fields([
+const uploadMiddleware = multer({ dest: 'upload_images/', limits: { files: MAX_FILES, fileSize: FILE_MAX_SIZE } }).fields([
   { name: 'images' }
 ])
 
@@ -25,6 +25,12 @@ const uploadGuardMiddleware = (req, res, next) => {
         res.statusCode = 403
         res.json({
           errorMsg: '图片数量超过上限'
+        })
+        return
+      } else if (error.code === 'LIMIT_FILE_SIZE') {
+        res.statusCode = 403
+        res.json({
+          errorMsg: '图片尺寸超出上限'
         })
         return
       } else {
