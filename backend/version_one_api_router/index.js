@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const multer = require('multer')
 const { TuChuangSpaceError } = require('./errors')
@@ -10,7 +11,7 @@ const ApiRouter = express.Router()
 const VersionOneApiRouter = express.Router()
 
 const uploadMiddleware = multer({
-  dest: 'upload_images/',
+  dest: path.resolve(__dirname, 'upload_images/'),
   limits: { files: MAX_FILES, fileSize: FILE_MAX_SIZE },
   fileFilter: (req, file, callback) => {
     const { mimetype } = file
@@ -71,8 +72,11 @@ VersionOneApiRouter.route('/images')
   .post(
     uploadGuardMiddleware,
     (req, res, next) => {
-      res.json({
-        length: req.files.length
+      const { images } = req.files
+      if (!images) {
+        // 抛出错误
+      }
+      images.forEach((file) => {
       })
     }
   )
