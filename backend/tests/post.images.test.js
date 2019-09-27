@@ -179,4 +179,44 @@ describe('post images 上传图片', () => {
       'eaac5508c31173165b15379f0a818988f271a2550e756e97b3a4882d2100dd13a9a48b15831ad61e42c07cc86fbe3046'
     )
   })
+
+  it('支持 .svg 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
+    const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
+    const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
+    const DELETE_PATH_CALC_KEY = 'foo'
+    const res = await request(app)
+      .post('/api/1.0.0/images')
+      .attach('images', filePath)
+    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.svg`))
+    expect(isFsExist).toEqual(true)
+    expect(res.status).toEqual(200)
+    expect(res.body).toHaveProperty('images')
+    expect(res.body.images).toHaveProperty(['svg.svg'])
+    expect(res.body.images['svg.svg'].mimetype).toEqual('image/svg+xml')
+    expect(res.body.images['svg.svg'].md5).toEqual(fileMd5)
+    expect(res.body.images['svg.svg'].fileName).toEqual(`${fileMd5}.svg`)
+    expect(res.body.images['svg.svg'].deleteKey).toEqual(
+      '19a8d1691fa874b0635ce4f259619667d1e96d30d595128485670c3316d511ad78b33f2c2d56d0197cf542b0da520ab3'
+    )
+  })
+
+  it('支持 .gif 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
+    const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+    const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+    const DELETE_PATH_CALC_KEY = 'foo'
+    const res = await request(app)
+      .post('/api/1.0.0/images')
+      .attach('images', filePath)
+    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.gif`))
+    expect(isFsExist).toEqual(true)
+    expect(res.status).toEqual(200)
+    expect(res.body).toHaveProperty('images')
+    expect(res.body.images).toHaveProperty(['gif.gif'])
+    expect(res.body.images['gif.gif'].mimetype).toEqual('image/gif')
+    expect(res.body.images['gif.gif'].md5).toEqual(fileMd5)
+    expect(res.body.images['gif.gif'].fileName).toEqual(`${fileMd5}.gif`)
+    expect(res.body.images['gif.gif'].deleteKey).toEqual(
+      'a7027a8d66a04e7c7029c2d0b2da9a7e0a8bc73bdb41d51813df34dcf4e9eb336baa02bf63aa605745e8bfecd44c3048'
+    )
+  })
 })
