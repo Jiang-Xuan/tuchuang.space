@@ -15,7 +15,6 @@ const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 
 describe('post images 上传图片', () => {
   beforeAll(async () => {
-    console.log(global.__MONGO_URI__)
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
   })
 
