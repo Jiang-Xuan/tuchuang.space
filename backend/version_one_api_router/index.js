@@ -4,16 +4,19 @@ const crypto = require('crypto')
 const { promisify } = require('util')
 const express = require('express')
 const multer = require('multer')
+const makeDir = require('make-dir')
 const { aes192Crypto } = require('../utils')
 const { TuChuangSpaceError } = require('./errors')
 const { FILE_MAX_SIZE, FILE_TYPE_ALLOWED, MAX_FILES, MIMETYPE_2_EXT } = require('../../shared/constants')
 
 const promisifyFsCopyFile = promisify(fs.copyFile)
 const promisifyFsUnlink = promisify(fs.unlink)
+const promisifyFsExists = promisify(fs.exists)
+const promisifyFsMkdir = promisify(fs.mkdir)
 
 const API_VERSION = '1.0.0'
 
-const imagesFileStorageDestFolderPath = path.resolve(__dirname, 'upload_images/')
+const imagesFileStorageDestFolderPath = path.resolve(__dirname, '../upload_images')
 
 const ApiRouter = express.Router()
 
@@ -24,7 +27,14 @@ const storage = multer.diskStorage({
     callback(null, imagesFileStorageDestFolderPath)
   },
   filename: (req, file, callback) => {
-    callback(null, `${new Date().valueOf()}-${Math.random()}${MIMETYPE_2_EXT[file.mimetype]}`)
+    const { originalname } = file
+    const extname = path.extname(originalname)
+
+    if (extname === '.jpg') {
+      callback(null, `${new Date().valueOf()}-${Math.random()}.jpg`)
+    } else {
+      callback(null, `${new Date().valueOf()}-${Math.random()}${MIMETYPE_2_EXT[file.mimetype]}`)
+    }
   }
 })
 
@@ -47,7 +57,7 @@ const uploadMiddleware = multer({
  * 上传文件的 guard 中间件
  * @param {Express.Request} req
  * @param {Express.Response} res
- * @param {require('express').NextFunction} next
+ * @param {import('express').NextFunction} next
  */
 const uploadGuardMiddleware = (req, res, next) => {
   uploadMiddleware(req, res, (error) => {
@@ -88,6 +98,15 @@ const uploadGuardMiddleware = (req, res, next) => {
 // Image 实体操作
 VersionOneApiRouter.route('/images')
   .post(
+    async (req, res, next) => {
+      const isUploadImagesExists = await promisifyFsExists(imagesFileStorageDestFolderPath)
+
+      if (isUploadImagesExists === false) {
+        await promisifyFsMkdir(imagesFileStorageDestFolderPath)
+      }
+
+      next()
+    },
     uploadGuardMiddleware,
     async (req, res, next) => {
       const { images } = req.files
@@ -107,10 +126,11 @@ VersionOneApiRouter.route('/images')
             resolve(hash.digest('hex'))
           })
         })
+        const fileExtname = path.extname(originalname) === '.jpg' ? '.jpg' : MIMETYPE_2_EXT[mimetype]
         // Step 2: 用复制的方式修改文件名
         await promisifyFsCopyFile(
           filePath,
-          path.resolve(imagesFileStorageDestFolderPath, `${fileHash}${MIMETYPE_2_EXT[mimetype]}`)
+          path.resolve(imagesFileStorageDestFolderPath, `${fileHash}${fileExtname}`)
         )
         // Step 3: 移除原来的文件
         await promisifyFsUnlink(filePath)
@@ -118,9 +138,9 @@ VersionOneApiRouter.route('/images')
         return {
           mimetype,
           md5: fileHash,
-          ext: MIMETYPE_2_EXT[mimetype],
+          ext: fileExtname,
           originalname,
-          fileName: `${fileHash}${MIMETYPE_2_EXT[mimetype]}`,
+          fileName: `${fileHash}${fileExtname}`,
           deleteKey: aes192Crypto(fileHash, 'foo')
         }
       })
