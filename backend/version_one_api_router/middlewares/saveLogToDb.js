@@ -23,7 +23,8 @@ module.exports = async function (req, res, next) {
     const newUploadImages = new UploadImages({
       createTime,
       md5,
-      originalname
+      originalname,
+      ip: req.ip.replace('::ffff:', '')
     })
 
     return newUploadImages.save()

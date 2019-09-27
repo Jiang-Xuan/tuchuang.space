@@ -244,7 +244,27 @@ describe('post images 上传图片', () => {
       expect(dbItem.md5).toEqual(fileMd5)
       expect(dbItem.createTime).toBeInstanceOf(Date)
     })
-    it.todo('上传图片的数据库记录符合数据库 modal')
+    it('上传图片的数据库记录符合数据库 modal', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+      const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+      const res = await request(app)
+        .post('/api/1.0.0/images')
+        .attach('images', filePath)
+
+      const dbItem = await UploadImages.findById(res.body.images['gif.gif']._id)
+      /**
+       * {
+       *  _id: <MongoDb Id>,
+       *  createTime: <创建时间>,
+       *  ip: <请求者的 ip>,
+       *  originalname: <上传的原始文件名>
+       * }
+       */
+      expect(dbItem.md5).toEqual(fileMd5)
+      expect(dbItem.createTime).toBeInstanceOf(Date)
+      expect(dbItem.originalname).toEqual('gif.gif')
+      expect(dbItem.ip).toEqual('127.0.0.1')
+    })
     it.todo('每 x 秒 允许上传 x 张图片')
     it.todo('每 x 小时 允许上传 x 张图片')
   })
