@@ -4,6 +4,8 @@ const fs = require('fs')
 const rimraf = require('rimraf')
 const { promisify } = require('util')
 const request = require('supertest')
+const mongoose = require('mongoose')
+const UploadImages = require('../modals/uploadImages')
 const app = require('../app')
 const promisifyFsExists = promisify(fs.exists)
 // const { MAX_FILES } = require('../../shared/constants') // 10
@@ -12,6 +14,11 @@ const promisifyFsExists = promisify(fs.exists)
 const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 
 describe('post images 上传图片', () => {
+  beforeAll(async () => {
+    console.log(global.__MONGO_URI__)
+    await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
+  })
+
   it('upload_images 目录默认不存在, 并且被 .gitignore 忽略, 所以需要在程序中判断是否要创建该目录', async () => {
     rimraf.sync(uploadImagesFolderPath)
     const filePath = path.resolve(__dirname, '../../shared/test_images/jpg.jpg')
@@ -218,5 +225,28 @@ describe('post images 上传图片', () => {
     expect(res.body.images['gif.gif'].deleteKey).toEqual(
       'a7027a8d66a04e7c7029c2d0b2da9a7e0a8bc73bdb41d51813df34dcf4e9eb336baa02bf63aa605745e8bfecd44c3048'
     )
+  })
+
+  describe('进行上传数据的存储和接口的基础鉴权', () => {
+    it('上传图片完成之后将上传记录存储至数据库', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+      const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+      const res = await request(app)
+        .post('/api/1.0.0/images')
+        .attach('images', filePath)
+
+      expect(res.body.images['gif.gif']).toHaveProperty('_id')
+      expect(typeof res.body.images['gif.gif']._id).toEqual('string')
+
+      const dbItem = await UploadImages.findById(res.body.images['gif.gif']._id)
+
+      expect(dbItem).toHaveProperty('_id')
+      expect(dbItem.originalname).toEqual('gif.gif')
+      expect(dbItem.md5).toEqual(fileMd5)
+      expect(dbItem.createTime).toBeInstanceOf(Date)
+    })
+    it.todo('上传图片的数据库记录符合数据库 modal')
+    it.todo('每 x 秒 允许上传 x 张图片')
+    it.todo('每 x 小时 允许上传 x 张图片')
   })
 })

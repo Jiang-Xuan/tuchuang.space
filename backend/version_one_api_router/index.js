@@ -5,6 +5,9 @@ const { promisify } = require('util')
 const express = require('express')
 const multer = require('multer')
 const makeDir = require('make-dir')
+const baseAuth = require('./middlewares/baseAuth')
+const saveLogToDb = require('./middlewares/saveLogToDb')
+
 const { aes192Crypto } = require('../utils')
 const { TuChuangSpaceError } = require('./errors')
 const { FILE_MAX_SIZE, FILE_TYPE_ALLOWED, MAX_FILES, MIMETYPE_2_EXT } = require('../../shared/constants')
@@ -98,6 +101,7 @@ const uploadGuardMiddleware = (req, res, next) => {
 // Image 实体操作
 VersionOneApiRouter.route('/images')
   .post(
+    baseAuth,
     async (req, res, next) => {
       const isUploadImagesExists = await promisifyFsExists(imagesFileStorageDestFolderPath)
 
@@ -153,12 +157,15 @@ VersionOneApiRouter.route('/images')
         imagesObj[originalname] = data
       })
 
-      res.json({
+      const data = {
         images: imagesObj
-      })
+      }
+
+      res.data = data
 
       next()
-    }
+    },
+    saveLogToDb
   )
 
 ApiRouter.use(`/${API_VERSION}`, VersionOneApiRouter)
