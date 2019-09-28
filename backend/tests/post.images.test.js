@@ -274,7 +274,7 @@ describe('post images 上传图片', () => {
       expect(dbItem.originalname).toEqual('gif.gif')
       expect(dbItem.ip).toEqual('127.0.0.1')
     })
-    it('每 x 秒 允许上传 x 张图片', async () => {
+    describe('每 x 秒 允许上传 x 张图片(根据 ip 限制)', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
       /*
        * mock 请求者的 ip https://stackoverflow.com/questions/16698284/testing-remote-ip-address-behaviors-on-a-node-express-server
@@ -285,20 +285,41 @@ describe('post images 上传图片', () => {
       const ip = '192.168.1.1'
       const createTime = new Date()
       const createTime2 = new Date()
-      // 插入多条数据
-      await new UploadImages({ ip, createTime }).save()
-      await new UploadImages({ ip, createTime: createTime2 }).save()
-      // 然后再发起请求, 该请求应该被拒绝
-      const res = await request(app)
-        .post('/api/1.0.0/images')
-        .attach('images', filePath)
-
-      expect(res.status).toEqual(403)
-      expect(res.body).toEqual({
-        errorMsg: '请求频率超限, 请稍后重试'
+      beforeAll(async () => {
+        // 插入多条数据
+        app.enable('trust proxy')
+        await new UploadImages({ ip, createTime }).save()
+        await new UploadImages({ ip, createTime: createTime2 }).save()
       })
-      appConfig.setSeconds(backSeconds)
+      afterAll(() => {
+        app.disable('trust proxy')
+        appConfig.setSeconds(backSeconds)
+      })
+      it('请求者为相同的 ip 进行限制', async () => {
+        // 然后再发起请求, 该请求应该被拒绝
+        const res = await request(app)
+          .post('/api/1.0.0/images')
+          .set('X-Forwarded-For', '192.168.1.1')
+          .attach('images', filePath)
+
+        expect(res.status).toEqual(403)
+        expect(res.body).toEqual({
+          errorMsg: '请求频率超限, 请稍后重试'
+        })
+      })
+      it('请求者为不同的 ip 不进行限制', async () => {
+        // 然后再发起请求, 该请求应该被拒绝
+        const res = await request(app)
+          .post('/api/1.0.0/images')
+          .set('X-Forwarded-For', '192.168.1.0')
+          .attach('images', filePath)
+
+        expect(res.status).toEqual(200)
+        // expect(res.body).toEqual()
+      })
     })
-    it.todo('每 x 小时 允许上传 x 张图片')
+    it.skip('每 x 小时 允许上传 x 张图片', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+    })
   })
 })

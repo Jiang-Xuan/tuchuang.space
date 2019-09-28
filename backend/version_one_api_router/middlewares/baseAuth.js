@@ -13,6 +13,7 @@ module.exports = async function (req, res, next) {
   const [secondsNumber, secondsAllow] = AppConfig.getSeconds()
   // console.log(secondsNumber, secondsAllow)
   const all = await UploadImages.find({
+    ip: req.ip,
     createTime: {
       $gt: new Date(now - secondsNumber * 1000)
     }
