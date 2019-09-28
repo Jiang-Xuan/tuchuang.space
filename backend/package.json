@@ -7,7 +7,7 @@
     "start": "nodemon service.js",
     "debugger": "nodemon --inspect service.js",
     "test": "jest",
-    "test:debugger": "node --inspect ./node_modules/.bin/jest",
+    "test:debugger": "node --inspect-brk ./node_modules/.bin/jest",
     "test:watch": "jest --watch"
   },
   "keywords": [],

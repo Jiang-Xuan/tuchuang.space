@@ -6,6 +6,7 @@ const { promisify } = require('util')
 const request = require('supertest')
 const mongoose = require('mongoose')
 const UploadImages = require('../modals/uploadImages')
+const appConfig = require('../config')
 const app = require('../app')
 const promisifyFsExists = promisify(fs.exists)
 // const { MAX_FILES } = require('../../shared/constants') // 10
@@ -16,6 +17,14 @@ const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 describe('post images 上传图片', () => {
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
+  })
+
+  afterAll(async () => {
+    await mongoose.disconnect()
+  })
+
+  afterEach(async () => {
+    await UploadImages.deleteMany({})
   })
 
   it('upload_images 目录默认不存在, 并且被 .gitignore 忽略, 所以需要在程序中判断是否要创建该目录', async () => {
@@ -265,7 +274,31 @@ describe('post images 上传图片', () => {
       expect(dbItem.originalname).toEqual('gif.gif')
       expect(dbItem.ip).toEqual('127.0.0.1')
     })
-    it.todo('每 x 秒 允许上传 x 张图片')
+    it('每 x 秒 允许上传 x 张图片', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+      /*
+       * mock 请求者的 ip https://stackoverflow.com/questions/16698284/testing-remote-ip-address-behaviors-on-a-node-express-server
+       */
+      // 测试: 每 60 s 允许上传 2 张图片
+      const backSeconds = appConfig.getSeconds()
+      appConfig.setSeconds([60, 2])
+      const ip = '192.168.1.1'
+      const createTime = new Date()
+      const createTime2 = new Date()
+      // 插入多条数据
+      await new UploadImages({ ip, createTime }).save()
+      await new UploadImages({ ip, createTime: createTime2 }).save()
+      // 然后再发起请求, 该请求应该被拒绝
+      const res = await request(app)
+        .post('/api/1.0.0/images')
+        .attach('images', filePath)
+
+      expect(res.status).toEqual(403)
+      expect(res.body).toEqual({
+        errorMsg: '请求频率超限, 请稍后重试'
+      })
+      appConfig.setSeconds(backSeconds)
+    })
     it.todo('每 x 小时 允许上传 x 张图片')
   })
 })
