@@ -308,7 +308,6 @@ describe('post images 上传图片', () => {
         })
       })
       it('请求者为不同的 ip 不进行限制', async () => {
-        // 然后再发起请求, 该请求应该被拒绝
         const res = await request(app)
           .post('/api/1.0.0/images')
           .set('X-Forwarded-For', '192.168.1.0')
@@ -318,8 +317,54 @@ describe('post images 上传图片', () => {
         // expect(res.body).toEqual()
       })
     })
-    it.skip('每 x 小时 允许上传 x 张图片', async () => {
+    describe('每 x 小时 允许上传 x 张图片(根据 ip 限制)', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
+      // 测试: 每 1 小时允许上传 2 张
+      const backHours = appConfig.getHours()
+      appConfig.setHours([1, 2])
+      const ip = '192.168.1.1'
+      /**
+       * 将日期按照分钟数回退
+       * @param {Date} date 日期
+       * @param {number} minutes 分钟数
+       */
+      const backMinutes = (date, minutes) => {
+        const milisecondes = minutes * 60 * 1000
+        return new Date(date.valueOf() - milisecondes)
+      }
+      const createTime = backMinutes(new Date(), 30)
+      const createTime2 = backMinutes(new Date(), 40)
+      beforeAll(async () => {
+        // 插入多条数据
+        app.enable('trust proxy')
+        await new UploadImages({ ip, createTime }).save()
+        await new UploadImages({ ip, createTime: createTime2 }).save()
+      })
+      afterAll(() => {
+        app.disable('trust proxy')
+        appConfig.setHours(backHours)
+      })
+      it('请求者为相同的 ip 进行限制', async () => {
+        // 然后再发起请求, 该请求应该被拒绝
+        const res = await request(app)
+          .post('/api/1.0.0/images')
+          .set('X-Forwarded-For', '192.168.1.1')
+          .attach('images', filePath)
+
+        expect(res.status).toEqual(403)
+        expect(res.body).toEqual({
+          errorMsg: '请求频率超限, 请稍后重试'
+        })
+      })
+      it('请求者为不同的 ip 不进行限制', async () => {
+        const res = await request(app)
+          .post('/api/1.0.0/images')
+          .set('X-Forwarded-For', '192.168.1.0')
+          .attach('images', filePath)
+
+        expect(res.status).toEqual(200)
+        // expect(res.body).toEqual()
+      })
     })
   })
 })

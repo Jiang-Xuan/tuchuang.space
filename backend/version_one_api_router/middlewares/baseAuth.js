@@ -9,21 +9,43 @@ const UploadImages = require('../../modals/uploadImages')
  */
 module.exports = async function (req, res, next) {
   // 从数据库中查询
-  const now = Date.now()
   const [secondsNumber, secondsAllow] = AppConfig.getSeconds()
-  // console.log(secondsNumber, secondsAllow)
-  const all = await UploadImages.find({
-    ip: req.ip,
-    createTime: {
-      $gt: new Date(now - secondsNumber * 1000)
-    }
-  })
-  if (all.length >= secondsAllow) {
-    res.statusCode = 403
-    res.json({
-      errorMsg: '请求频率超限, 请稍后重试'
+  const [hoursNumber, hoursAllow] = AppConfig.getHours()
+  if (secondsAllow !== 0) {
+    // seconds 限制
+    const now = Date.now()
+    // console.log(secondsNumber, secondsAllow)
+    const all = await UploadImages.find({
+      ip: req.ip,
+      createTime: {
+        $gt: new Date(now - secondsNumber * 1000)
+      }
     })
-    return
+    if (all.length >= secondsAllow) {
+      res.statusCode = 403
+      res.json({
+        errorMsg: '请求频率超限, 请稍后重试'
+      })
+      return
+    }
+  }
+
+  if (hoursAllow !== 0) {
+    // hours 限制
+    const now = Date.now()
+    const all = await UploadImages.find({
+      ip: req.ip,
+      createTime: {
+        $gt: new Date(now - hoursNumber * 60 * 60 * 1000)
+      }
+    })
+    if (all.length >= hoursAllow) {
+      res.statusCode = 403
+      res.json({
+        errorMsg: '请求频率超限, 请稍后重试'
+      })
+      return
+    }
   }
   next()
 }
