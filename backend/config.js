@@ -26,15 +26,6 @@ class AppConfig {
     return this
   }
 
-  getMinutes () {
-    return this.config.minutes
-  }
-
-  setMinutes (minutes) {
-    this.config.minutes = minutes
-    return this
-  }
-
   getHours () {
     return this.config.hours
   }
@@ -46,8 +37,7 @@ class AppConfig {
 }
 
 module.exports = new AppConfig({
-  // 请求频率限制
+  // 请求频率限制, 按照 秒 限制
   seconds: [1, 10],
-  minutes: [60, 1000],
   hours: [24, 5000]
 })
