@@ -23,6 +23,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "ali-oss": "^6.1.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "mongodb": "^3.3.2",

@@ -6,6 +6,7 @@ const express = require('express')
 const multer = require('multer')
 const makeDir = require('make-dir')
 const baseAuth = require('./middlewares/baseAuth')
+const uploadImagesToAliOss = require('./middlewares/uploadImagesToAliOss')
 const saveLogToDb = require('./middlewares/saveLogToDb')
 
 const { aes192Crypto } = require('../utils')
@@ -165,6 +166,7 @@ VersionOneApiRouter.route('/images')
 
       next()
     },
+    uploadImagesToAliOss,
     saveLogToDb
   )
 

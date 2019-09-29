@@ -4,6 +4,21 @@
 
 图床系统
 
+## 测试规范
+
+1. 测试有时候需要代码提供一些钩子, 一般不会提供给 生产环境/开发环境 使用, 方法以 `_` 开头, 比如 `post.images.test.js` 文件中对于 `config.js` 文件的测试
+
+```js
+/**
+ * 设置 oss 客户端
+ * **Notes** 该方法只提供给 e2e 测试, 一般不会在程序中调用, 所以该函数以 _ 开头
+ * @param {{}} ossClient ali-oss 客户端
+ */
+_setOssClient (ossClient) {
+  this.ossClient = ossClient
+}
+```
+
 ## Motivation
 
 1. 为了锻炼自己架构一个系统的能力

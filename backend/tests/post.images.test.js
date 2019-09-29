@@ -5,6 +5,7 @@ const rimraf = require('rimraf')
 const { promisify } = require('util')
 const request = require('supertest')
 const mongoose = require('mongoose')
+const Oss = require('ali-oss')
 const UploadImages = require('../modals/uploadImages')
 const appConfig = require('../config')
 const app = require('../app')
@@ -15,8 +16,16 @@ const promisifyFsExists = promisify(fs.exists)
 const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 
 describe('post images 上传图片', () => {
+  const testAliOssClient = new Oss({
+    region: 'oss-cn-hangzhou',
+    accessKeyId: 'LTAI4FtS842LoZriQNgbm872',
+    accessKeySecret: 's8ILS7u0C3xkAnNqSYDVgOdzzu9CFj',
+    bucket: 'tuchuang-space-test1',
+    secure: true
+  })
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
+    appConfig._setOssClient(testAliOssClient)
   })
 
   afterAll(async () => {
@@ -25,6 +34,14 @@ describe('post images 上传图片', () => {
 
   afterEach(async () => {
     await UploadImages.deleteMany({})
+    const result = await testAliOssClient.list()
+    const names = (result.objects || []).map((object) => {
+      return object.name
+    })
+
+    if (names.length) {
+      await testAliOssClient.deleteMulti(names)
+    }
   })
 
   it('upload_images 目录默认不存在, 并且被 .gitignore 忽略, 所以需要在程序中判断是否要创建该目录', async () => {
@@ -116,19 +133,6 @@ describe('post images 上传图片', () => {
     expect(res.body.images['png.png'].deleteKey).toEqual(
       'd593492065ff2885cf2d702184954621da99eec3f49fff5a0caa6d661262cf84e9b3638de6c24a222735ed17fa54371c'
     )
-    // 2019-09-26 由于暂时没有接入域名, oss 和 cdn, 暂不支持 域名, oss, cdn 断言
-    // expect(res.body).toEqual({
-    //   images: {
-    //     'png.png': {
-    //       mimetype: 'image/png',
-    //       md5: fileMd5,
-    //       fileName: `${fileMd5}.png`,
-    //       ossPath: 'https://tuchuang-space.oss-cn-hangzhou.aliyuncs.com/2e425e7fb41bb392b0a6c7245673c4cd.png',
-    //       cdnPath: 'https://images.tuchuang.space/2e425e7fb41bb392b0a6c7245673c4cd.png',
-    //       deletePath: 'https://tuchuang.space/api/1.0.0/images/d593492065ff2885cf2d702184954621da99eec3f49fff5a0caa6d661262cf84e9b3638de6c24a222735ed17fa54371c'
-    //     }
-    //   }
-    // })
   })
 
   it('支持 .webp 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
@@ -281,7 +285,7 @@ describe('post images 上传图片', () => {
        */
       // 测试: 每 60 s 允许上传 2 张图片
       const backSeconds = appConfig.getSeconds()
-      appConfig.setSeconds([60, 2])
+      appConfig._setSeconds([60, 2])
       const ip = '192.168.1.1'
       const createTime = new Date()
       const createTime2 = new Date()
@@ -293,7 +297,7 @@ describe('post images 上传图片', () => {
       })
       afterAll(() => {
         app.disable('trust proxy')
-        appConfig.setSeconds(backSeconds)
+        appConfig._setSeconds(backSeconds)
       })
       it('请求者为相同的 ip 进行限制', async () => {
         // 然后再发起请求, 该请求应该被拒绝
@@ -321,7 +325,7 @@ describe('post images 上传图片', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
       // 测试: 每 1 小时允许上传 2 张
       const backHours = appConfig.getHours()
-      appConfig.setHours([1, 2])
+      appConfig._setHours([1, 2])
       const ip = '192.168.1.1'
       /**
        * 将日期按照分钟数回退
@@ -342,7 +346,7 @@ describe('post images 上传图片', () => {
       })
       afterAll(() => {
         app.disable('trust proxy')
-        appConfig.setHours(backHours)
+        appConfig._setHours(backHours)
       })
       it('请求者为相同的 ip 进行限制', async () => {
         // 然后再发起请求, 该请求应该被拒绝
@@ -365,6 +369,17 @@ describe('post images 上传图片', () => {
         expect(res.status).toEqual(200)
         // expect(res.body).toEqual()
       })
+    })
+
+    it('接入 阿里云 oss 系统, 返回关于 oss 的链接作为 ossPath 字段', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
+      const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
+      const res = await request(app)
+        .post('/api/1.0.0/images')
+        .attach('images', filePath)
+      await testAliOssClient.get(`${fileMd5}.svg`)
+      expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
+      expect(res.body.images['svg.svg'].ossPath).toEqual(`https://tuchuang-space-test1.oss-cn-hangzhou.aliyuncs.com/${fileMd5}.svg`)
     })
   })
 })

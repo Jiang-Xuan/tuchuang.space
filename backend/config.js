@@ -1,9 +1,20 @@
-const { isArray, isNumber, isInteger } = require('lodash')
+const { isArray, isInteger } = require('lodash')
+const Oss = require('ali-oss')
 
 class AppConfig {
   /**
    *
-   * @param {{ seconds?: [number, number], minutes?: [number, number], hours?: [number, number] }} config 配置参数
+   * @param {{
+   *  seconds?: [number, number],
+   *  minutes?: [number, number],
+   *  hours?: [number, number],
+   *  alioss: {
+   *    region: string,
+   *    accessKeyId: string,
+   *    accessKeySecret: string,
+   *    bucket: string
+   *  }
+   * }} config 配置参数
    */
   constructor (config) {
     if (AppConfig.instance) {
@@ -11,8 +22,20 @@ class AppConfig {
     }
 
     this.config = config
+    this.ossClient = new Oss({
+      ...config.alioss
+    })
 
     AppConfig.instance = this
+  }
+
+  /**
+   * 设置 oss 客户端
+   * **Notes** 该方法只提供给 e2e 测试, 一般不会在程序中调用, 所以该函数以 _ 开头
+   * @param {{}} ossClient ali-oss 客户端
+   */
+  _setOssClient (ossClient) {
+    this.ossClient = ossClient
   }
 
   getSeconds () {
@@ -23,7 +46,7 @@ class AppConfig {
    *
    * @param {[number, number]} seconds
    */
-  setSeconds (seconds) {
+  _setSeconds (seconds) {
     if (seconds === undefined) {
       throw new TypeError('期望参数数量为 1 个, 得到了 0 个参数')
     }
@@ -45,7 +68,7 @@ class AppConfig {
     return this.config.hours
   }
 
-  setHours (hours) {
+  _setHours (hours) {
     if (hours === undefined) {
       throw new TypeError('期望参数数量为 1 个, 得到了 0 个参数')
     }
@@ -67,5 +90,12 @@ class AppConfig {
 module.exports = new AppConfig({
   // 请求频率限制, 按照 秒 限制
   seconds: [1, 10],
-  hours: [24, 5000]
+  hours: [24, 5000],
+  alioss: {
+    region: 'oss-cn-hangzhou',
+    accessKeyId: 'LTAI4FtS842LoZriQNgbm872',
+    accessKeySecret: 's8ILS7u0C3xkAnNqSYDVgOdzzu9CFj',
+    bucket: 'tuchuang-space',
+    secure: true
+  }
 })
