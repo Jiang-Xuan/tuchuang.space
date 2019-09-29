@@ -105,7 +105,7 @@ describe('post images 上传图片', () => {
 
   it('上传的文件命名为 [文件的 md5].[ext]', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
-    const fileMd5 = '2e425e7fb41bb392b0a6c7245673c4cd'
+    const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
@@ -117,7 +117,7 @@ describe('post images 上传图片', () => {
 
   it('支持 .png 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
-    const fileMd5 = '2e425e7fb41bb392b0a6c7245673c4cd'
+    const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/1.0.0/images')
@@ -131,13 +131,13 @@ describe('post images 上传图片', () => {
     expect(res.body.images['png.png'].md5).toEqual(fileMd5)
     expect(res.body.images['png.png'].fileName).toEqual(`${fileMd5}.png`)
     expect(res.body.images['png.png'].deleteKey).toEqual(
-      'd593492065ff2885cf2d702184954621da99eec3f49fff5a0caa6d661262cf84e9b3638de6c24a222735ed17fa54371c'
+      '2436b48115486de952296f2b5295aeb90d284761278661102e7dda990c3f67022133080fb1bcd99d7f94678a991c57f1'
     )
   })
 
   it('支持 .webp 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/webp.webp')
-    const fileMd5 = '48eb13ccd9d190f210519bed179e08ac'
+    const fileMd5 = 'a4345330c12d929089fb828a6faf1188'
     const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/1.0.0/images')
@@ -151,7 +151,7 @@ describe('post images 上传图片', () => {
     expect(res.body.images['webp.webp'].md5).toEqual(fileMd5)
     expect(res.body.images['webp.webp'].fileName).toEqual(`${fileMd5}.webp`)
     expect(res.body.images['webp.webp'].deleteKey).toEqual(
-      'bf7c65a0f3fad3bcb92d963eccd5a9456fcf4713db51697d5cbf54dfeb724602e20a81e4705297eaeceea815327faf56'
+      '5a6e6b1918ff3836a0733de79ae1d05c50411a2097b50c8e0a4342ed7b345f225cee3bded7d2a55f5a4d985c222feeb2'
     )
   })
 
@@ -181,7 +181,7 @@ describe('post images 上传图片', () => {
    */
   it('支持 .jpg 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/jpg.jpg')
-    const fileMd5 = '02ff22f42bfee2f745862ffd05facd9f'
+    const fileMd5 = 'd9d003268cd2dc9ed82ad671d168881b'
     const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/1.0.0/images')
@@ -195,7 +195,7 @@ describe('post images 上传图片', () => {
     expect(res.body.images['jpg.jpg'].md5).toEqual(fileMd5)
     expect(res.body.images['jpg.jpg'].fileName).toEqual(`${fileMd5}.jpg`)
     expect(res.body.images['jpg.jpg'].deleteKey).toEqual(
-      'eaac5508c31173165b15379f0a818988f271a2550e756e97b3a4882d2100dd13a9a48b15831ad61e42c07cc86fbe3046'
+      'c8f992f096ea480f851b73ec3ae6dc40a7f0091871703b0f33ab63db599542b81e5bdfd82b24b349a0af0a3974feea6a'
     )
   })
 
@@ -221,7 +221,7 @@ describe('post images 上传图片', () => {
 
   it('支持 .gif 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
-    const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+    const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
     const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/1.0.0/images')
@@ -235,14 +235,14 @@ describe('post images 上传图片', () => {
     expect(res.body.images['gif.gif'].md5).toEqual(fileMd5)
     expect(res.body.images['gif.gif'].fileName).toEqual(`${fileMd5}.gif`)
     expect(res.body.images['gif.gif'].deleteKey).toEqual(
-      'a7027a8d66a04e7c7029c2d0b2da9a7e0a8bc73bdb41d51813df34dcf4e9eb336baa02bf63aa605745e8bfecd44c3048'
+      'a642f37bf90cad0004b26ac14c6e4bed8cdce95b522c91e3fac28bebb74a05a71596df62585c340a2a0ac9f0ce0cb852'
     )
   })
 
   describe('进行上传数据的存储和接口的基础鉴权', () => {
     it('上传图片完成之后将上传记录存储至数据库', async () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
-      const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+      const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
       const res = await request(app)
         .post('/api/1.0.0/images')
         .attach('images', filePath)
@@ -259,7 +259,7 @@ describe('post images 上传图片', () => {
     })
     it('上传图片的数据库记录符合数据库 modal', async () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
-      const fileMd5 = '6232d3ed249ea1805a7766f416a25b69'
+      const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
       const res = await request(app)
         .post('/api/1.0.0/images')
         .attach('images', filePath)
