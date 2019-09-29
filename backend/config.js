@@ -1,3 +1,5 @@
+const { isArray, isNumber, isInteger } = require('lodash')
+
 class AppConfig {
   /**
    *
@@ -22,6 +24,19 @@ class AppConfig {
    * @param {[number, number]} seconds
    */
   setSeconds (seconds) {
+    if (seconds === undefined) {
+      throw new TypeError('期望参数数量为 1 个, 得到了 0 个参数')
+    }
+    if (!isArray(seconds)) {
+      throw new TypeError('期望 seconds 参数为数组')
+    }
+    const [secondsNumber, secondsAllow] = seconds
+    if (
+      !isInteger(secondsNumber) ||
+      !isInteger(secondsAllow)
+    ) {
+      throw new TypeError('期望参数 seconds 为数组 [integer, integer]')
+    }
     this.config.seconds = seconds
     return this
   }
@@ -31,6 +46,19 @@ class AppConfig {
   }
 
   setHours (hours) {
+    if (hours === undefined) {
+      throw new TypeError('期望参数数量为 1 个, 得到了 0 个参数')
+    }
+    if (!isArray(hours)) {
+      throw new TypeError('期望 hours 参数为数组')
+    }
+    const [hoursNumber, hoursAllow] = hours
+    if (
+      !isInteger(hoursNumber) ||
+      !isInteger(hoursAllow)
+    ) {
+      throw new TypeError('期望参数 hours 为数组 [integer, integer]')
+    }
     this.config.hours = hours
     return this
   }
