@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node devServer.js",
     "test": "npm run test:karma",
-    "test:karma": "karma start ./karma.config.js"
+    "test:karma": "karma start ./karma.config.js",
+    "test:pptr": "npm run build:development && jest --config ./pptr.jest.config.json",
+    "build:development": "webpack --config ./webpack.dev.config.js",
+    "build:production": "webpack --config ./webpack.prod.config.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +25,7 @@
     "enzyme": "^3.10.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
+    "jest-puppeteer": "^4.3.0",
     "karma": "^4.3.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -35,11 +39,13 @@
     "style-loader": "^1.0.0",
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.0",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "antd": "^3.23.2",
+    "puppeteer": "^1.20.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router": "^5.0.1"

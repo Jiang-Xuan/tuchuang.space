@@ -1,0 +1,7 @@
+{
+  "preset": "jest-puppeteer",
+  "testRegex": [
+    "./e2e/pptr.test.js"
+  ],
+  "transform": {}
+}
