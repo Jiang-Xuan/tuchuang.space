@@ -11,20 +11,21 @@ const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:430
 function App () {
   const [fileList, setFileList] = React.useState([])
 
-  const tabsPanes = fileList.map(({ url, status, name, size, type }, index) => {
+  const tabsPanes = fileList.map(({ url, status, name, size, type, response }, index) => {
     let result
     if (status === 'uploading') {
       result = <div>uploading</div>
     } else if (status === 'error') {
       result = <div>error</div>
-    } else if (status === 'success') {
+    } else if (status === 'done') {
+      const { ossPath, deleteKey } = response.images[name]
       result = (
         <>
-          <CopyInput value={`<a href="${url}"></a>`} addonBefore='HTML' />
-          <CopyInput className='mt-2' value={url} addonBefore='URL' />
-          <CopyInput className='mt-2' value={`![](${url})`} addonBefore='markdown' />
-          <CopyInput className='mt-2' value={`<img src="${url}" />`} addonBefore='image' />
-          <CopyInput className='mt-2' value={`${url}/delete`} addonBefore={<span className='text-red'>移除图片</span>} />
+          <CopyInput value={`<a href="${ossPath}"></a>`} addonBefore='HTML' />
+          <CopyInput className='mt-2' value={ossPath} addonBefore='URL' />
+          <CopyInput className='mt-2' value={`![](${ossPath})`} addonBefore='markdown' />
+          <CopyInput className='mt-2' value={`<img src="${ossPath}" />`} addonBefore='image' />
+          <CopyInput className='mt-2' value={deleteKey} addonBefore={<span className='text-red'>移除图片</span>} />
         </>
       )
     } else {
@@ -107,7 +108,7 @@ function App () {
             )}
           </div>
         </Layout.Content>
-        <Layout.Footer className='text-center'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 jiangxuan. All rights reserved.</Layout.Footer>
+        <Layout.Footer className='text-center' data-karma-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
       </Layout>
     </ConfigProvider>
   )

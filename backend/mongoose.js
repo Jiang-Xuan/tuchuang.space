@@ -8,7 +8,7 @@ module.exports.connectDb = function () {
       resolve()
       return
     }
-    mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true })
+    mongoose.connect('mongodb://localhost:3402/test', { useNewUrlParser: true })
 
     mongoose.connection.once('open', resolve)
 

@@ -95,7 +95,7 @@ module.exports = new AppConfig({
     region: 'oss-cn-hangzhou',
     accessKeyId: 'LTAI4FtS842LoZriQNgbm872',
     accessKeySecret: 's8ILS7u0C3xkAnNqSYDVgOdzzu9CFj',
-    bucket: 'tuchuang-space',
+    bucket: 'tuchuang-space-localdevelopmont',
     secure: true
   }
 })

@@ -4,7 +4,8 @@
   "description": "**beta, 还不适用于生产环境**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env KARMA_SINGLE_MODE=on npm run test:real",
+    "test:real": "cross-env-shell \"cd backend && yarn run test && cd ../frondend && yarn run test\""
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,12 @@
   },
   "homepage": "https://github.com/Jiang-Xuan/tuchuang.space#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.3",
+    "@types/enzyme": "^3.10.3",
     "@types/express": "^4.17.1",
     "@types/jest": "^24.0.18",
-    "@types/lodash": "^4.14.138"
+    "@types/lodash": "^4.14.138",
+    "@types/mocha": "^5.2.7",
+    "cross-env": "^6.0.0"
   }
 }
