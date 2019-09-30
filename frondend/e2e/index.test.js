@@ -22,6 +22,10 @@ describe('App', () => {
     expect(fileInput).to.be.an.instanceOf(window.HTMLInputElement)
   })
 
+  it('failed', () => {
+    expect(4).equal(5)
+  })
+
   it('正确的站点 copyright', () => {
     const ele = document.querySelectorAll(`[${KARMA_TEST_ID_ATTR_NAME}='SITE_COPYRIGHT']`)
     expect(ele.length).equal(1)
