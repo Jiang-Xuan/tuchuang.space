@@ -27,3 +27,4 @@ jobs:
         yarn run test
       env:
         CI: true
+        KARMA_SINGLE_MODE: on
