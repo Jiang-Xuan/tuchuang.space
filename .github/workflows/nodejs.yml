@@ -20,9 +20,11 @@ jobs:
     - name: yarn install, and test
       run: |
         cd ./backend
+        yarn cache clean
         yarn install
         yarn run test
         cd ../frondend
+        yarn cache clean
         yarn install
         yarn run test
       env:
