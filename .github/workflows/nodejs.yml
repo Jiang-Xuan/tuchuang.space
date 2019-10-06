@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: install xvfb
-      run: apt-get install xvfb
+      run: sudo apt-get install xvfb
     - name: yarn install, and test
       run: |
         cd ./backend
