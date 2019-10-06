@@ -85,7 +85,7 @@ function App () {
           </Menu>
         </Layout.Header>
         <Layout.Content className='p-5'>
-          <div className='upload'>
+          <div className='upload' data-e2e-test-id='UPLOAD_CLICK_AREA'>
             <Upload.Dragger
               beforeUpload={handleBeforeUpload}
               multiple
@@ -108,7 +108,7 @@ function App () {
             )}
           </div>
         </Layout.Content>
-        <Layout.Footer className='text-center' data-karma-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
+        <Layout.Footer className='text-center' data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
       </Layout>
     </ConfigProvider>
   )

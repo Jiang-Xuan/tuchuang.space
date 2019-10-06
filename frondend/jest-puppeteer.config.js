@@ -2,7 +2,8 @@
 module.exports = {
   launch: {
     dumpio: true,
-    headless: false
+    headless: false,
+    devtools: process.env.CI !== 'true'
   },
   browserContext: 'default'
 }

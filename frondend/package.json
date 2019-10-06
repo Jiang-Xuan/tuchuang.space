@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node devServer.js",
-    "test": "npm run test:karma",
+    "test": "npm run test:karma && npm run test:pptr",
     "test:karma": "karma start ./karma.config.js",
     "test:pptr": "npm run build:development && jest --config ./pptr.jest.config.json",
     "build:development": "webpack --config ./webpack.dev.config.js",
