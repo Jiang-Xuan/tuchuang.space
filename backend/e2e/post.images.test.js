@@ -6,6 +6,7 @@ const { promisify } = require('util')
 const request = require('supertest')
 const mongoose = require('mongoose')
 const Oss = require('ali-oss')
+const uuidV1 = require('uuid/v1')
 const UploadImages = require('../modals/uploadImages')
 const appConfig = require('../config')
 const app = require('../app')
@@ -15,6 +16,20 @@ const promisifyFsExists = promisify(fs.exists)
 
 const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 
+/**
+ * 图片名称生成器
+ * @param {string} md5 文件的 md5
+ * @param {string?} imageNameSuffix 文件名后缀
+ * @param {string} ext 文件后缀, **带有 . 字符**
+ */
+const imageNameGenerateHelper = (md5, ext, { suffix = '' }) => {
+  if (suffix !== '') {
+    return `${md5}-${suffix}${ext}`
+  } else {
+    return `${md5}${ext}`
+  }
+}
+
 describe('post images 上传图片', () => {
   const testAliOssClient = new Oss({
     region: 'oss-cn-hangzhou',
@@ -23,13 +38,18 @@ describe('post images 上传图片', () => {
     bucket: 'tuchuang-space-test1',
     secure: true
   })
+  const imageNameSuffix = uuidV1()
+  const imageNameSuffixBackup = appConfig.getImageNameSuffix()
+  console.log(`imageNameSuffix: ${imageNameSuffix}`)
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
     appConfig._setOssClient(testAliOssClient)
+    appConfig._setImageNameSuffix(imageNameSuffix)
   })
 
   afterAll(async () => {
     await mongoose.disconnect()
+    appConfig._setImageNameSuffix(imageNameSuffixBackup)
   })
 
   afterEach(async () => {
@@ -103,14 +123,16 @@ describe('post images 上传图片', () => {
     })
   })
 
-  it('上传的文件命名为 [文件的 md5].[ext]', async () => {
+  it('上传的文件命名为 [文件的 md5]-[suffix].[ext]', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
 
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.png`))
+    const isFsExist = await promisifyFsExists(
+      path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
+    )
 
     expect(isFsExist).toEqual(true)
   })
@@ -122,14 +144,18 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.png`))
+    const isFsExist = await promisifyFsExists(
+      path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
+    )
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['png.png'])
     expect(res.body.images['png.png'].mimetype).toEqual('image/png')
     expect(res.body.images['png.png'].md5).toEqual(fileMd5)
-    expect(res.body.images['png.png'].fileName).toEqual(`${fileMd5}.png`)
+    expect(res.body.images['png.png'].fileName).toEqual(
+      imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix })
+    )
     expect(res.body.images['png.png'].deleteKey).toEqual(
       '2436b48115486de952296f2b5295aeb90d284761278661102e7dda990c3f67022133080fb1bcd99d7f94678a991c57f1'
     )
@@ -142,14 +168,18 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.webp`))
+    const isFsExist = await promisifyFsExists(
+      path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.webp', { suffix: imageNameSuffix }))
+    )
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['webp.webp'])
     expect(res.body.images['webp.webp'].mimetype).toEqual('image/webp')
     expect(res.body.images['webp.webp'].md5).toEqual(fileMd5)
-    expect(res.body.images['webp.webp'].fileName).toEqual(`${fileMd5}.webp`)
+    expect(res.body.images['webp.webp'].fileName).toEqual(
+      imageNameGenerateHelper(fileMd5, '.webp', { suffix: imageNameSuffix })
+    )
     expect(res.body.images['webp.webp'].deleteKey).toEqual(
       '5a6e6b1918ff3836a0733de79ae1d05c50411a2097b50c8e0a4342ed7b345f225cee3bded7d2a55f5a4d985c222feeb2'
     )
@@ -162,14 +192,18 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.jpeg`))
+    const isFsExist = await promisifyFsExists(
+      path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.jpeg', { suffix: imageNameSuffix }))
+    )
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['jpeg.jpeg'])
     expect(res.body.images['jpeg.jpeg'].mimetype).toEqual('image/jpeg')
     expect(res.body.images['jpeg.jpeg'].md5).toEqual(fileMd5)
-    expect(res.body.images['jpeg.jpeg'].fileName).toEqual(`${fileMd5}.jpeg`)
+    expect(res.body.images['jpeg.jpeg'].fileName).toEqual(
+      imageNameGenerateHelper(fileMd5, '.jpeg', { suffix: imageNameSuffix })
+    )
     expect(res.body.images['jpeg.jpeg'].deleteKey).toEqual(
       '0e9f92caf299d793456c1428379eba1b289eff723c2611274d77c537a3b6db87499ab4edede74c331d9ff91e1c35cc8c'
     )
@@ -186,14 +220,18 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.jpg`))
+    const isFsExist = await promisifyFsExists(
+      path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.jpg', { suffix: imageNameSuffix }))
+    )
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['jpg.jpg'])
     expect(res.body.images['jpg.jpg'].mimetype).toEqual('image/jpeg')
     expect(res.body.images['jpg.jpg'].md5).toEqual(fileMd5)
-    expect(res.body.images['jpg.jpg'].fileName).toEqual(`${fileMd5}.jpg`)
+    expect(res.body.images['jpg.jpg'].fileName).toEqual(
+      imageNameGenerateHelper(fileMd5, '.jpg', { suffix: imageNameSuffix })
+    )
     expect(res.body.images['jpg.jpg'].deleteKey).toEqual(
       'c8f992f096ea480f851b73ec3ae6dc40a7f0091871703b0f33ab63db599542b81e5bdfd82b24b349a0af0a3974feea6a'
     )
@@ -206,14 +244,14 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.svg`))
+    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })))
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['svg.svg'])
     expect(res.body.images['svg.svg'].mimetype).toEqual('image/svg+xml')
     expect(res.body.images['svg.svg'].md5).toEqual(fileMd5)
-    expect(res.body.images['svg.svg'].fileName).toEqual(`${fileMd5}.svg`)
+    expect(res.body.images['svg.svg'].fileName).toEqual(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
     expect(res.body.images['svg.svg'].deleteKey).toEqual(
       '19a8d1691fa874b0635ce4f259619667d1e96d30d595128485670c3316d511ad78b33f2c2d56d0197cf542b0da520ab3'
     )
@@ -226,14 +264,14 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/1.0.0/images')
       .attach('images', filePath)
-    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, `${fileMd5}.gif`))
+    const isFsExist = await promisifyFsExists(path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.gif', { suffix: imageNameSuffix })))
     expect(isFsExist).toEqual(true)
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['gif.gif'])
     expect(res.body.images['gif.gif'].mimetype).toEqual('image/gif')
     expect(res.body.images['gif.gif'].md5).toEqual(fileMd5)
-    expect(res.body.images['gif.gif'].fileName).toEqual(`${fileMd5}.gif`)
+    expect(res.body.images['gif.gif'].fileName).toEqual(imageNameGenerateHelper(fileMd5, '.gif', { suffix: imageNameSuffix }))
     expect(res.body.images['gif.gif'].deleteKey).toEqual(
       'a642f37bf90cad0004b26ac14c6e4bed8cdce95b522c91e3fac28bebb74a05a71596df62585c340a2a0ac9f0ce0cb852'
     )
@@ -377,9 +415,11 @@ describe('post images 上传图片', () => {
       const res = await request(app)
         .post('/api/1.0.0/images')
         .attach('images', filePath)
-      await testAliOssClient.get(`${fileMd5}.svg`)
+      await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
-      expect(res.body.images['svg.svg'].ossPath).toEqual(`https://tuchuang-space-test1.oss-cn-hangzhou.aliyuncs.com/${fileMd5}.svg`)
+      expect(res.body.images['svg.svg'].ossPath).toEqual(`https://tuchuang-space-test1.oss-cn-hangzhou.aliyuncs.com/${
+        imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
+      }`)
     })
   })
 })

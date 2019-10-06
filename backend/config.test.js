@@ -57,4 +57,14 @@ describe('app config', () => {
     expect(isInteger(hoursNumber)).toEqual(true)
     expect(isInteger(hoursAllow)).toEqual(true)
   })
+
+  it('_setImageNameSuffix 函数接收 suffix 参数, 期望为字符串', () => {
+    expect(() => {
+      AppConfig._setImageNameSuffix({})
+    }).toThrow('期望 suffix 参数为字符串')
+  })
+  it('getImageNameSuffix 函数返回正确的值', () => {
+    AppConfig._setImageNameSuffix('test')
+    expect(AppConfig.getImageNameSuffix()).toEqual('test')
+  })
 })
