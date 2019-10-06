@@ -22,9 +22,9 @@ jobs:
         cd ./backend
         yarn install
         yarn run test
-        # cd ../frondend
-        # yarn install
-        # yarn run test
+        cd ../frondend
+        yarn install
+        yarn run test
       env:
         CI: true
         KARMA_SINGLE_MODE: on
