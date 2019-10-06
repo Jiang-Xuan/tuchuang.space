@@ -33,7 +33,7 @@ describe('App', () => {
       interceptedRequest.continue()
     })
   })
-  it('success', async () => {
+  it('点击 UPLOAD_CLICK_AREA 发起相应的请求', async () => {
     await page.goto(`file://${indexHtml}`, {
       waitUntil: 'domcontentloaded'
     })
@@ -45,6 +45,7 @@ describe('App', () => {
     await fileChooser.accept([path.resolve(__dirname, '../../shared/test_images/png.png')])
     const request = await imagesUploadPromise
     expect(request.method()).toEqual('POST')
+    // https://github.com/GoogleChrome/puppeteer/issues/4414
     expect(request.headers()['content-type'].includes('multipart/form-data;')).toEqual(true)
   })
 })
