@@ -29,6 +29,7 @@ jobs:
         yarn cache clean
         yarn install
         xvfb-run ./node_modules/.bin/karma start karma.config.js
+        npm run test:pptr
       env:
         CI: true
         KARMA_SINGLE_MODE: on
