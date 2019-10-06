@@ -28,7 +28,7 @@ jobs:
         cd ../frondend
         yarn cache clean
         yarn install
-        xvfb ./node_modules/.bin/karma start karma.config.js
+        xvfb-run ./node_modules/.bin/karma start karma.config.js
       env:
         CI: true
         KARMA_SINGLE_MODE: on
