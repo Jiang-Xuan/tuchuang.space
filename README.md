@@ -1,5 +1,7 @@
 # tuchuang.space
 
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 **beta, 还不适用于生产环境**
 
 图床系统
