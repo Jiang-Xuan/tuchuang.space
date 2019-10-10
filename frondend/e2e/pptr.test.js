@@ -3,7 +3,6 @@
 // 先打包
 // 在访问 index.html
 // 然后进行测试
-const child_process = require('child_process')
 const path = require('path')
 
 const indexHtml = path.resolve(__dirname, '../dist/index.html')
@@ -28,10 +27,10 @@ const TEST_ID_STORE = {
 }
 
 // !! 阻止 jest 关闭 browser
-jest.setTimeout(60000)
-function abortPageClosed () {
-  return new Promise((resolve) => setTimeout(resolve, 90000))
-}
+// jest.setTimeout(60000)
+// function abortPageClosed () {
+//   return new Promise((resolve) => setTimeout(resolve, 90000))
+// }
 // !! 阻止 jest 关闭 browser
 
 describe('上传图片时. 向 api/1.0.0/image 接口发起 POST 请求, 且请求的 content-type 为 multiple/form-data', () => {
