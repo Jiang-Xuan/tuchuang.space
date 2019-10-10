@@ -21,11 +21,11 @@ function App () {
       const { ossPath, deleteKey } = response.images[name]
       result = (
         <>
-          <CopyInput value={`<a href="${ossPath}"></a>`} addonBefore='HTML' />
-          <CopyInput className='mt-2' value={ossPath} addonBefore='URL' />
-          <CopyInput className='mt-2' value={`![](${ossPath})`} addonBefore='markdown' />
-          <CopyInput className='mt-2' value={`<img src="${ossPath}" />`} addonBefore='image' />
-          <CopyInput className='mt-2' value={deleteKey} addonBefore={<span className='text-red'>移除图片</span>} />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_HTML' value={`<a href="${ossPath}"></a>`} addonBefore='HTML' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_URL' className='mt-2' value={ossPath} addonBefore='URL' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_MARKDOWN' className='mt-2' value={`![](${ossPath})`} addonBefore='markdown' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_IMAGE' className='mt-2' value={`<img src="${ossPath}" />`} addonBefore='image' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_DELETE' className='mt-2' value={deleteKey} addonBefore={<span className='text-red'>移除图片</span>} />
         </>
       )
     } else {
@@ -38,12 +38,12 @@ function App () {
 
       if (!FILE_TYPE_ALLOWED.includes(type)) {
         errors.push(
-          <li key='类型不对'>文件类型不符合要求, 允许的文件类型为 {FILE_TYPE_ALLOWED.join(', ')}</li>
+          <li key='类型不对'>格式不正确</li>
         )
       }
       result = (
         <>
-          <div>不能上传, 原因如下:</div>
+          <div>不能上传 {name}, 原因如下:</div>
           <ul>
             {errors.length ? errors : '未知错误'}
           </ul>
@@ -98,7 +98,7 @@ function App () {
               <small className='d-block mb-4'>允许 .png, .jpg, .jpeg, .svg, .webp 后缀的文件</small>
             </Upload.Dragger>
           </div>
-          <div className='result mt-3'>
+          <div className='result mt-3' data-e2e-test-id='UPLOAD_RESULTS'>
             {tabsPanes.length ? (
               <Tabs>
                 {tabsPanes}
