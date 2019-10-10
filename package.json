@@ -17,6 +17,16 @@
   "bugs": {
     "url": "https://github.com/Jiang-Xuan/tuchuang.space/issues"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "standard && npm test"
+    }
+  },
+  "standard": {
+    "ignore": [
+      "dist/**/*"
+    ]
+  },
   "homepage": "https://github.com/Jiang-Xuan/tuchuang.space#readme",
   "devDependencies": {
     "@types/chai": "^4.2.3",
@@ -25,6 +35,8 @@
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
-    "cross-env": "^6.0.0"
+    "cross-env": "^6.0.0",
+    "husky": "^3.0.8",
+    "standard": "^14.3.1"
   }
 }

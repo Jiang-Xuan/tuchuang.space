@@ -14,9 +14,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "standard": {
-    "ignore": ["dist/**/*"]
-  },
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
@@ -38,7 +35,6 @@
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "mocha": "^6.2.1",
-    "standard": "^14.2.0",
     "style-loader": "^1.0.0",
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",

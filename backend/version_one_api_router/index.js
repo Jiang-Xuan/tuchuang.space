@@ -4,7 +4,6 @@ const crypto = require('crypto')
 const { promisify } = require('util')
 const express = require('express')
 const multer = require('multer')
-const makeDir = require('make-dir')
 const baseAuth = require('./middlewares/baseAuth')
 const uploadImagesToAliOss = require('./middlewares/uploadImagesToAliOss')
 const saveLogToDb = require('./middlewares/saveLogToDb')
@@ -16,7 +15,7 @@ const { FILE_MAX_SIZE, FILE_TYPE_ALLOWED, MAX_FILES, MIMETYPE_2_EXT } = require(
 
 const promisifyFsCopyFile = promisify(fs.copyFile)
 const promisifyFsUnlink = promisify(fs.unlink)
-const promisifyFsExists = promisify(fs.exists)
+const promisifyFsAccess = promisify(fs.access)
 const promisifyFsMkdir = promisify(fs.mkdir)
 
 const API_VERSION = '1.0.0'
@@ -105,9 +104,9 @@ VersionOneApiRouter.route('/images')
   .post(
     baseAuth,
     async (req, res, next) => {
-      const isUploadImagesExists = await promisifyFsExists(imagesFileStorageDestFolderPath)
-
-      if (isUploadImagesExists === false) {
+      try {
+        await promisifyFsAccess(imagesFileStorageDestFolderPath)
+      } catch (error) {
         await promisifyFsMkdir(imagesFileStorageDestFolderPath)
       }
 
