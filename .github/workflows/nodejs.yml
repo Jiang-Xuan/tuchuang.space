@@ -18,6 +18,7 @@ jobs:
       run: |
         cd ./backend
         dir
+        yarn --version
         yarn cache clean
         yarn install
         yarn run test
