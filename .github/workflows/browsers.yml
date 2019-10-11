@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - use: actions/checkout@v1
+    - uses: actions/checkout@v1
     - name: yarn install, test:karma, test:pptr
       run: |
         cd .\frondend
