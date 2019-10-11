@@ -17,8 +17,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: install xvfb
-      run: sudo apt-get install xvfb
+    # - name: install xvfb
+    #   run: sudo apt-get install xvfb
     - name: yarn install, and test
       run: |
         cd ./backend
@@ -28,7 +28,7 @@ jobs:
         cd ../frondend
         yarn cache clean
         yarn install
-        xvfb-run ./node_modules/.bin/karma start karma.config.js
+        ./node_modules/.bin/karma start karma.config.js
         npm run test:pptr
       env:
         CI: true
