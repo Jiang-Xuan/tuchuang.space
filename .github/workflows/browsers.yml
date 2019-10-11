@@ -15,3 +15,7 @@ jobs:
         call yarn install
         call yarn run test:karma
         call yarn run test:pptr
+      env:
+        CI: true
+        KARMA_SINGLE_MODE: on
+
