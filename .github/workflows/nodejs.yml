@@ -18,13 +18,13 @@ jobs:
       run: |
         cd ./backend
         dir
-        yarn --version
-        yarn cache clean
-        yarn install
-        yarn run test
+        call yarn --version
+        call yarn cache clean
+        call yarn install
+        call yarn run test
         cd ../frondend
-        yarn cache clean
-        yarn install
+        call yarn cache clean
+        call yarn install
         ./node_modules/.bin/karma start karma.config.js
         npm run test:pptr
       env:
