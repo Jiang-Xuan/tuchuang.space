@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
@@ -22,11 +22,11 @@ jobs:
         call yarn cache clean
         call yarn install
         call yarn run test
-        cd ../frondend
-        call yarn cache clean
-        call yarn install
-        ./node_modules/.bin/karma start karma.config.js
-        npm run test:pptr
+        # cd ../frondend
+        # call yarn cache clean
+        # call yarn install
+        # ./node_modules/.bin/karma start karma.config.js
+        # npm run test:pptr
       env:
         CI: true
         KARMA_SINGLE_MODE: on
