@@ -11,14 +11,10 @@ jobs:
     - name: yarn install, test:karma, test:pptr
       run: |
         cd .\frondend
-        call yarn cache clean
-        if errorlevel gtr 0 exit
-        call yarn install
-        if errorlevel gtr 0 exit
-        call yarn run test:karma
-        if errorlevel gtr 0 exit
-        call yarn run test:pptr
-        if errorlevel gtr 0 exit
+        call yarn cache clean || exit 1
+        call yarn install || exit 1
+        call yarn run test:karma || exit 1
+        call yarn run test:pptr || exit 1
       env:
         CI: true
         KARMA_SINGLE_MODE: on
