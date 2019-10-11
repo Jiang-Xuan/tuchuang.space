@@ -17,6 +17,7 @@ jobs:
     - name: yarn install, and test
       run: |
         cd ./backend
+        dir
         yarn cache clean
         yarn install
         yarn run test
