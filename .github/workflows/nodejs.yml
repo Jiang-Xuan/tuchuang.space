@@ -17,11 +17,10 @@ jobs:
     - name: yarn install, and test
       run: |
         cd ./backend
-        dir
-        call yarn --version
-        call yarn cache clean
-        call yarn install
-        call yarn run test
+        yarn --version
+        yarn cache clean
+        yarn install
+        yarn run test
         # cd ../frondend
         # call yarn cache clean
         # call yarn install
