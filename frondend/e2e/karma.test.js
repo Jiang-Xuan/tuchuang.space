@@ -9,7 +9,7 @@ const E2E_TEST_ID_ATTR_NAME = 'data-e2e-test-id'
 
 describe('App', () => {
   before(function () {
-    this.setTimeout(15000)
+    this.timeout(15000)
     const div = document.createElement('div')
     div.id = 'root'
     document.body.append(div)
