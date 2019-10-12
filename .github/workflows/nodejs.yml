@@ -5,15 +5,17 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node: [8.x, 10.x, 12.x]
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js 12.x
+    - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
-    # - name: install xvfb
-    #   run: sudo apt-get install xvfb
+        node-version: ${{ matrix.node }}
+    - name: install xvfb
+      run: sudo apt-get install xvfb
     - name: yarn install, and test
       run: |
         cd ./backend
@@ -21,11 +23,6 @@ jobs:
         yarn cache clean
         yarn install
         yarn run test
-        # cd ../frondend
-        # call yarn cache clean
-        # call yarn install
-        # ./node_modules/.bin/karma start karma.config.js
-        # npm run test:pptr
       env:
         CI: true
         KARMA_SINGLE_MODE: on
