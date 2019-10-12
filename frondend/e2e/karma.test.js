@@ -12,7 +12,7 @@ describe('App', () => {
     this.timeout(15000)
     const div = document.createElement('div')
     div.id = 'root'
-    document.body.append(div)
+    document.body.appendChild(div)
     ReactDom.render(<App />, div)
   })
   // after(() => {
