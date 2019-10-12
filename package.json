@@ -19,7 +19,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "standard && npm test"
+      "pre-commit": "standard"
     }
   },
   "standard": {
