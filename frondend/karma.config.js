@@ -30,7 +30,7 @@ module.exports = function (config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai'],
 
-    plugins: ['karma-mocha', 'karma-chai', 'karma-webpack', 'karma-chrome-launcher', 'karma-firefox-launcher'],
+    plugins: ['karma-mocha', 'karma-chai', 'karma-webpack', 'karma-chrome-launcher', 'karma-firefox-launcher', 'karma-ie-launcher', 'karma-safari-launcher'],
 
     // list of files / patterns to load in the browser
     files: [
