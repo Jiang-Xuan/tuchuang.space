@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Sun Sep 29 2019 18:30:42 GMT+0800 (China Standard Time)
+const os = require('os')
 const { cloneDeep } = require('lodash')
 const webpackDevConfig = cloneDeep(require('./webpack.dev.config'))
 
@@ -7,6 +8,16 @@ delete webpackDevConfig.entry
 
 function isSingleRun () {
   return process.env.KARMA_SINGLE_MODE === 'on'
+}
+
+const browsers = ['Chrome', 'Firefox']
+
+if (os.platform() === 'darwin') {
+  browsers.push('Safari')
+}
+
+if (os.platform() === 'win32') {
+  browsers.push('IE')
 }
 
 module.exports = function (config) {
@@ -59,7 +70,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'Firefox'],
+    browsers,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
