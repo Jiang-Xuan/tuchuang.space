@@ -46,5 +46,6 @@ jobs:
         cat ~/.ssh/id_rsa
     - name: deploy to beta
       run: |
+        npm install -g pm2
         pm2 deploy ecosystem.config.js beta setup
         pm2 deploy ecosystem.config.js
