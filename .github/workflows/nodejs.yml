@@ -26,3 +26,10 @@ jobs:
       env:
         CI: true
         KARMA_SINGLE_MODE: on
+  deploy-to-beta:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: deploy to beta
+      run: |
+        echo "deploy to beta"
