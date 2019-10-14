@@ -32,6 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: copy BETA_DEPLOY_SSH_PRIVATE_KEY
+      run: |
+        echo ${{ BETA_DEPLOY_SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
+    - name: test BETA_DEPLOY_SSH_PRIVATE_KEY
+      run: |
+        echo ~/.ssh/id_rsa
     - name: deploy to beta
       run: |
         echo "deploy to beta"
