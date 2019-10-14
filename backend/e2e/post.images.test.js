@@ -31,6 +31,8 @@ const imageNameGenerateHelper = (md5, ext, { suffix = '' }) => {
   }
 }
 
+jest.setTimeout(30000)
+
 describe('post images 上传图片', () => {
   const testAliOssClient = new Oss({
     region: 'oss-cn-hangzhou',
