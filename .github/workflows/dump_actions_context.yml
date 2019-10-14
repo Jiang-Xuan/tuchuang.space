@@ -1,3 +1,5 @@
+name: dump actions context
+
 on: push
 
 jobs:
