@@ -39,6 +39,7 @@ jobs:
         BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
         BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
       run: |
+        mkdir ~/.ssh
         echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
     - name: test BETA_DEPLOY_SSH_PRIVATE_KEY
       run: |
