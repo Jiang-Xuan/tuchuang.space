@@ -43,7 +43,7 @@ jobs:
         echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
     - name: test BETA_DEPLOY_SSH_PRIVATE_KEY
       run: |
-        echo ~/.ssh/id_rsa
+        cat ~/.ssh/id_rsa
     - name: deploy to beta
       run: |
         echo "deploy to beta"
