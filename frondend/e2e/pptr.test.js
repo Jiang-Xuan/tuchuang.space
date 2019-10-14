@@ -26,6 +26,7 @@ const TEST_ID_STORE = {
   UPLOAD_RESULT_DELETE: 'UPLOAD_RESULT_DELETE'
 }
 
+jest.setTimeout(30000)
 // !! 阻止 jest 关闭 browser
 // jest.setTimeout(60000)
 // function abortPageClosed () {
