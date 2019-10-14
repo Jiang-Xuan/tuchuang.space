@@ -33,8 +33,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: copy BETA_DEPLOY_SSH_PRIVATE_KEY
+      env:
+        BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ BETA_DEPLOY_SSH_PRIVATE_KEY }}
       run: |
-        echo ${{ BETA_DEPLOY_SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
+        echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
     - name: test BETA_DEPLOY_SSH_PRIVATE_KEY
       run: |
         echo ~/.ssh/id_rsa
