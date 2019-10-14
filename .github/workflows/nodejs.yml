@@ -4,6 +4,9 @@ on: [push]
 
 jobs:
   test:
+    env:
+      CI: true
+      KARMA_SINGLE_MODE: on
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,10 +26,8 @@ jobs:
         yarn cache clean
         yarn install
         yarn run test
-      env:
-        CI: true
-        KARMA_SINGLE_MODE: on
   deploy-to-beta:
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
