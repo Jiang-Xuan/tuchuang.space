@@ -27,7 +27,7 @@ jobs:
         yarn install
         yarn run test
   deploy-to-beta:
-    if: github.ref == 'feat-CD'
+    if: github.ref == 'refs/heads/feat-CD'
     needs: test
     runs-on: ubuntu-latest
     steps:
