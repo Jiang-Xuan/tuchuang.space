@@ -34,7 +34,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: copy BETA_DEPLOY_SSH_PRIVATE_KEY
       env:
-        BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ BETA_DEPLOY_SSH_PRIVATE_KEY }}
+        BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}
+        BETA_DEPLOY_USER: ${{ secrets.BETA_DEPLOY_USER }}
+        BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
+        BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
       run: |
         echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
     - name: test BETA_DEPLOY_SSH_PRIVATE_KEY
