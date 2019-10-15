@@ -41,6 +41,9 @@ jobs:
       run: |
         mkdir ~/.ssh
         echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+    - name: copy host key
+      run: |
+        echo $BETA_HOST_KEY > ~/.ssh/known_hosts
     - name: deploy to beta
       run: |
         cd ./backend
