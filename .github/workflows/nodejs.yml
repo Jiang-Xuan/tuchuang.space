@@ -50,7 +50,7 @@ jobs:
         sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
         ls -l ~/.ssh
         cat ~/.ssh/id_rsa
-        cat ~/.ssh/text.txt
+        cat ~/.ssh/test.txt
     - name: copy host key
       run: |
         echo $BETA_HOST_KEY > ~/.ssh/known_hosts
