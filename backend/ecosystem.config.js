@@ -46,7 +46,7 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: BETA_DEPLOY_PATH,
-      'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env beta'
+      'post-deploy': 'yarn install && pm2 reload ecosystem.config.js --env beta'
     }
   }
 }
