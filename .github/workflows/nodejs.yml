@@ -48,6 +48,7 @@ jobs:
         echo "foo\nbar" > ~/.ssh/test.txt
         chmod 600 ~/.ssh/id_rsa
         sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
+        sed -i -e "s/\\\\n/\n/g" ~/.ssh/test.txt
         ls -l ~/.ssh
         cat ~/.ssh/id_rsa
         cat ~/.ssh/test.txt
