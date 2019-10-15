@@ -46,8 +46,9 @@ jobs:
         mkdir ~/.ssh
         echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        sed -i -e "s#\\\\n#\n#g" ~/.ssh/id_rsa
+        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
         ls -l ~/.ssh
+        cat ~/.ssh/id_rsa
     - name: copy host key
       run: |
         echo $BETA_HOST_KEY > ~/.ssh/known_hosts
