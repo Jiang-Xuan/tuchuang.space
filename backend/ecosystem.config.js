@@ -36,7 +36,7 @@ module.exports = {
       user: 'root',
       host: '47.110.138.177',
       ref: 'origin/master',
-      repo: 'https://github.com/Jiang-Xuan/tuchuang.space.git',
+      repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: '/var/www/production',
       'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
     },
@@ -44,7 +44,7 @@ module.exports = {
       user: BETA_DEPLOY_USER,
       host: BETA_DEPLOY_HOST,
       ref: 'origin/master',
-      repo: 'https://github.com/Jiang-Xuan/tuchuang.space.git',
+      repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: BETA_DEPLOY_PATH,
       'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env beta'
     }
