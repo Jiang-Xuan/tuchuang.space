@@ -34,6 +34,7 @@ jobs:
       BETA_DEPLOY_USER: ${{ secrets.BETA_DEPLOY_USER }}
       BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
       BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
+      BETA_HOST_KEY: ${{ secrets.BETA_HOST_KEY }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
