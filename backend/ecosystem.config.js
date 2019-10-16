@@ -47,7 +47,7 @@ module.exports = {
     production: {
       user: PROD_DEPLOY_USER,
       host: PROD_DEPLOY_HOST,
-      ref: `origin/${tag}`,
+      ref: tag,
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: PROD_DEPLOY_PATH,
       'post-deploy': 'echo \'post deploy\' && cd ./backend && npx cross-env MONGOMS_DISABLE_POSTINSTALL=1 yarn install && pm2 reload ecosystem.config.js --env production'
