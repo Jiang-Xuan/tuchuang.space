@@ -14,7 +14,7 @@ const {
 } = process.env
 
 let tag = null
-if (GITHUB_REF.startsWith('refs/tags')) {
+if (GITHUB_REF && GITHUB_REF.startsWith('refs/tags')) {
   console.log('production 环境的部署')
   tag = GITHUB_REF.slice(10)
 
