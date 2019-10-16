@@ -27,7 +27,7 @@ jobs:
         yarn install
         yarn run test
   deploy-to-beta:
-    if: github.ref == 'refs/heads/feat-CD'
+    if: github.ref == 'refs/heads/master'
     needs: test
     env:
       BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}
