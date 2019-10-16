@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - test-ci
     tags-ignore:
-      - \*
+      - v*
 
 jobs:
   test:

@@ -3,7 +3,7 @@ name: deploy 到 production 环境
 on:
   push:
     tags:
-      - \*
+      - v*
 
 jobs:
   backend-test:
