@@ -3,7 +3,7 @@ name: deploy 到 beta 环境
 on:
   push:
     branches:
-      - master
+      - test-ci
 
 jobs:
   backend-test:
