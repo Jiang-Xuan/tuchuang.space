@@ -43,7 +43,7 @@ module.exports = {
     beta: {
       user: BETA_DEPLOY_USER,
       host: BETA_DEPLOY_HOST,
-      ref: 'origin/master',
+      ref: 'origin/feat-CD',
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: BETA_DEPLOY_PATH,
       'post-deploy': 'echo \'post deploy\' && cd ./backend && npx cross-env MONGOMS_DISABLE_POSTINSTALL=1 yarn install && pm2 reload ecosystem.config.js --env beta'
