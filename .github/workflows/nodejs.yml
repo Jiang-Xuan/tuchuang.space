@@ -52,3 +52,30 @@ jobs:
         cd ./backend
         sudo npm install -g pm2
         pm2 deploy ecosystem.config.js beta
+  deploy-to-prod:
+    if: startsWith(github.ref, 'refs/tags')
+    needs: test
+    env:
+      PROD_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.PROD_DEPLOY_SSH_PRIVATE_KEY }}
+      PROD_DEPLOY_USER: ${{ secrets.PROD_DEPLOY_USER }}
+      PROD_DEPLOY_PATH: ${{ secrets.PROD_DEPLOY_PATH }}
+      PROD_DEPLOY_HOST: ${{ secrets.PROD_DEPLOY_HOST }}
+      PROD_HOST_KEY: ${{ secrets.PROD_HOST_KEY }}
+      GITHUB_REF: ${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
+      run: |
+        mkdir ~/.ssh
+        echo $PROD_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
+    - name: copy host key
+      run: |
+        echo $PROD_HOST_KEY > ~/.ssh/known_hosts
+    - name: deploy to prod
+      run: |
+        cd ./backend
+        sudo npm install -g pm2
+        pm2 deploy ecosystem.config.js production

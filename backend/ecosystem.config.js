@@ -6,8 +6,20 @@
 const {
   BETA_DEPLOY_USER,
   BETA_DEPLOY_PATH,
-  BETA_DEPLOY_HOST
+  BETA_DEPLOY_HOST,
+  PROD_DEPLOY_USER,
+  PROD_DEPLOY_PATH,
+  PROD_DEPLOY_HOST,
+  GITHUB_REF
 } = process.env
+
+let tag = null
+if (GITHUB_REF.startsWith('refs/tags')) {
+  console.log('production 环境的部署')
+  tag = GITHUB_REF.slice(10)
+
+  console.log(`GITHUB_REF: ${GITHUB_REF}, tag: ${tag}`)
+}
 
 module.exports = {
   apps: [{
@@ -33,12 +45,12 @@ module.exports = {
 
   deploy: {
     production: {
-      user: 'root',
-      host: '47.110.138.177',
-      ref: 'origin/master',
+      user: PROD_DEPLOY_USER,
+      host: PROD_DEPLOY_HOST,
+      ref: `origin/${tag}`,
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
-      path: '/var/www/production',
-      'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
+      path: PROD_DEPLOY_PATH,
+      'post-deploy': 'echo \'post deploy\' && cd ./backend && npx cross-env MONGOMS_DISABLE_POSTINSTALL=1 yarn install && pm2 reload ecosystem.config.js --env production'
     },
     beta: {
       user: BETA_DEPLOY_USER,
