@@ -25,7 +25,8 @@ module.exports = {
   apps: [{
     name: 'tuchuang.space',
     script: 'service.js',
-
+    // https://github.com/Unitech/pm2/pull/2650
+    append_env_to_name: true,
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     // args: 'one two',
     instances: 1,
@@ -36,10 +37,12 @@ module.exports = {
       NODE_ENV: 'development'
     },
     env_production: {
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
+      PORT: 4300
     },
     env_beta: {
-      NODE_ENV: 'beta'
+      NODE_ENV: 'beta',
+      PORT: 4301
     }
   }],
 
