@@ -5,7 +5,7 @@ on:
     branchs-ignore:
       - master
     tags-ignore:
-      - *
+      - \*
 
 jobs:
   windows-browsers:

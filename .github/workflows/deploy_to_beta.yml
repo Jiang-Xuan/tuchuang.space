@@ -2,7 +2,7 @@ name: deploy 到 beta 环境
 
 on:
   push:
-    branchs:
+    branches:
       - master
 
 jobs:

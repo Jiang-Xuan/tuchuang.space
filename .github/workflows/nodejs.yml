@@ -2,7 +2,7 @@ name: backend 测试
 
 on:
   push:
-    branchs-ignore:
+    branches-ignore:
       - master
     tags-ignore:
       - *
