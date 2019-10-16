@@ -1,6 +1,11 @@
-name: Node CI
+name: backend 测试
 
-on: [push]
+on:
+  push:
+    branchs-ignore:
+      - master
+    tags-ignore:
+      - *
 
 jobs:
   test:
@@ -26,56 +31,3 @@ jobs:
         yarn cache clean
         yarn install
         yarn run test
-  deploy-to-beta:
-    if: github.ref == 'refs/heads/master'
-    needs: test
-    env:
-      BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}
-      BETA_DEPLOY_USER: ${{ secrets.BETA_DEPLOY_USER }}
-      BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
-      BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
-      BETA_HOST_KEY: ${{ secrets.BETA_HOST_KEY }}
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: copy BETA_DEPLOY_SSH_PRIVATE_KEY
-      run: |
-        mkdir ~/.ssh
-        echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
-    - name: copy host key
-      run: |
-        echo $BETA_HOST_KEY > ~/.ssh/known_hosts
-    - name: deploy to beta
-      run: |
-        cd ./backend
-        sudo npm install -g pm2
-        pm2 deploy ecosystem.config.js beta
-  deploy-to-prod:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: test
-    env:
-      PROD_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.PROD_DEPLOY_SSH_PRIVATE_KEY }}
-      PROD_DEPLOY_USER: ${{ secrets.PROD_DEPLOY_USER }}
-      PROD_DEPLOY_PATH: ${{ secrets.PROD_DEPLOY_PATH }}
-      PROD_DEPLOY_HOST: ${{ secrets.PROD_DEPLOY_HOST }}
-      PROD_HOST_KEY: ${{ secrets.PROD_HOST_KEY }}
-      GITHUB_REF: ${{ github.ref }}
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
-      run: |
-        mkdir ~/.ssh
-        echo $PROD_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
-    - name: copy host key
-      run: |
-        echo $PROD_HOST_KEY > ~/.ssh/known_hosts
-    - name: deploy to prod
-      run: |
-        cd ./backend
-        sudo npm install -g pm2
-        pm2 deploy ecosystem.config.js production

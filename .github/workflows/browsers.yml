@@ -1,6 +1,11 @@
 name: frondend 测试
 
-on: [push]
+on:
+  push:
+    branchs-ignore:
+      - master
+    tags-ignore:
+      - *
 
 jobs:
   windows-browsers:

@@ -1,0 +1,72 @@
+name: deploy 到 production 环境
+
+on:
+  push:
+    tags:
+      - *
+
+jobs:
+  backend-test:
+    env:
+      CI: true
+      KARMA_SINGLE_MODE: on
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [8.x, 10.x, 12.x]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - name: install xvfb
+      run: sudo apt-get install xvfb
+    - name: yarn install, and test
+      run: |
+        cd ./backend
+        yarn --version
+        yarn cache clean
+        yarn install
+        yarn run test
+  frondend-test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: yarn install, test:karma, test:pptr
+      run: |
+        cd .\frondend
+        call yarn cache clean || exit 1
+        call yarn install || exit 1
+        call yarn run test:karma || exit 1
+        call yarn run test:pptr || exit 1
+      env:
+        CI: true
+        KARMA_SINGLE_MODE: on
+  deploy-to-prod:
+    needs: backend-test
+    env:
+      PROD_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.PROD_DEPLOY_SSH_PRIVATE_KEY }}
+      PROD_DEPLOY_USER: ${{ secrets.PROD_DEPLOY_USER }}
+      PROD_DEPLOY_PATH: ${{ secrets.PROD_DEPLOY_PATH }}
+      PROD_DEPLOY_HOST: ${{ secrets.PROD_DEPLOY_HOST }}
+      PROD_HOST_KEY: ${{ secrets.PROD_HOST_KEY }}
+      GITHUB_REF: ${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
+      run: |
+        mkdir ~/.ssh
+        echo $PROD_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
+    - name: copy host key
+      run: |
+        echo $PROD_HOST_KEY > ~/.ssh/known_hosts
+    - name: deploy to prod
+      run: |
+        cd ./backend
+        sudo npm install -g pm2
+        pm2 deploy ecosystem.config.js production
