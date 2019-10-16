@@ -53,7 +53,7 @@ jobs:
         sudo npm install -g pm2
         pm2 deploy ecosystem.config.js beta
   deploy-to-prod:
-    if: startsWith(github.ref, 'refs')
+    if: startsWith(github.ref, 'refs/tags')
     needs: test
     env:
       PROD_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.PROD_DEPLOY_SSH_PRIVATE_KEY }}
