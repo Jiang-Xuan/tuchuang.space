@@ -59,15 +59,7 @@ module.exports = {
       ref: 'origin/test-ci',
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: BETA_DEPLOY_PATH,
-      'post-deploy': `
-        echo 'post deploy' &&
-        cd ./frondend &&
-        yarn install &&
-        yarn run build:prod &&
-        node publish.js &&
-        cp ./dist/index.html ./bff/index.html &&
-        pm2 reload ecosystem.config.js --env beta
-      `
+      'post-deploy': 'echo \'post deploy\' && cd ./frondend && yarn install && yarn run build:prod && node publish.js && cp ./dist/index.html ./bff/index.html && pm2 reload ecosystem.config.js --env beta'
     }
   }
 }
