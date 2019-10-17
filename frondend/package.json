@@ -48,6 +48,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "ali-oss": "^6.1.1",
     "antd": "^3.23.2",
     "express": "^4.17.1",
     "puppeteer": "^1.20.0",

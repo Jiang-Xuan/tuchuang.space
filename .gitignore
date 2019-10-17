@@ -67,4 +67,4 @@ db
 dist
 
 # 前端中间层的 index.html 文件
-./frondend/bff/index.html
+frondend/bff/index.html
