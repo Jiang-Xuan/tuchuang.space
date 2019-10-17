@@ -5,6 +5,13 @@ on:
     branches:
       - test-ci
 
+env:
+  BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}
+  BETA_DEPLOY_USER: ${{ secrets.BETA_DEPLOY_USER }}
+  BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
+  BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
+  BETA_HOST_KEY: ${{ secrets.BETA_HOST_KEY }}
+
 jobs:
   backend-test:
     env:
@@ -46,12 +53,6 @@ jobs:
         KARMA_SINGLE_MODE: on
   deploy-backend-to-beta:
     needs: backend-test
-    env:
-      BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}
-      BETA_DEPLOY_USER: ${{ secrets.BETA_DEPLOY_USER }}
-      BETA_DEPLOY_PATH: ${{ secrets.BETA_DEPLOY_PATH }}
-      BETA_DEPLOY_HOST: ${{ secrets.BETA_DEPLOY_HOST }}
-      BETA_HOST_KEY: ${{ secrets.BETA_HOST_KEY }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -67,5 +68,24 @@ jobs:
     - name: deploy to beta
       run: |
         cd ./backend
+        sudo npm install -g pm2
+        pm2 deploy ecosystem.config.js beta
+  deploy-frondend-to-beta:
+    needs: [deploy-backend-to-beta, frondend-test]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: copy BETA_DEPLOY_SSH_PRIVATE_KEY
+      run: |
+        mkdir ~/.ssh
+        echo $BETA_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        sed -i -e "s/\\\\n/\n/g" ~/.ssh/id_rsa
+    - name: copy host key
+      run: |
+        echo $BETA_HOST_KEY > ~/.ssh/known_hosts
+    - name: deploy to beta
+      run: |
+        cd ./frondend
         sudo npm install -g pm2
         pm2 deploy ecosystem.config.js beta
