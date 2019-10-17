@@ -108,6 +108,7 @@ jobs:
       run: |
         cd ./frondend
         sudo npm install -g pm2
+        sudo yarn install
         sudo yarn run build:production
         node ./publish.js
         pm2 deploy ecosystem.config.js beta
