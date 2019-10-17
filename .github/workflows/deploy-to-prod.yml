@@ -3,7 +3,7 @@ name: deploy 到 production 环境
 on:
   push:
     tags:
-      - \*
+      - v*
 
 jobs:
   backend-test:
@@ -58,6 +58,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
       run: |
+        echo test
         mkdir ~/.ssh
         echo $PROD_DEPLOY_SSH_PRIVATE_KEY > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
