@@ -19,7 +19,7 @@ if (buildPathState.isDirectory() === false) {
 }
 
 /**
- * 上传目录下所有文件, 忽略 .html 后缀文件
+ * 上传目录下所有文件
  * @param {string} dir 目录路径
  */
 const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve()) => {
@@ -34,9 +34,6 @@ const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve())
     } else if (
       fs.statSync(childPath).isFile()
     ) {
-      if (path.extname(child) === '.html') {
-        return console.log(`Skip ${childPath}`)
-      }
       exector = exector.then(async () => {
         console.log(`开始上传文件 ${childPath}`)
         await client.put(`${ossDir}/${child}`, fs.createReadStream(childPath))

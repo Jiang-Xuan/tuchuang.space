@@ -63,9 +63,6 @@ module.exports = {
         'echo \'post deploy\'',
         'cd ./frondend',
         'yarn install',
-        // 'yarn run build:production',
-        // 'node publish.js',
-        // 'cp ./dist/index.html ./bff/index.html',
         'pm2 reload ecosystem.config.js --env beta'
       ].join(' && ')
     }
