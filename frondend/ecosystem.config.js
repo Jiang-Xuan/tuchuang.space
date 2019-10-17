@@ -63,6 +63,7 @@ module.exports = {
         'echo \'post deploy\'',
         'cd ./frondend',
         'yarn install',
+        'node ./downloadIndexHtml.js',
         'pm2 reload ecosystem.config.js --env beta'
       ].join(' && ')
     }
