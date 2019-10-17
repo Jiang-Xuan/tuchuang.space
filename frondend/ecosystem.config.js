@@ -51,7 +51,13 @@ module.exports = {
       ref: tag,
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: PROD_DEPLOY_PATH,
-      'post-deploy': 'echo \'post deploy\' && cd ./frondend && yarn install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy': [
+        'echo \'post deploy\'',
+        'cd ./frondend',
+        'yarn install',
+        'node ./downloadIndexHtml.js',
+        'pm2 reload ecosystem.config.js --env production'
+      ].join(' && ')
     },
     beta: {
       user: BETA_DEPLOY_USER,
@@ -63,7 +69,7 @@ module.exports = {
         'echo \'post deploy\'',
         'cd ./frondend',
         'yarn install',
-        'node ./downloadIndexHtml.js',
+        'npx cross-env DEPLOY_TYPE=beta node ./downloadIndexHtml.js',
         'pm2 reload ecosystem.config.js --env beta'
       ].join(' && ')
     }
