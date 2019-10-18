@@ -3,7 +3,7 @@ name: deploy 到 beta 环境
 on:
   push:
     branches:
-      - test-ci
+      - master
 
 env:
   BETA_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.BETA_DEPLOY_SSH_PRIVATE_KEY }}

@@ -62,7 +62,7 @@ module.exports = {
     beta: {
       user: BETA_DEPLOY_USER,
       host: BETA_DEPLOY_HOST,
-      ref: 'origin/test-ci',
+      ref: 'origin/master',
       repo: 'git@github.com:Jiang-Xuan/tuchuang.space.git',
       path: BETA_DEPLOY_PATH,
       'post-deploy': [
