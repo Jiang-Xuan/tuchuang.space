@@ -1,5 +1,15 @@
 /* eslint-env jest */
 const path = require('path')
+/**
+ * @type {boolean}
+ * @description 是否在 CI 环境
+ */
+const isInCi = process.env.CI === 'true'
+
+if (!isInCi) {
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
+}
+
 const fs = require('fs')
 const rimraf = require('rimraf')
 const { promisify } = require('util')
@@ -36,8 +46,8 @@ jest.setTimeout(30000)
 describe('post images 上传图片', () => {
   const testAliOssClient = new Oss({
     region: 'oss-cn-hangzhou',
-    accessKeyId: 'LTAI4FtS842LoZriQNgbm872',
-    accessKeySecret: 's8ILS7u0C3xkAnNqSYDVgOdzzu9CFj',
+    accessKeyId: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID,
+    accessKeySecret: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET,
     bucket: 'tuchuang-space-test1',
     secure: true
   })
