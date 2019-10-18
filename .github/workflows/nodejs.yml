@@ -1,9 +1,17 @@
-name: Node CI
+name: backend 测试
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - master
+    tags-ignore:
+      - v*
 
 jobs:
   test:
+    env:
+      CI: true
+      KARMA_SINGLE_MODE: on
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,6 +31,3 @@ jobs:
         yarn cache clean
         yarn install
         yarn run test
-      env:
-        CI: true
-        KARMA_SINGLE_MODE: on
