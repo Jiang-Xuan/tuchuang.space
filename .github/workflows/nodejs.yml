@@ -12,6 +12,8 @@ jobs:
     env:
       CI: true
       KARMA_SINGLE_MODE: on
+      BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID: ${{ secrets.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID }}
+      BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
