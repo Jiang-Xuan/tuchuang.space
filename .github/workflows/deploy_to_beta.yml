@@ -121,6 +121,6 @@ jobs:
         cd ./frondend
         sudo npm install -g pm2
         sudo yarn install
-        sudo yarn run build:production
+        sudo npx cross-env DEPLOY_TYPE=beta yarn run build:production
         npx cross-env DEPLOY_TYPE=beta node ./publish.js
         pm2 deploy ecosystem.config.js beta

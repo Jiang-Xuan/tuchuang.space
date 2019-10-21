@@ -5,7 +5,9 @@ const { DEPLOY_TYPE } = process.env
 
 const publicPath = DEPLOY_TYPE === 'beta'
   ? 'https://beta-assets-tuchuang-space.oss-cn-hangzhou.aliyuncs.com'
-  : 'assets-tuchuang-space.oss-cn-hangzhou.aliyuncs.com'
+  : 'https://assets-tuchuang-space.oss-cn-hangzhou.aliyuncs.com'
+
+console.log(`webpack.prod.config.js  当前发布静态资源的环境为: DEPLOY_TYPE: ${DEPLOY_TYPE}, publicPath: ${publicPath}`)
 
 const webpackDevConfig = {
   devtool: 'source-map',
