@@ -1,4 +1,14 @@
 /* eslint-env jest */
+const path = require('path')
+/**
+ * @type {boolean}
+ * @description 是否在 CI 环境
+ */
+const isInCi = process.env.CI === 'true'
+
+if (!isInCi) {
+  require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+}
 const { isInteger } = require('lodash')
 const AppConfig = require('./config')
 

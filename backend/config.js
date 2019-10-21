@@ -110,8 +110,8 @@ module.exports = new AppConfig({
   hours: [24, 5000],
   alioss: {
     region: 'oss-cn-hangzhou',
-    accessKeyId: 'LTAI4FtS842LoZriQNgbm872',
-    accessKeySecret: 's8ILS7u0C3xkAnNqSYDVgOdzzu9CFj',
+    accessKeyId: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID,
+    accessKeySecret: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET,
     bucket: 'tuchuang-space-localdevelopmont',
     secure: true
   }
