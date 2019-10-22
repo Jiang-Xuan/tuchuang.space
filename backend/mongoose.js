@@ -15,6 +15,8 @@ if (NODE_ENV === 'beta') {
   dbPath = 'mongodb://localhost:3402/test'
 }
 
+console.log(`mongoose.js dbPath: ${dbPath}, NODE_ENV: ${NODE_ENV}`)
+
 module.exports.connectDb = function () {
   return new Promise((resolve, reject) => {
     const readyState = mongoose.connection.readyState
