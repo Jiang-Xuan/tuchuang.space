@@ -18,13 +18,13 @@ function App () {
     } else if (status === 'error') {
       result = <div>error</div>
     } else if (status === 'done') {
-      const { ossPath, deleteKey } = response.images[name]
+      const { deleteKey, cdnPath } = response.images[name]
       result = (
         <>
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_HTML' value={`<a href="${ossPath}"></a>`} addonBefore='HTML' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_URL' className='mt-2' value={ossPath} addonBefore='URL' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_MARKDOWN' className='mt-2' value={`![](${ossPath})`} addonBefore='markdown' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_IMAGE' className='mt-2' value={`<img src="${ossPath}" />`} addonBefore='image' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_HTML' value={`<a href="${cdnPath}"></a>`} addonBefore='HTML' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_URL' className='mt-2' value={cdnPath} addonBefore='URL' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_MARKDOWN' className='mt-2' value={`![](${cdnPath})`} addonBefore='markdown' />
+          <CopyInput data-e2e-test-id='UPLOAD_RESULT_IMAGE' className='mt-2' value={`<img src="${cdnPath}" />`} addonBefore='image' />
           <CopyInput data-e2e-test-id='UPLOAD_RESULT_DELETE' className='mt-2' value={deleteKey} addonBefore={<span className='text-red'>移除图片</span>} />
         </>
       )

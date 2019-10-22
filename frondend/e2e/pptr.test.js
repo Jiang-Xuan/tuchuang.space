@@ -130,6 +130,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
                 md5: '637e2ee416a2de90cf6e76b6f4cc8c89',
                 filename: 'test-test.png',
                 ossPath: 'http://example.com/test-test.png',
+                cdnPath: 'https://i.tuchuang.space/test.png',
                 deleteKey: '2436b48115486de952296f2b5295aeb90d284761278661102e7dda990c3f67022133080fb1bcd99d7f94678a991c57f1'
               }
             }
@@ -154,7 +155,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     const inputValue = await input.getProperty('value')
     const inputValueJsonValue = await inputValue.jsonValue()
 
-    expect(inputValueJsonValue).toEqual('<a href="http://example.com/test-test.png"></a>')
+    expect(inputValueJsonValue).toEqual('<a href="https://i.tuchuang.space/test.png"></a>')
   })
 
   it('url 数据', async () => {
@@ -162,7 +163,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     const inputValue = await input.getProperty('value')
     const inputValueJsonValue = await inputValue.jsonValue()
 
-    expect(inputValueJsonValue).toEqual('http://example.com/test-test.png')
+    expect(inputValueJsonValue).toEqual('https://i.tuchuang.space/test.png')
   })
 
   it('markdown 数据', async () => {
@@ -170,7 +171,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     const inputValue = await input.getProperty('value')
     const inputValueJsonValue = await inputValue.jsonValue()
 
-    expect(inputValueJsonValue).toEqual('![](http://example.com/test-test.png)')
+    expect(inputValueJsonValue).toEqual('![](https://i.tuchuang.space/test.png)')
   })
 
   it('image 数据', async () => {
@@ -178,7 +179,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     const inputValue = await input.getProperty('value')
     const inputValueJsonValue = await inputValue.jsonValue()
 
-    expect(inputValueJsonValue).toEqual('<img src="http://example.com/test-test.png" />')
+    expect(inputValueJsonValue).toEqual('<img src="https://i.tuchuang.space/test.png" />')
   })
 
   it('deleteKey 数据', async () => {
