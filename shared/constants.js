@@ -13,3 +13,6 @@ module.exports.MIMETYPE_2_EXT = {
 }
 /** @type {10} 允许一次上传的文件的最大数量 */
 module.exports.MAX_FILES = 10
+
+/** @type {'i.tuchuang.space'} cdn 的域名 */
+module.exports.CDN_DOMAIN = 'i.tuchuang.space'
