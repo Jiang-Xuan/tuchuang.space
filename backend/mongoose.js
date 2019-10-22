@@ -6,10 +6,10 @@ let dbPath
 
 if (NODE_ENV === 'beta') {
   // beta 环境
-  dbPath = 'mongodb://localhost:27017/beta.tuchuang.space'
+  dbPath = 'mongodb://localhost:27017/beta-tuchuang-space'
 } else if (NODE_ENV === 'production') {
   // 生产环境
-  dbPath = 'mongodb://localhost:27017/tuchuang.space'
+  dbPath = 'mongodb://localhost:27017/tuchuang-space'
 } else {
   // 本地开发环境
   dbPath = 'mongodb://localhost:3402/test'
