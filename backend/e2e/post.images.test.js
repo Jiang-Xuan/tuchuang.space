@@ -457,5 +457,18 @@ describe('post images 上传图片', () => {
         imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
       }`)
     })
+
+    it('接入 阿里云 cdn 系统, 返回关于 cdn 的链接作为 cdnPath 字段', async () => {
+      const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
+      const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
+      const res = await request(app)
+        .post('/api/1.0.0/images')
+        .attach('images', filePath)
+      await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
+      expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
+      expect(res.body.images['svg.svg'].cdnPath).toEqual(`https://i.tuchuang.space/${
+        imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
+      }`)
+    })
   })
 })

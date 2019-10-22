@@ -1,5 +1,6 @@
 const path = require('path')
 const appConfig = require('../../config')
+const { CDN_DOMAIN } = require('../../../shared/constants')
 /**
  * 上传图片至 ali oss
  * @param {Express.Request}
@@ -28,7 +29,8 @@ const uploadImagesToAliOss = async function (req, res, next) {
       ...curr,
       [imageName]: {
         ...images[imageName],
-        ossPath: ossData.url
+        ossPath: ossData.url,
+        cdnPath: `https://${CDN_DOMAIN}/${fileName}`
       }
     }
   }, {})
