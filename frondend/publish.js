@@ -47,7 +47,7 @@ const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve())
       exector = exector.then(async () => {
         console.log(`开始分片上传文件 ${childPath}`)
         const progress = async (percentage, checkpoint, res) => {
-          console.log(`percentage: ${percentage}, checkpoint: ${checkpoint}, res: ${JSON.stringify(res)}`)
+          console.log(`percentage: ${percentage * 100}%, checkpoint: ${JSON.stringify(checkpoint)}, res: ${JSON.stringify(res)}`)
         }
         await client.multipartUpload(`${ossDir}/${child}`, childPath, {
           progress,
