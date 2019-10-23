@@ -1,6 +1,21 @@
 const path = require('path')
 const appConfig = require('../../config')
-const { CDN_DOMAIN } = require('../../../shared/constants')
+const { CDN_DOMAIN, BETA_CDN_DOMAIN, LOCAL_DEVELOPMENT_CDN_DOMAIN, TEST_CDN_DOMAIN } = require('../../../shared/constants')
+const { DEPOLY_TYPE, NODE_ENV } = process.env
+
+let cdnDomain
+
+if (DEPOLY_TYPE === 'beta') {
+  cdnDomain = BETA_CDN_DOMAIN
+} else if (DEPOLY_TYPE === 'production') {
+  cdnDomain = CDN_DOMAIN
+} else {
+  cdnDomain = LOCAL_DEVELOPMENT_CDN_DOMAIN
+}
+
+if (NODE_ENV === 'test') {
+  cdnDomain = TEST_CDN_DOMAIN
+}
 /**
  * 上传图片至 ali oss
  * @param {Express.Request}
@@ -30,7 +45,7 @@ const uploadImagesToAliOss = async function (req, res, next) {
       [imageName]: {
         ...images[imageName],
         ossPath: ossData.url,
-        cdnPath: `https://${CDN_DOMAIN}/${fileName}`
+        cdnPath: `https://${cdnDomain}/${fileName}`
       }
     }
   }, {})

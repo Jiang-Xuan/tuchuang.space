@@ -466,7 +466,7 @@ describe('post images 上传图片', () => {
         .attach('images', filePath)
       await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
-      expect(res.body.images['svg.svg'].cdnPath).toEqual(`https://i.tuchuang.space/${
+      expect(res.body.images['svg.svg'].cdnPath).toEqual(`https://test.i.tuchuang.space/${
         imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
       }`)
     })

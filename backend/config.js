@@ -104,6 +104,20 @@ class AppConfig {
   }
 }
 
+const {
+  DEPLOY_TYPE
+} = process.env
+
+let bucketName
+
+if (DEPLOY_TYPE === 'beta') {
+  bucketName = 'tuchuang-space-beta'
+} else if (DEPLOY_TYPE === 'production') {
+  bucketName = 'tuchuang-space'
+} else {
+  bucketName = 'tuchuang-space-localdevelopmont'
+}
+
 module.exports = new AppConfig({
   // 请求频率限制, 按照 秒 限制
   seconds: [1, 10],
@@ -112,7 +126,7 @@ module.exports = new AppConfig({
     region: 'oss-cn-hangzhou',
     accessKeyId: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID,
     accessKeySecret: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET,
-    bucket: 'tuchuang-space-localdevelopmont',
+    bucket: bucketName,
     secure: true
   }
 })

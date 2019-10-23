@@ -16,3 +16,9 @@ module.exports.MAX_FILES = 10
 
 /** @type {'i.tuchuang.space'} cdn 的域名 */
 module.exports.CDN_DOMAIN = 'i.tuchuang.space'
+/** @type {'beta.i.tuchuang.space'} beta 环境 cdn 的域名 */
+module.exports.BETA_CDN_DOMAIN = 'beta.i.tuchuang.space'
+/** @type {'localdevelopment.i.tuchuang.space'} localdevelopment 环境 cdn 的域名 */
+module.exports.LOCAL_DEVELOPMENT_CDN_DOMAIN = 'localdevelopment.i.tuchuang.space'
+/** @type {'test.i.tuchuang.space'} 测试环境 cdn 的域名 */
+module.exports.TEST_CDN_DOMAIN = 'test.i.tuchuang.space'
