@@ -102,14 +102,14 @@ class AppConfig {
 }
 
 const {
-  DEPLOY_TYPE
+  NODE_ENV
 } = process.env
 
 let bucketName
 
-if (DEPLOY_TYPE === 'beta') {
+if (NODE_ENV === 'beta') {
   bucketName = 'tuchuang-space-beta'
-} else if (DEPLOY_TYPE === 'production') {
+} else if (NODE_ENV === 'production') {
   bucketName = 'tuchuang-space'
 } else {
   bucketName = 'tuchuang-space-localdevelopmont'
