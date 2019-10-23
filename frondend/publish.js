@@ -45,8 +45,15 @@ const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve())
       fs.statSync(childPath).isFile()
     ) {
       exector = exector.then(async () => {
-        console.log(`开始上传文件 ${childPath}`)
-        await client.put(`${ossDir}/${child}`, fs.createReadStream(childPath))
+        console.log(`开始分片上传文件 ${childPath}`)
+        const progress = async (percentage, checkpoint, res) => {
+          console.log(`percentage: ${percentage}, checkpoint: ${checkpoint}, res: ${JSON.stringify(res)}`)
+        }
+        await client.multipartUpload(`${ossDir}/${child}`, childPath, {
+          progress,
+          parallel: 1,
+          partSize: 100 * 1024
+        })
         console.log(`上传文件 ${childPath} 结束`)
 
         return Promise.resolve()
