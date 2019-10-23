@@ -1,4 +1,4 @@
-const { isArray, isInteger, isString } = require('lodash')
+const { isArray, isInteger } = require('lodash')
 const Oss = require('ali-oss')
 
 class AppConfig {
@@ -15,7 +15,7 @@ class AppConfig {
    *    bucket: string,
    *    secure: boolean
    *  },
-   * imageNameSuffix: string?
+   * imageNameSuffix: string
    * }} config 配置参数
    */
   constructor (config) {
@@ -36,9 +36,6 @@ class AppConfig {
    * @param {string} suffix 后缀
    */
   _setImageNameSuffix (suffix) {
-    if (!isString(suffix)) {
-      throw new TypeError('期望 suffix 参数为字符串')
-    }
     this.config.imageNameSuffix = suffix
   }
 
@@ -128,5 +125,6 @@ module.exports = new AppConfig({
     accessKeySecret: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET,
     bucket: bucketName,
     secure: true
-  }
+  },
+  imageNameSuffix: ''
 })

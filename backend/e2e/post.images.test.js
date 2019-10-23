@@ -471,4 +471,26 @@ describe('post images 上传图片', () => {
       }`)
     })
   })
+
+  // https://github.com/Jiang-Xuan/tuchuang.space/issues/1#issuecomment-545231777
+  it('imageNameSuffix 为 undefined 的时候的文件命名', async () => {
+    const imageNameSuffixBackup = appConfig.getImageNameSuffix()
+    appConfig._setImageNameSuffix(undefined)
+    const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
+    const spy = jest.spyOn(testAliOssClient, 'put').mockImplementation(() => {
+      return new Promise(resolve => resolve({
+        url: `https://example.com/${fileMd5}.svg`,
+        name: `${fileMd5}.svg`
+      }))
+    })
+
+    const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
+    await request(app)
+      .post('/api/1.0.0/images')
+      .attach('images', filePath)
+
+    expect(spy).toBeCalledWith(`${fileMd5}.svg`, path.resolve(__dirname, '../upload_images', `${fileMd5}.svg`))
+    spy.mockRestore()
+    appConfig._setImageNameSuffix(imageNameSuffixBackup)
+  })
 })
