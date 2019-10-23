@@ -132,11 +132,14 @@ VersionOneApiRouter.route('/images')
           })
         })
         const fileExtname = path.extname(originalname) === '.jpg' ? '.jpg' : MIMETYPE_2_EXT[mimetype]
-        const imageNameSuffix = appConfig.getImageNameSuffix() === '' ? '' : appConfig.getImageNameSuffix()
+        const imageNameSuffix = !appConfig.getImageNameSuffix() ? '' : appConfig.getImageNameSuffix()
         // Step 2: 用复制的方式修改文件名
         await promisifyFsCopyFile(
           filePath,
-          path.resolve(imagesFileStorageDestFolderPath, `${fileHash}-${imageNameSuffix}${fileExtname}`)
+          path.resolve(
+            imagesFileStorageDestFolderPath,
+            imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`
+          )
         )
         // Step 3: 移除原来的文件
         await promisifyFsUnlink(filePath)
@@ -146,7 +149,7 @@ VersionOneApiRouter.route('/images')
           md5: fileHash,
           ext: fileExtname,
           originalname,
-          fileName: `${fileHash}-${imageNameSuffix}${fileExtname}`,
+          fileName: imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`,
           deleteKey: aes192Crypto(fileHash, 'foo')
         }
       })
