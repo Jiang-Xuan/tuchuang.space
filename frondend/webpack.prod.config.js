@@ -12,7 +12,8 @@ console.log(`webpack.prod.config.js  当前发布静态资源的环境为: DEPLO
 const webpackDevConfig = {
   devtool: 'source-map',
   output: {
-    publicPath
+    publicPath,
+    filename: '[chunkhash].bundle.js'
   },
   mode: 'production',
   module: {
