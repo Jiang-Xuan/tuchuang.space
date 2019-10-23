@@ -1,13 +1,13 @@
 const path = require('path')
 const appConfig = require('../../config')
 const { CDN_DOMAIN, BETA_CDN_DOMAIN, LOCAL_DEVELOPMENT_CDN_DOMAIN, TEST_CDN_DOMAIN } = require('../../../shared/constants')
-const { DEPOLY_TYPE, NODE_ENV } = process.env
+const { NODE_ENV } = process.env
 
 let cdnDomain
 
-if (DEPOLY_TYPE === 'beta') {
+if (NODE_ENV === 'beta') {
   cdnDomain = BETA_CDN_DOMAIN
-} else if (DEPOLY_TYPE === 'production') {
+} else if (NODE_ENV === 'production') {
   cdnDomain = CDN_DOMAIN
 } else {
   cdnDomain = LOCAL_DEVELOPMENT_CDN_DOMAIN
