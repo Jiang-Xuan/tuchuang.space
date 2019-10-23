@@ -2,6 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const Oss = require('ali-oss')
 
+if (!process.env.CI) {
+  require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+}
+
 const {
   DEPLOY_TYPE,
   F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID,

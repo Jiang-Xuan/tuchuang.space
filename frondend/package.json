@@ -10,8 +10,12 @@
     "test:pptr": "npm run build:development && jest --config ./pptr.jest.config.json",
     "test:bff": "jest ./bff/e2e.test.js",
     "test:bff:watch": "jest --watch ./bff/e2e.test.js",
-    "build:development": "webpack --config ./webpack.dev.config.js",
-    "build:production": "webpack --config ./webpack.prod.config.js"
+    "publish.js": "node ./publish.js",
+    "publish.js:beta": "DEPLOY_TYPE=beta node ./publish.js",
+    "downloadIndexHtml.js": "node ./downloadIndexHtml.js",
+    "downloadIndexHtml.js:beta": "DEPLOY_TYPE=beta node ./downloadIndexHtml.js",
+    "build:development": "rimraf ./dist && webpack --config ./webpack.dev.config.js",
+    "build:production": "rimraf ./dist && webpack --config ./webpack.prod.config.js"
   },
   "keywords": [],
   "author": "",
