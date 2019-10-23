@@ -68,9 +68,9 @@ describe('post images 上传图片', () => {
   afterEach(async () => {
     await UploadImages.deleteMany({})
     const result = await testAliOssClient.list()
-    const names = (result.objects || []).map((object) => {
-      return object.name
-    })
+    const names = (result.objects || [])
+      .filter((object) => object.name.indexOf(imageNameSuffix) !== -1)
+      .map(object => object.name)
 
     if (names.length) {
       await testAliOssClient.deleteMulti(names)
