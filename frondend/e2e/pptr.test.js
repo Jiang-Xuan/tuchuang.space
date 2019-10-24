@@ -23,7 +23,9 @@ const TEST_ID_STORE = {
   /** @description 上传图片的结果区域的 image 输入框 @type {'UPLOAD_RESULT_IMAGE'} */
   UPLOAD_RESULT_IMAGE: 'UPLOAD_RESULT_IMAGE',
   /** @description 上传图片的结果区域的 delete 输入框 @type {'UPLOAD_RESULT_DELETE'} */
-  UPLOAD_RESULT_DELETE: 'UPLOAD_RESULT_DELETE'
+  UPLOAD_RESULT_DELETE: 'UPLOAD_RESULT_DELETE',
+  /** @description 前往 api 文档的按钮 @type {'GOTO_API_DOC_BTN'} */
+  GOTO_API_DOC_BTN: 'GOTO_API_DOC_BTN'
 }
 
 jest.setTimeout(30000)
@@ -188,5 +190,21 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     const inputValueJsonValue = await inputValue.jsonValue()
 
     expect(inputValueJsonValue).toEqual('2436b48115486de952296f2b5295aeb90d284761278661102e7dda990c3f67022133080fb1bcd99d7f94678a991c57f1')
+  })
+})
+
+describe('导航条导航', () => {
+  beforeAll(async () => {
+    await global.jestPuppeteer.resetBrowser()
+    await page.goto(`file://${indexHtml}`, {
+      waitUntil: 'domcontentloaded'
+    })
+  })
+  it('前往 api 文档的链接正常', async () => {
+    const gotoApiDocBtn = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.GOTO_API_DOC_BTN}"]`)
+    await gotoApiDocBtn.click()
+    await page.waitForNavigation()
+    const pathname = await page.waitForFunction('location.pathname')
+    expect(pathname).toEqual('/api')
   })
 })

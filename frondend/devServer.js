@@ -5,7 +5,8 @@ const webpackDevConfig = require('./webpack.dev.config')
 const PORT = 3400
 
 const webpackDevServerOps = Object.assign({}, webpackDevConfig.devServer, {
-  hot: true
+  hot: true,
+  historyApiFallback: true
 })
 
 const compiler = webpack(webpackDevConfig)
