@@ -8,10 +8,20 @@ import Nav from './Nav'
 
 import './app.less'
 
+let reactRouterBasename = '/'
+/* 用于 e2e 测试 */
+{
+  const isInKarma = !!window.__karma__
+  if (isInKarma) {
+    reactRouterBasename = window.location.pathname
+  }
+}
+/* END 用于 e2e 测试 */
+
 function App () {
   return (
     <ConfigProvider locale={zhCN}>
-      <BrowserRouter>
+      <BrowserRouter basename={reactRouterBasename}>
         <Layout className='app'>
           <Layout.Header>
             <Nav />
