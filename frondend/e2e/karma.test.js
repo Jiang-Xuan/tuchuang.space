@@ -9,6 +9,7 @@ const E2E_TEST_ID_ATTR_NAME = 'data-e2e-test-id'
 
 describe('App', () => {
   before(function () {
+    console.log(window.location)
     this.timeout(15000)
     const div = document.createElement('div')
     div.id = 'root'
@@ -18,7 +19,7 @@ describe('App', () => {
   // after(() => {
   //   ReactDom.unmountComponentAtNode(document.querySelector('#root'))
   // })
-  it('有且仅有一个 input[type="file"] 输入框', () => {
+  it('有且仅有一个 input[type="file"] 输入框', function () {
     const fileInput = document.querySelector('input[type="file"]')
     expect(fileInput).to.be.an.instanceOf(window.HTMLInputElement)
   })

@@ -1,115 +1,40 @@
 import React from 'react'
-import { Upload, Tabs, Empty, ConfigProvider, Layout, Menu } from 'antd'
+import { ConfigProvider, Layout } from 'antd'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/es/locale/zh_CN'
-import CopyInput from './CopyInput'
-import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
+import Home from './Home'
+import Api from './Api'
+import Nav from './Nav'
 
 import './app.less'
 
-const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/1.0.0/images' : '/api/1.0.0/images'
+let reactRouterBasename = '/'
+/* 用于 e2e 测试 */
+{
+  const isInKarma = !!window.__karma__
+  if (isInKarma) {
+    reactRouterBasename = window.location.pathname
+  }
+}
+/* END 用于 e2e 测试 */
 
 function App () {
-  const [fileList, setFileList] = React.useState([])
-
-  const tabsPanes = fileList.map(({ url, status, name, size, type, response }, index) => {
-    let result
-    if (status === 'uploading') {
-      result = <div>uploading</div>
-    } else if (status === 'error') {
-      result = <div>error</div>
-    } else if (status === 'done') {
-      const { deleteKey, cdnPath } = response.images[name]
-      result = (
-        <>
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_HTML' value={`<a href="${cdnPath}"></a>`} addonBefore='HTML' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_URL' className='mt-2' value={cdnPath} addonBefore='URL' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_MARKDOWN' className='mt-2' value={`![](${cdnPath})`} addonBefore='markdown' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_IMAGE' className='mt-2' value={`<img src="${cdnPath}" />`} addonBefore='image' />
-          <CopyInput data-e2e-test-id='UPLOAD_RESULT_DELETE' className='mt-2' value={deleteKey} addonBefore={<span className='text-red'>移除图片</span>} />
-        </>
-      )
-    } else {
-      const errors = []
-      if (size > FILE_MAX_SIZE) {
-        errors.push(
-          <li key='文件超大'>文件超过最大限制, 最大限制为 {FILE_MAX_SIZE / 1024 / 1024}M</li>
-        )
-      }
-
-      if (!FILE_TYPE_ALLOWED.includes(type)) {
-        errors.push(
-          <li key='类型不对'>格式不正确</li>
-        )
-      }
-      result = (
-        <>
-          <div>不能上传 {name}, 原因如下:</div>
-          <ul>
-            {errors.length ? errors : '未知错误'}
-          </ul>
-        </>
-      )
-    }
-    return (
-      <Tabs.TabPane tab={`image ${name}`} key={index}>
-        {result}
-      </Tabs.TabPane>
-    )
-  })
-
-  const handleBeforeUpload = ({ size, type }) => {
-    if (size > FILE_MAX_SIZE) {
-      return false
-    } else if (!FILE_TYPE_ALLOWED.includes(type)) {
-      return false
-    }
-
-    return true
-  }
-
-  const handleChange = (event) => {
-    console.log(event)
-    const fileList = [...event.fileList]
-    setFileList(fileList)
-  }
   return (
     <ConfigProvider locale={zhCN}>
-      <Layout className='app'>
-        <Layout.Header>
-          <div className='logo' />
-          <Menu mode='horizontal' theme='dark' style={{ lineHeight: '64px' }}>
-            <Menu.Item>Home</Menu.Item>
-            <Menu.Item>About</Menu.Item>
-            <Menu.Item>Contact</Menu.Item>
-            <Menu.Item>Api</Menu.Item>
-          </Menu>
-        </Layout.Header>
-        <Layout.Content className='p-5'>
-          <div className='upload' data-e2e-test-id='UPLOAD_CLICK_AREA'>
-            <Upload.Dragger
-              beforeUpload={handleBeforeUpload}
-              multiple
-              onChange={handleChange}
-              accept='.png, .jpg, .jpeg, .svg, .webp'
-              action={uploadUrl}
-              name='images'
-            >
-              <p className='mt-4'>点击或者是拖拽文件到这里来上传</p>
-              <small className='d-block mb-4'>允许 .png, .jpg, .jpeg, .svg, .webp 后缀的文件</small>
-            </Upload.Dragger>
-          </div>
-          <div className='result mt-3' data-e2e-test-id='UPLOAD_RESULTS'>
-            {tabsPanes.length ? (
-              <Tabs>
-                {tabsPanes}
-              </Tabs>
-            ) : (
-              <Empty />
-            )}
-          </div>
-        </Layout.Content>
-        <Layout.Footer className='text-center' data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
-      </Layout>
+      <BrowserRouter basename={reactRouterBasename}>
+        <Layout className='app'>
+          <Layout.Header>
+            <Nav />
+          </Layout.Header>
+          <Layout.Content className='p-5'>
+            <Switch>
+              <Route exact path='/'><Home /></Route>
+              <Route path='/api'><Api /></Route>
+            </Switch>
+          </Layout.Content>
+          <Layout.Footer className='text-center' data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
+        </Layout>
+      </BrowserRouter>
     </ConfigProvider>
   )
 }
