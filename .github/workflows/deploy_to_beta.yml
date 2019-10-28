@@ -54,6 +54,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: yarn install, test:karma, test:pptr
+      shell: cmd
       run: |
         cd .\frondend
         call yarn cache clean || exit 1
