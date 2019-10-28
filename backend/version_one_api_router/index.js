@@ -7,6 +7,7 @@ const multer = require('multer')
 const baseAuth = require('./middlewares/baseAuth')
 const uploadImagesToAliOss = require('./middlewares/uploadImagesToAliOss')
 const saveLogToDb = require('./middlewares/saveLogToDb')
+const deleteImages = require('./middlewares/deleteImages')
 const appConfig = require('../config')
 
 const { aes192Crypto } = require('../utils')
@@ -150,7 +151,7 @@ VersionOneApiRouter.route('/images')
           ext: fileExtname,
           originalname,
           fileName: imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`,
-          deleteKey: aes192Crypto(fileHash, 'foo')
+          deleteKey: aes192Crypto(`${fileHash}${fileExtname}`, 'foo')
         }
       })
 
@@ -173,6 +174,7 @@ VersionOneApiRouter.route('/images')
     uploadImagesToAliOss,
     saveLogToDb
   )
+  .delete(deleteImages)
 
 ApiRouter.use(`/${API_VERSION}`, VersionOneApiRouter)
 

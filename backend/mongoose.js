@@ -10,6 +10,8 @@ if (NODE_ENV === 'beta') {
 } else if (NODE_ENV === 'production') {
   // 生产环境
   dbPath = 'mongodb://localhost:27017/tuchuang-space'
+} else if (NODE_ENV === 'test') {
+  dbPath = global.__MONGO_URI__
 } else {
   // 本地开发环境
   dbPath = 'mongodb://localhost:3402/test'
