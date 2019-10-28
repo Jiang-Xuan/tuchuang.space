@@ -72,7 +72,7 @@ function ApiDoc (props) {
 
       <h2>images</h2>
 
-      <h3>POST /api/1.0.0/images</h3>
+      <h3>POST /api/v1/images</h3>
 
       <p>接口说明: 上传图片</p>
 
@@ -95,7 +95,7 @@ function ApiDoc (props) {
         <Column dataIndex='description' title='描述' />
       </Table>
 
-      <h3>DELETE /api/1.0.0/images</h3>
+      <h3>DELETE /api/v1/images</h3>
 
       <p>接口说明: 删除图片</p>
 
