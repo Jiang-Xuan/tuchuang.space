@@ -48,7 +48,7 @@ module.exports = async (req, res, next) => {
 
   try {
     ossImageKey = aes192Decrypto(req.body.key, 'foo')
-  } catch {
+  } catch (e) {
     res
       .status(422)
       .json({
@@ -65,7 +65,7 @@ module.exports = async (req, res, next) => {
   try {
     await appConfig.ossClient.get(ossImageKey)
     fileInOss = true
-  } catch {
+  } catch (e) {
     fileInOss = false
   }
 
