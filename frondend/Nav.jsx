@@ -14,7 +14,7 @@ function Nav (props) {
         <Menu.Item key='/'><Link to='/'>Home</Link></Menu.Item>
         <Menu.Item key='/about'><Link to='/about'>About</Link></Menu.Item>
         <Menu.Item key='/contact'><Link to='/contact'>Contact</Link></Menu.Item>
-        <Menu.Item data-e2e-test-id='GOTO_API_DOC_BTN' key='/api'><Link to='/api'>Api</Link></Menu.Item>
+        <Menu.Item data-e2e-test-id='GOTO_API_DOC_BTN' key='/api-doc'><Link to='/api-doc'>Api</Link></Menu.Item>
       </Menu>
     </>
   )

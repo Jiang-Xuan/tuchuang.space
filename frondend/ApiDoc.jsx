@@ -3,7 +3,7 @@ import { Table } from 'antd'
 
 const { Column } = Table
 
-function Api (props) {
+function ApiDoc (props) {
   const postUploadImagesParams = [{
     name: 'images',
     type: 'array',
@@ -87,7 +87,7 @@ function Api (props) {
   )
 }
 
-Api.propTypes = {
+ApiDoc.propTypes = {
 }
 
-export default Api
+export default ApiDoc

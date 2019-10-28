@@ -248,6 +248,6 @@ describe('导航条导航', () => {
     const pathname = await page.waitForFunction('location.pathname')
     const pathnameJsonValue = await pathname.jsonValue()
 
-    expect(pathnameJsonValue).toEqual('/api')
+    expect(pathnameJsonValue).toEqual('/api-doc')
   })
 })
