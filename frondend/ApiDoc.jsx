@@ -4,14 +4,14 @@ import { Table } from 'antd'
 const { Column } = Table
 
 function ApiDoc (props) {
-  const postUploadImagesParams = [{
+  const postImagesParams = [{
     name: 'images',
     type: 'array',
     isRequired: '是',
     defaultValue: ' - ',
     description: '图片数组'
   }]
-  const postUploadImagesResponse = [{
+  const postImagesResponse = [{
     name: 'images',
     type: 'object',
     isRequired: '是',
@@ -57,17 +57,28 @@ function ApiDoc (props) {
     isRequired: '是',
     description: '上传的图片的移除 key, 传递给删除图片接口'
   }]
+
+  const deleteImagesParams = [{
+    name: 'key',
+    type: 'string',
+    isRequired: '是',
+    defaultValue: ' - ',
+    description: '移除图片的 key, 上传图片时可以获得'
+  }]
+
   return (
     <div>
-      <h2>uploadImages</h2>
+      <strong>接口严格遵循 RESTFul 风格</strong>
 
-      <h3>POST /api/v1/uploadImages</h3>
+      <h2>images</h2>
+
+      <h3>POST /api/1.0.0/images</h3>
 
       <p>接口说明: 上传图片</p>
 
       <p>参数: </p>
       <strong>请求 content-type: multipart/form-data</strong>
-      <Table rowKey='name' pagination={false} size='small' dataSource={postUploadImagesParams}>
+      <Table rowKey='name' pagination={false} size='small' dataSource={postImagesParams}>
         <Column dataIndex='name' title='参数名' />
         <Column dataIndex='type' title='参数类型' />
         <Column dataIndex='isRequired' title='是否必须' />
@@ -77,7 +88,31 @@ function ApiDoc (props) {
 
       <p>响应: </p>
       <strong>响应 content-type: application/json</strong>
-      <Table rowKey='name' pagination={false} size='small' dataSource={postUploadImagesResponse}>
+      <Table rowKey='name' pagination={false} size='small' dataSource={postImagesResponse}>
+        <Column dataIndex='name' title='参数名' />
+        <Column dataIndex='type' title='参数类型' />
+        <Column dataIndex='isRequired' title='是否必须' />
+        <Column dataIndex='description' title='描述' />
+      </Table>
+
+      <h3>DELETE /api/1.0.0/images</h3>
+
+      <p>接口说明: 删除图片</p>
+
+      <p>参数:</p>
+      <strong>请求 content-type: application/json</strong>
+      <Table rowKey='name' pagination={false} size='small' dataSource={deleteImagesParams}>
+        <Column dataIndex='name' title='参数名' />
+        <Column dataIndex='type' title='参数类型' />
+        <Column dataIndex='isRequired' title='是否必须' />
+        <Column dataIndex='defaultValue' title='默认值' />
+        <Column dataIndex='description' title='描述' />
+      </Table>
+
+      <p>响应:</p>
+      <strong>HTTP CODE: 204</strong>
+      <strong>响应 content-type: application/json</strong>
+      <Table rowKey='name' pagination={false} size='small' dataSource={[]}>
         <Column dataIndex='name' title='参数名' />
         <Column dataIndex='type' title='参数类型' />
         <Column dataIndex='isRequired' title='是否必须' />
