@@ -81,7 +81,7 @@ describe('post images 上传图片', () => {
     rimraf.sync(uploadImagesFolderPath)
     const filePath = path.resolve(__dirname, '../../shared/test_images/jpg.jpg')
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(uploadImagesFolderPath)
@@ -92,7 +92,7 @@ describe('post images 上传图片', () => {
   it('当文件超出 MAX_FILES 的时候抛出错误', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const resHandler = request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath) // 1
       .attach('images', filePath)
       .attach('images', filePath)
@@ -116,7 +116,7 @@ describe('post images 上传图片', () => {
   it('当文件尺寸超出 FILE_MAX_SIZE 的时候抛出错误', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/16.1m.jpeg')
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
 
     expect(res.status).toEqual(403)
@@ -128,7 +128,7 @@ describe('post images 上传图片', () => {
   it('当文件格式不支持的时候抛出错误', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/text.txt')
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
 
     expect(res.status).toEqual(403)
@@ -141,7 +141,7 @@ describe('post images 上传图片', () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
 
     expect(async () => {
@@ -156,7 +156,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -183,7 +183,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = 'a4345330c12d929089fb828a6faf1188'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -210,7 +210,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = '2fecf647622e72e8af94147fa1e6c59f'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -241,7 +241,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = 'd9d003268cd2dc9ed82ad671d168881b'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -268,7 +268,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -293,7 +293,7 @@ describe('post images 上传图片', () => {
     const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
     // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     expect(async () => {
       await promisifyFsAccess(
@@ -318,7 +318,7 @@ describe('post images 上传图片', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
       const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
       const res = await request(app)
-        .post('/api/1.0.0/images')
+        .post('/api/v1/images')
         .attach('images', filePath)
 
       expect(res.body.images['gif.gif']).toHaveProperty('_id')
@@ -335,7 +335,7 @@ describe('post images 上传图片', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/gif.gif')
       const fileMd5 = 'a5d04b4ab641306351e3687faf17d7e6'
       const res = await request(app)
-        .post('/api/1.0.0/images')
+        .post('/api/v1/images')
         .attach('images', filePath)
 
       const dbItem = await UploadImages.findById(res.body.images['gif.gif']._id)
@@ -376,7 +376,7 @@ describe('post images 上传图片', () => {
       it('请求者为相同的 ip 进行限制', async () => {
         // 然后再发起请求, 该请求应该被拒绝
         const res = await request(app)
-          .post('/api/1.0.0/images')
+          .post('/api/v1/images')
           .set('X-Forwarded-For', '192.168.1.1')
           .attach('images', filePath)
 
@@ -387,7 +387,7 @@ describe('post images 上传图片', () => {
       })
       it('请求者为不同的 ip 不进行限制', async () => {
         const res = await request(app)
-          .post('/api/1.0.0/images')
+          .post('/api/v1/images')
           .set('X-Forwarded-For', '192.168.1.0')
           .attach('images', filePath)
 
@@ -425,7 +425,7 @@ describe('post images 上传图片', () => {
       it('请求者为相同的 ip 进行限制', async () => {
         // 然后再发起请求, 该请求应该被拒绝
         const res = await request(app)
-          .post('/api/1.0.0/images')
+          .post('/api/v1/images')
           .set('X-Forwarded-For', '192.168.1.1')
           .attach('images', filePath)
 
@@ -436,7 +436,7 @@ describe('post images 上传图片', () => {
       })
       it('请求者为不同的 ip 不进行限制', async () => {
         const res = await request(app)
-          .post('/api/1.0.0/images')
+          .post('/api/v1/images')
           .set('X-Forwarded-For', '192.168.1.0')
           .attach('images', filePath)
 
@@ -449,7 +449,7 @@ describe('post images 上传图片', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
       const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
       const res = await request(app)
-        .post('/api/1.0.0/images')
+        .post('/api/v1/images')
         .attach('images', filePath)
       await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
@@ -462,7 +462,7 @@ describe('post images 上传图片', () => {
       const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
       const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
       const res = await request(app)
-        .post('/api/1.0.0/images')
+        .post('/api/v1/images')
         .attach('images', filePath)
       await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
@@ -486,7 +486,7 @@ describe('post images 上传图片', () => {
 
     const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
     await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
 
     expect(spy).toBeCalledWith(`${fileMd5}.svg`, path.resolve(__dirname, '../upload_images', `${fileMd5}.svg`))

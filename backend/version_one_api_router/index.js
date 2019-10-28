@@ -19,7 +19,7 @@ const promisifyFsUnlink = promisify(fs.unlink)
 const promisifyFsAccess = promisify(fs.access)
 const promisifyFsMkdir = promisify(fs.mkdir)
 
-const API_VERSION = '1.0.0'
+const API_VERSION = 'v1'
 
 const imagesFileStorageDestFolderPath = path.resolve(__dirname, '../upload_images')
 

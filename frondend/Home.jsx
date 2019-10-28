@@ -5,7 +5,7 @@ import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
 
 import './home.less'
 
-const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/1.0.0/images' : '/api/1.0.0/images'
+const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/v1/images' : '/api/v1/images'
 
 const Home = () => {
   const [fileList, setFileList] = React.useState([])

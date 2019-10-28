@@ -43,7 +43,7 @@ jest.setTimeout(30000)
 // }
 // !! 阻止 jest 关闭 browser
 
-describe('上传图片时. 向 api/1.0.0/image 接口发起 POST 请求, 且请求的 content-type 为 multiple/form-data', () => {
+describe('上传图片时. 向 api/v1/image 接口发起 POST 请求, 且请求的 content-type 为 multiple/form-data', () => {
   let imagesUploadPromiseResolve = null
   const imagesUploadPromise = new Promise((resolve) => {
     imagesUploadPromiseResolve = resolve
@@ -56,7 +56,7 @@ describe('上传图片时. 向 api/1.0.0/image 接口发起 POST 请求, 且请�
     await page.setRequestInterception(true)
     page.on('request', (interceptedRequest) => {
       if (
-        interceptedRequest.url().includes('api/1.0.0/images')
+        interceptedRequest.url().includes('api/v1/images')
       ) {
         imagesUploadPromiseResolve(interceptedRequest)
         return
@@ -148,7 +148,7 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     await page.setRequestInterception(true)
     page.on('request', (interceptedRequest) => {
       if (
-        interceptedRequest.url().includes('api/1.0.0/images')
+        interceptedRequest.url().includes('api/v1/images')
       ) {
         interceptedRequest.respond({
           status: 200,

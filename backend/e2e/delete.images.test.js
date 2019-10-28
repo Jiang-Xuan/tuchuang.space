@@ -75,13 +75,13 @@ describe('delete images', () => {
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
     const deleteKey = aes192Crypto(`${fileMd5}-${imageNameSuffix}.png`, 'foo')
     await request(app)
-      .post('/api/1.0.0/images')
+      .post('/api/v1/images')
       .attach('images', filePath)
     await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
 
     // act
     const res = await request(app)
-      .delete('/api/1.0.0/images')
+      .delete('/api/v1/images')
       .set('content-type', 'application/json')
       .send({ key: deleteKey })
 
@@ -98,7 +98,7 @@ describe('delete images', () => {
     await testAliOssClient.delete(imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
     // act
     const res = await request(app)
-      .delete('/api/1.0.0/images')
+      .delete('/api/v1/images')
       .set('content-type', 'application/json')
       .send({ key: deleteKey })
 
@@ -110,7 +110,7 @@ describe('delete images', () => {
 
     // act
     const res = await request(app)
-      .delete('/api/1.0.0/images')
+      .delete('/api/v1/images')
       .set('content-type', 'application/json')
       .send({ foo: '' })
 
@@ -132,7 +132,7 @@ describe('delete images', () => {
 
     // act
     const res = await request(app)
-      .delete('/api/1.0.0/images')
+      .delete('/api/v1/images')
       .set('content-type', 'application/json')
       .send({ key: unDecryptoDeleteKey })
 
@@ -151,7 +151,7 @@ describe('delete images', () => {
 
     // act
     const res = await request(app)
-      .delete('/api/1.0.0/images')
+      .delete('/api/v1/images')
       .set('content-type', 'text/plain')
       .send('foo')
 
