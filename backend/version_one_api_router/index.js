@@ -151,7 +151,7 @@ VersionOneApiRouter.route('/images')
           ext: fileExtname,
           originalname,
           fileName: imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`,
-          deleteKey: aes192Crypto(`${fileHash}${fileExtname}`, 'foo')
+          deleteKey: aes192Crypto(`${fileHash}${fileExtname}`, appConfig.getDeleteKeyCryptoKey())
         }
       })
 

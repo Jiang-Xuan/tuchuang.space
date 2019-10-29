@@ -72,4 +72,9 @@ describe('app config', () => {
     AppConfig._setImageNameSuffix('test')
     expect(AppConfig.getImageNameSuffix()).toEqual('test')
   })
+
+  it('getDeleteKeyCryptoKey 函数返回正确的值', () => {
+    AppConfig._setDeleteKeyCryptoKey('test')
+    expect(AppConfig.getDeleteKeyCryptoKey()).toEqual('test')
+  })
 })

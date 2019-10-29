@@ -47,7 +47,7 @@ module.exports = async (req, res, next) => {
   let ossImageKey
 
   try {
-    ossImageKey = aes192Decrypto(req.body.key, 'foo')
+    ossImageKey = aes192Decrypto(req.body.key, appConfig.getDeleteKeyCryptoKey())
   } catch (e) {
     res
       .status(422)

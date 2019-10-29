@@ -46,16 +46,20 @@ describe('delete images', () => {
   })
   const imageNameSuffix = uuidV1()
   const imageNameSuffixBackup = appConfig.getImageNameSuffix()
+  const deleteKeyCryptoKeyTest = 'foo'
+  const deleteKeyCryptoKeyBackup = appConfig.getDeleteKeyCryptoKey()
   console.log(`imageNameSuffix: ${imageNameSuffix}`)
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
     appConfig._setOssClient(testAliOssClient)
     appConfig._setImageNameSuffix(imageNameSuffix)
+    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyTest)
   })
 
   afterAll(async () => {
     await mongoose.disconnect()
     appConfig._setImageNameSuffix(imageNameSuffixBackup)
+    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyBackup)
   })
 
   afterEach(async () => {
@@ -73,7 +77,7 @@ describe('delete images', () => {
     // arrange
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
-    const deleteKey = aes192Crypto(`${fileMd5}-${imageNameSuffix}.png`, 'foo')
+    const deleteKey = aes192Crypto(`${fileMd5}-${imageNameSuffix}.png`, deleteKeyCryptoKeyTest)
     await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)

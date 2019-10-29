@@ -44,6 +44,17 @@ class AppConfig {
   }
 
   /**
+   * 获取生成 deleteKey 生成秘钥的 key
+   */
+  getDeleteKeyCryptoKey () {
+    return this.config.deleteKeyCryptoKey
+  }
+
+  _setDeleteKeyCryptoKey (key) {
+    this.config.deleteKeyCryptoKey = key
+  }
+
+  /**
    * 设置 oss 客户端
    * **Notes** 该方法只提供给 e2e 测试, 一般不会在程序中调用, 所以该函数以 _ 开头
    * @param {{}} ossClient ali-oss 客户端
@@ -126,5 +137,6 @@ module.exports = new AppConfig({
     bucket: bucketName,
     secure: true
   },
-  imageNameSuffix: ''
+  imageNameSuffix: '',
+  deleteKeyCryptoKey: process.env.BACKEND_DELETE_KEY_CRYPTO_KEY
 })
