@@ -53,11 +53,15 @@ describe('post images 上传图片', () => {
   })
   const imageNameSuffix = uuidV1()
   const imageNameSuffixBackup = appConfig.getImageNameSuffix()
+  const deleteKeyCryptoKeyTest = 'foo'
+  const deleteKeyCryptoKeyBackup = appConfig.getDeleteKeyCryptoKey()
   console.log(`imageNameSuffix: ${imageNameSuffix}`)
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true })
     appConfig._setOssClient(testAliOssClient)
     appConfig._setImageNameSuffix(imageNameSuffix)
+    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyTest)
+    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyBackup)
   })
 
   afterAll(async () => {
