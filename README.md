@@ -1,12 +1,17 @@
-# tuchuang.space
+<p align="center">
+  <a href="http://tuchuang.space">
+    <img width="200" src="https://beta.i.tuchuang.space/3c7185dd08b19791c4141f089616952f.png">
+  </a>
+</p>
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+<h1 align="center">tuchuang.space</h1>
 
-beta, 还不适用于生产环境
 
-## Slogan
+<p align="center">
 
-测试驱动开发的图床系统
+测试驱动开发的图床系统. [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+</p>
 
 ## 功能
 
