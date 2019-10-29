@@ -20,6 +20,8 @@
 
 ## 如何贡献
 
+_接受 issue, 对于 pr 很谨慎, 如果有疑问请提 issue 或者 mail 至[这里](mailto:645762213@qq.com)_
+
 ## Wiki
 
 ### Motivation
