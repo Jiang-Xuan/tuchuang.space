@@ -61,12 +61,12 @@ describe('post images 上传图片', () => {
     appConfig._setOssClient(testAliOssClient)
     appConfig._setImageNameSuffix(imageNameSuffix)
     appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyTest)
-    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyBackup)
   })
 
   afterAll(async () => {
     await mongoose.disconnect()
     appConfig._setImageNameSuffix(imageNameSuffixBackup)
+    appConfig._setDeleteKeyCryptoKey(deleteKeyCryptoKeyBackup)
   })
 
   afterEach(async () => {
