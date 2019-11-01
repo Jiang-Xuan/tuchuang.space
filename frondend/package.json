@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node devServer.js",
+    "start": "NODE_ENV=development node devServer.js",
     "test": "npm run test:karma && npm run test:pptr",
     "test:karma": "karma start ./karma.config.js",
     "test:pptr": "npm run build:development && jest --config ./pptr.jest.config.json",
@@ -14,8 +14,9 @@
     "publish.js:beta": "DEPLOY_TYPE=beta node ./publish.js",
     "downloadIndexHtml.js": "node ./downloadIndexHtml.js",
     "downloadIndexHtml.js:beta": "DEPLOY_TYPE=beta node ./downloadIndexHtml.js",
-    "build:development": "rimraf ./dist && webpack --config ./webpack.dev.config.js",
-    "build:production": "rimraf ./dist && webpack --config ./webpack.prod.config.js"
+    "build:development": "rimraf ./dist && NODE_ENV=development webpack --config ./webpack.dev.config.js",
+    "build:production": "rimraf ./dist && NODE_ENV=production webpack --config ./webpack.prod.config.js",
+    "build:production:beta": "rimraf ./dist && DEPLOY_TYPE=beta NODE_ENV=production webpack --config ./webpack.prod.config.js"
   },
   "keywords": [],
   "author": "",
