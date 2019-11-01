@@ -85,7 +85,7 @@ jobs:
         yarn cache clean
         yarn install
         yarn run test:bff
-  deploy-to-prod:
+  deploy-backend-to-prod:
     needs: backend-test
     runs-on: ubuntu-latest
     steps:
