@@ -1,6 +1,6 @@
 {
   "name": "tuchuang.space",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "**beta, 还不适用于生产环境**",
   "main": "index.js",
   "scripts": {
