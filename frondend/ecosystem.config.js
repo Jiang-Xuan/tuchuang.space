@@ -29,6 +29,7 @@ module.exports = {
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     // args: 'one two',
     instances: 1,
+    log_date_format: 'YYYY-MM-DD HH:mm Z',
     autorestart: true,
     watch: false,
     max_memory_restart: '1G',
