@@ -136,3 +136,7 @@ _尚未确定, 容易变化_
 * [第三方部署](https://github.com/Jiang-Xuan/tuchuang.space/issues/31)
 * [用户登录注册系统, 支持用户的上传文件和查看文件](https://github.com/Jiang-Xuan/tuchuang.space/issues/3)
 * [用户级别的 api](https://github.com/Jiang-Xuan/tuchuang.space/issues/4)
+
+## 沟通
+
+![](https://i.tuchuang.space/697c178f3845d43059a18d6fc8f23bad.jpg)
