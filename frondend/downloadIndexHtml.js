@@ -24,4 +24,10 @@ const downloadIndexHtml = async () => {
   result.stream.pipe(writeStream)
 }
 
+process.on('unhandledRejection', (reason, promise) => {
+  // https://nodejs.org/api/process.html#process_event_unhandledrejection
+  console.log('Unhandled Rejection at:', promise, 'reason:', reason)
+  process.exit(1)
+})
+
 downloadIndexHtml()
