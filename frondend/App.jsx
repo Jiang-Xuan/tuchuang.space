@@ -5,6 +5,7 @@ import zhCN from 'antd/es/locale/zh_CN'
 import Home from './Home'
 import ApiDoc from './ApiDoc'
 import Nav from './Nav'
+import Contact from './Contact'
 
 import './app.less'
 
@@ -30,6 +31,7 @@ function App () {
             <Switch>
               <Route exact path='/'><Home /></Route>
               <Route path='/api-doc'><ApiDoc /></Route>
+              <Route path='/contact'><Contact /></Route>
             </Switch>
           </Layout.Content>
           <Layout.Footer className='text-center' data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>

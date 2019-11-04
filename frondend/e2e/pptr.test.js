@@ -32,7 +32,9 @@ const TEST_ID_STORE = {
   /** @description 上传图片的结果区域的 delete 输入框 @type {'UPLOAD_RESULT_DELETE'} */
   UPLOAD_RESULT_DELETE: 'UPLOAD_RESULT_DELETE',
   /** @description 前往 api 文档的按钮 @type {'GOTO_API_DOC_BTN'} */
-  GOTO_API_DOC_BTN: 'GOTO_API_DOC_BTN'
+  GOTO_API_DOC_BTN: 'GOTO_API_DOC_BTN',
+  /** @description 前往 contact 页面的按钮 @type {'GOTO_CONTACT_BTN'} */
+  GOTO_CONTACT_BTN: 'GOTO_CONTACT_BTN'
 }
 
 jest.setTimeout(30000)
@@ -249,5 +251,13 @@ describe('导航条导航', () => {
     const pathnameJsonValue = await pathname.jsonValue()
 
     expect(pathnameJsonValue).toEqual('/api-doc')
+  })
+  it('前往 contact 的链接正常', async () => {
+    const gotoContactBtn = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.GOTO_CONTACT_BTN}"]`)
+    await gotoContactBtn.click()
+    const pathname = await page.waitForFunction('location.pathname')
+    const pathnameJsonValue = await pathname.jsonValue()
+
+    expect(pathnameJsonValue).toEqual('/contact')
   })
 })
