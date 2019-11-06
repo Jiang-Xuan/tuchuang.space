@@ -27,20 +27,6 @@ const promisifyFsAccess = promisify(fs.access)
 
 const uploadImagesFolderPath = path.resolve(__dirname, '../upload_images')
 
-/**
- * 图片名称生成器
- * @param {string} md5 文件的 md5
- * @param {string?} imageNameSuffix 文件名后缀
- * @param {string} ext 文件后缀, **带有 . 字符**
- */
-const imageNameGenerateHelper = (md5, ext, { suffix = '' }) => {
-  if (suffix !== '') {
-    return `${md5}-${suffix}${ext}`
-  } else {
-    return `${md5}${ext}`
-  }
-}
-
 jest.setTimeout(30000)
 
 describe('post images 上传图片', () => {
@@ -141,98 +127,61 @@ describe('post images 上传图片', () => {
     })
   })
 
-  it('上传的文件命名为 [文件的 md5]-[suffix].[ext]', async () => {
-    const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
-    const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
-    await request(app)
-      .post('/api/v1/images')
-      .attach('images', filePath)
-
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
-  })
-
   it('支持 .png 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const fileMd5 = '637e2ee416a2de90cf6e76b6f4cc8c89'
-    // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
+
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['png.png'])
     expect(res.body.images['png.png'].mimetype).toEqual('image/png')
     expect(res.body.images['png.png'].md5).toEqual(fileMd5)
-    expect(res.body.images['png.png'].fileName).toEqual(
-      imageNameGenerateHelper(fileMd5, '.png', { suffix: imageNameSuffix })
-    )
     expect(
-      isString(
-        res.body.images['png.png'].deleteKey
-      )
+      isString(res.body.images['png.png'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['png.png'].deleteKey)
     ).toEqual(true)
   })
 
   it('支持 .webp 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/webp.webp')
     const fileMd5 = 'a4345330c12d929089fb828a6faf1188'
-    // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.webp', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['webp.webp'])
     expect(res.body.images['webp.webp'].mimetype).toEqual('image/webp')
     expect(res.body.images['webp.webp'].md5).toEqual(fileMd5)
-    expect(res.body.images['webp.webp'].fileName).toEqual(
-      imageNameGenerateHelper(fileMd5, '.webp', { suffix: imageNameSuffix })
-    )
     expect(
-      isString(
-        res.body.images['webp.webp'].deleteKey
-      )
+      isString(res.body.images['webp.webp'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['webp.webp'].deleteKey)
     ).toEqual(true)
   })
 
   it('支持 .jpeg 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/jpeg.jpeg')
     const fileMd5 = '2fecf647622e72e8af94147fa1e6c59f'
-    // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.jpeg', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['jpeg.jpeg'])
     expect(res.body.images['jpeg.jpeg'].mimetype).toEqual('image/jpeg')
     expect(res.body.images['jpeg.jpeg'].md5).toEqual(fileMd5)
-    expect(res.body.images['jpeg.jpeg'].fileName).toEqual(
-      imageNameGenerateHelper(fileMd5, '.jpeg', { suffix: imageNameSuffix })
-    )
     expect(
-      isString(
-        res.body.images['jpeg.jpeg'].deleteKey
-      )
+      isString(res.body.images['jpeg.jpeg'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['jpeg.jpeg'].deleteKey)
     ).toEqual(true)
   })
 
@@ -243,52 +192,38 @@ describe('post images 上传图片', () => {
   it('支持 .jpg 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/jpg.jpg')
     const fileMd5 = 'd9d003268cd2dc9ed82ad671d168881b'
-    // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.jpg', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['jpg.jpg'])
     expect(res.body.images['jpg.jpg'].mimetype).toEqual('image/jpeg')
     expect(res.body.images['jpg.jpg'].md5).toEqual(fileMd5)
-    expect(res.body.images['jpg.jpg'].fileName).toEqual(
-      imageNameGenerateHelper(fileMd5, '.jpg', { suffix: imageNameSuffix })
-    )
     expect(
-      isString(
-        res.body.images['jpg.jpg'].deleteKey
-      )
+      isString(res.body.images['jpg.jpg'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['jpg.jpg'].deleteKey)
     ).toEqual(true)
   })
 
   it('支持 .svg 格式文件上传至 upload_images 目录下并响应一些字段', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
     const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
-    // const DELETE_PATH_CALC_KEY = 'foo'
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['svg.svg'])
     expect(res.body.images['svg.svg'].mimetype).toEqual('image/svg+xml')
     expect(res.body.images['svg.svg'].md5).toEqual(fileMd5)
-    expect(res.body.images['svg.svg'].fileName).toEqual(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
     expect(
-      isString(
-        res.body.images['svg.svg'].deleteKey
-      )
+      isString(res.body.images['svg.svg'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['svg.svg'].deleteKey)
     ).toEqual(true)
   })
 
@@ -299,21 +234,16 @@ describe('post images 上传图片', () => {
     const res = await request(app)
       .post('/api/v1/images')
       .attach('images', filePath)
-    expect(async () => {
-      await promisifyFsAccess(
-        path.resolve(uploadImagesFolderPath, imageNameGenerateHelper(fileMd5, '.gif', { suffix: imageNameSuffix }))
-      )
-    }).not.toThrow()
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('images')
     expect(res.body.images).toHaveProperty(['gif.gif'])
     expect(res.body.images['gif.gif'].mimetype).toEqual('image/gif')
     expect(res.body.images['gif.gif'].md5).toEqual(fileMd5)
-    expect(res.body.images['gif.gif'].fileName).toEqual(imageNameGenerateHelper(fileMd5, '.gif', { suffix: imageNameSuffix }))
     expect(
-      isString(
-        res.body.images['gif.gif'].deleteKey
-      )
+      isString(res.body.images['gif.gif'].fileName)
+    ).toEqual(true)
+    expect(
+      isString(res.body.images['gif.gif'].deleteKey)
     ).toEqual(true)
   })
 
@@ -450,51 +380,37 @@ describe('post images 上传图片', () => {
     })
 
     it('接入 阿里云 oss 系统, 返回关于 oss 的链接作为 ossPath 字段', async () => {
+      // arrange
+
+      // act
       const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
-      const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
       const res = await request(app)
         .post('/api/v1/images')
         .attach('images', filePath)
-      await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
+
+      // assert
+      await expect(testAliOssClient.get(res.body.images['svg.svg'].fileName)).resolves.toBeInstanceOf(Object)
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
       expect(res.body.images['svg.svg'].ossPath).toEqual(`https://tuchuang-space-test1.oss-cn-hangzhou.aliyuncs.com/${
-        imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
+        res.body.images['svg.svg'].fileName
       }`)
     })
 
     it('接入 阿里云 cdn 系统, 返回关于 cdn 的链接作为 cdnPath 字段', async () => {
+      // arrange
+
+      // act
       const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
-      const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
       const res = await request(app)
         .post('/api/v1/images')
         .attach('images', filePath)
-      await testAliOssClient.get(imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix }))
+
+      // assert
+      await expect(testAliOssClient.get(res.body.images['svg.svg'].fileName)).resolves.toBeInstanceOf(Object)
       expect(res.body.images['svg.svg']).toHaveProperty('ossPath')
       expect(res.body.images['svg.svg'].cdnPath).toEqual(`https://test.i.tuchuang.space/${
-        imageNameGenerateHelper(fileMd5, '.svg', { suffix: imageNameSuffix })
+        res.body.images['svg.svg'].fileName
       }`)
     })
-  })
-
-  // https://github.com/Jiang-Xuan/tuchuang.space/issues/1#issuecomment-545231777
-  it('imageNameSuffix 为 undefined 的时候的文件命名', async () => {
-    const imageNameSuffixBackup = appConfig.getImageNameSuffix()
-    appConfig._setImageNameSuffix(undefined)
-    const fileMd5 = '0797503940a344aff23ed9a9a70a8d7d'
-    const spy = jest.spyOn(testAliOssClient, 'put').mockImplementation(() => {
-      return new Promise(resolve => resolve({
-        url: `https://example.com/${fileMd5}.svg`,
-        name: `${fileMd5}.svg`
-      }))
-    })
-
-    const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
-    await request(app)
-      .post('/api/v1/images')
-      .attach('images', filePath)
-
-    expect(spy).toBeCalledWith(`${fileMd5}.svg`, path.resolve(__dirname, '../upload_images', `${fileMd5}.svg`))
-    spy.mockRestore()
-    appConfig._setImageNameSuffix(imageNameSuffixBackup)
   })
 })
