@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const { promisify } = require('util')
 const express = require('express')
 const multer = require('multer')
+const uuidV1 = require('uuid/v1')
 const baseAuth = require('./middlewares/baseAuth')
 const uploadImagesToAliOss = require('./middlewares/uploadImagesToAliOss')
 const saveLogToDb = require('./middlewares/saveLogToDb')
@@ -132,6 +133,12 @@ VersionOneApiRouter.route('/images')
             resolve(hash.digest('hex'))
           })
         })
+        let md5FileHashAndUuid
+        {
+          // 文件名生成算法
+          const uuid = uuidV1()
+          md5FileHashAndUuid = crypto.createHash('md5').update(`${fileHash}${uuid}`).digest('hex')
+        }
         const fileExtname = path.extname(originalname) === '.jpg' ? '.jpg' : MIMETYPE_2_EXT[mimetype]
         const imageNameSuffix = !appConfig.getImageNameSuffix() ? '' : appConfig.getImageNameSuffix()
         // Step 2: 用复制的方式修改文件名
@@ -139,7 +146,7 @@ VersionOneApiRouter.route('/images')
           filePath,
           path.resolve(
             imagesFileStorageDestFolderPath,
-            imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`
+            imageNameSuffix === '' ? `${md5FileHashAndUuid}${fileExtname}` : `${md5FileHashAndUuid}-${imageNameSuffix}${fileExtname}`
           )
         )
         // Step 3: 移除原来的文件
@@ -150,8 +157,10 @@ VersionOneApiRouter.route('/images')
           md5: fileHash,
           ext: fileExtname,
           originalname,
-          fileName: imageNameSuffix === '' ? `${fileHash}${fileExtname}` : `${fileHash}-${imageNameSuffix}${fileExtname}`,
-          deleteKey: aes192Crypto(`${fileHash}${fileExtname}`, appConfig.getDeleteKeyCryptoKey())
+          fileName: imageNameSuffix === '' ? `${md5FileHashAndUuid}${fileExtname}` : `${md5FileHashAndUuid}-${imageNameSuffix}${fileExtname}`,
+          deleteKey: imageNameSuffix === ''
+            ? aes192Crypto(`${md5FileHashAndUuid}${fileExtname}`, appConfig.getDeleteKeyCryptoKey())
+            : aes192Crypto(`${md5FileHashAndUuid}-${imageNameSuffix}${fileExtname}`, appConfig.getDeleteKeyCryptoKey())
         }
       })
 
