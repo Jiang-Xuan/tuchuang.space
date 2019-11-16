@@ -60,7 +60,7 @@ jobs:
     - name: Cache node modules
       uses: actions/cache@v1
       with:
-        path: frondend\node_modules
+        path: frondend/node_modules
         key: frondend-${{ hashFiles('frondend/yarn.lock') }}
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
