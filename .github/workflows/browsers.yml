@@ -61,7 +61,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: frondend/node_modules
-        key: frondend-bff-test-${{ hashFiles('frondend/yarn.lock') }}
+        key: frondend-bff-test-${{ matrix.node }}-${{ hashFiles('frondend/yarn.lock') }}
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
