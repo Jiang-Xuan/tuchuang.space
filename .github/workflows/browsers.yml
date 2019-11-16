@@ -16,8 +16,8 @@ jobs:
     - name: Cache node modules
       uses: actions/cache@v1
       with:
-        path: .\frondend\node_modules
-        key: frondend-${{ hashFiles('./frondend/yarn-lock.json') }}
+        path: frondend\node_modules
+        key: frondend-${{ hashFiles('.frondend/yarn-lock.json') }}
     - name: yarn install, test:karma, test:pptr
       shell: cmd
       run: |
@@ -60,8 +60,8 @@ jobs:
     - name: Cache node modules
       uses: actions/cache@v1
       with:
-        path: .\frondend\node_modules
-        key: frondend-${{ hashFiles('./frondend/yarn-lock.json') }}
+        path: frondend\node_modules
+        key: frondend-${{ hashFiles('frondend/yarn-lock.json') }}
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
