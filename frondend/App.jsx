@@ -1,5 +1,5 @@
 import React from 'react'
-import { ConfigProvider, Layout } from 'antd'
+import { ConfigProvider, Layout, Icon } from 'antd'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/es/locale/zh_CN'
 import Home from './Home'
@@ -34,7 +34,11 @@ function App () {
               <Route path='/contact'><Contact /></Route>
             </Switch>
           </Layout.Content>
-          <Layout.Footer className='text-center' data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</Layout.Footer>
+          <Layout.Footer className='text-center siteFooter'>
+            <span data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</span>
+            <span className='ml-2'><a href='http://beian.gov.cn/portal/registerSystemInfo/'>浙ICP备19042875号-1</a></span>
+            <span className='ml-2'><a href='https://github.com/Jiang-Xuan/tuchuang.space'><Icon type='github' /></a></span>
+          </Layout.Footer>
         </Layout>
       </BrowserRouter>
     </ConfigProvider>
