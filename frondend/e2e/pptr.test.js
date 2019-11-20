@@ -261,3 +261,19 @@ describe('导航条导航', () => {
     expect(pathnameJsonValue).toEqual('/contact')
   })
 })
+
+describe('ctrl + v 粘贴图片', () => {
+  beforeAll(async () => {
+    await new Promise(resolve => {
+      testServer.listen(distPort, () => resolve())
+    })
+    await global.jestPuppeteer.resetBrowser()
+    await page.goto(`http://127.0.0.1:${distPort}`, {
+      waitUntil: 'domcontentloaded'
+    })
+  })
+
+  it.skip('ctrl + v 粘贴 png 图片', () => {
+
+  })
+})
