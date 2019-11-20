@@ -1,5 +1,5 @@
 import React from 'react'
-import { Upload, Tabs, Empty } from 'antd'
+import { Upload, Tabs, Empty, Icon } from 'antd'
 import CopyInput from './CopyInput'
 import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
 
@@ -82,8 +82,11 @@ const Home = () => {
           action={uploadUrl}
           name='images'
         >
-          <p className='mt-4'>点击或者是拖拽文件到这里来上传</p>
-          <small className='d-block mb-4'>允许 .png, .jpg, .jpeg, .svg, .webp 后缀的文件</small>
+          <p className='ant-upload-drag-icon'>
+            <Icon type='inbox' />
+          </p>
+          <p className='ant-upload-text'>点击或者是拖拽文件到这里来上传</p>
+          <p className='ant-upload-hint'>允许 .png, .jpg, .jpeg, .svg, .webp 后缀的文件</p>
         </Upload.Dragger>
       </div>
       <div className='result mt-3' data-e2e-test-id='UPLOAD_RESULTS'>
