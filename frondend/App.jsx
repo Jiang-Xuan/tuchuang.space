@@ -36,8 +36,8 @@ function App () {
           </Layout.Content>
           <Layout.Footer className='text-center siteFooter'>
             <span data-e2e-test-id='SITE_COPYRIGHT'>请勿上传违反中国大陆法律的图片，违者后果自负。Copyright Ⓒ 2019 tuchuang.space. All rights reserved.</span>
-            <span className='ml-2'><a href='http://beian.gov.cn/portal/registerSystemInfo/'>浙ICP备19042875号-1</a></span>
-            <span className='ml-2'><a href='https://github.com/Jiang-Xuan/tuchuang.space'><Icon type='github' /></a></span>
+            <span className='ml-2'><a target='_blank' rel='noopener noreferrer' href='http://beian.gov.cn/portal/registerSystemInfo/'>浙ICP备19042875号-1</a></span>
+            <span className='ml-2'><a target='_blank' rel='noopener noreferrer' href='https://github.com/Jiang-Xuan/tuchuang.space'><Icon type='github' /></a></span>
           </Layout.Footer>
         </Layout>
       </BrowserRouter>
