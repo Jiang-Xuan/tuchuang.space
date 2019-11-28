@@ -7,7 +7,8 @@ module.exports = {
   },
   server: {
     command: 'npm run start',
-    port: 3400
+    port: 3400,
+    launchTimeout: 60000
   },
   browserContext: 'default'
 }
