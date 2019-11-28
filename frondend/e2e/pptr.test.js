@@ -4,17 +4,10 @@
 // 在访问 index.html
 // 然后进行测试
 const path = require('path')
-const express = require('express')
-const stoppable = require('stoppable')
-const http = require('http')
-const testApp = express()
-/** @type {10001} 用来托管 dist 目录的端口 */
-const distPort = 10001
-const distPath = path.resolve(__dirname, '../dist')
-testApp.use(express.static(distPath))
-const testServer = stoppable(http.createServer(testApp), 0)
 
 const E2E_TEST_ID_ATTR_NAME = 'data-e2e-test-id'
+
+const devServerPort = 3400
 
 const TEST_ID_STORE = {
   /** @description 用户上传图片的点击区域 @type {'UPLOAD_CLICK_AREA'} */
@@ -52,9 +45,6 @@ describe('上传图片时. 向 api/v1/image 接口发起 POST 请求, 且请求�
   })
 
   beforeAll(async () => {
-    await new Promise(resolve => {
-      testServer.listen(distPort, () => resolve())
-    })
     await page.setRequestInterception(true)
     page.on('request', (interceptedRequest) => {
       if (
@@ -66,13 +56,8 @@ describe('上传图片时. 向 api/v1/image 接口发起 POST 请求, 且请求�
       interceptedRequest.continue()
     })
   })
-  afterAll(async () => {
-    await new Promise((resolve, reject) => {
-      testServer.stop(error => error ? reject(error) : resolve())
-    })
-  })
   it('点击 UPLOAD_CLICK_AREA 发起相应的请求', async () => {
-    await page.goto(`http://127.0.0.1:${distPort}`, {
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
       waitUntil: 'domcontentloaded'
     })
     const fileElement = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.UPLOAD_CLICK_AREA}"]`)
@@ -89,21 +74,11 @@ describe('上传图片时. 向 api/v1/image 接口发起 POST 请求, 且请求�
 })
 
 describe('上传文件不合法的时候展示错误信息', () => {
-  beforeAll(async () => {
-    await new Promise(resolve => {
-      testServer.listen(distPort, () => resolve())
-    })
-  })
-  afterAll(async () => {
-    await new Promise((resolve, reject) => {
-      testServer.stop(error => error ? reject(error) : resolve())
-    })
-  })
   beforeEach(async () => {
     await global.jestPuppeteer.resetBrowser()
   })
   it('图片尺寸过大', async () => {
-    await page.goto(`http://127.0.0.1:${distPort}`, {
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
       waitUntil: 'domcontentloaded'
     })
     const fileElement = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.UPLOAD_CLICK_AREA}"]`)
@@ -120,7 +95,7 @@ describe('上传文件不合法的时候展示错误信息', () => {
     expect(uploadResultsInnerTextJsonValue.indexOf('不能上传 16.1m.jpeg, 原因如下:\n文件超过最大限制, 最大限制为 10M')).not.toEqual(-1)
   })
   it('格式不支持', async () => {
-    await page.goto(`http://127.0.0.1:${distPort}`, {
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
       waitUntil: 'domcontentloaded'
     })
     const fileElement = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.UPLOAD_CLICK_AREA}"]`)
@@ -140,11 +115,8 @@ describe('上传文件不合法的时候展示错误信息', () => {
 
 describe('接口数据响应正常的时候显示正常的数据', () => {
   beforeAll(async () => {
-    await new Promise(resolve => {
-      testServer.listen(distPort, () => resolve())
-    })
     await global.jestPuppeteer.resetBrowser()
-    await page.goto(`http://127.0.0.1:${distPort}`, {
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
       waitUntil: 'domcontentloaded'
     })
     await page.setRequestInterception(true)
@@ -180,12 +152,6 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
     await fileChooser.accept([path.resolve(__dirname, '../../shared/test_images/png.png')])
 
     await new Promise((resolve) => setTimeout(resolve, 1000))
-  })
-
-  afterAll(async () => {
-    await new Promise((resolve, reject) => {
-      testServer.stop(error => error ? reject(error) : resolve())
-    })
   })
 
   it('html 数据', async () => {
@@ -231,17 +197,9 @@ describe('接口数据响应正常的时候显示正常的数据', () => {
 
 describe('导航条导航', () => {
   beforeAll(async () => {
-    await new Promise(resolve => {
-      testServer.listen(distPort, () => resolve())
-    })
     await global.jestPuppeteer.resetBrowser()
-    await page.goto(`http://127.0.0.1:${distPort}`, {
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
       waitUntil: 'domcontentloaded'
-    })
-  })
-  afterAll(async () => {
-    await new Promise((resolve, reject) => {
-      testServer.stop(error => error ? reject(error) : resolve())
     })
   })
   it('前往 api 文档的链接正常', async () => {
