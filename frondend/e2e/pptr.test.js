@@ -30,7 +30,7 @@ const TEST_ID_STORE = {
   GOTO_CONTACT_BTN: 'GOTO_CONTACT_BTN'
 }
 
-jest.setTimeout(30000)
+jest.setTimeout(90000)
 // !! 阻止 jest 关闭 browser
 // jest.setTimeout(60000)
 // function abortPageClosed () {
