@@ -58,7 +58,8 @@ describe('上传图片时. 向 api/v1/image 接口发起 POST 请求, 且请求�
   })
   it('点击 UPLOAD_CLICK_AREA 发起相应的请求', async () => {
     await page.goto(`http://127.0.0.1:${devServerPort}`, {
-      waitUntil: 'domcontentloaded'
+      waitUntil: 'domcontentloaded',
+      timeout: 60000
     })
     const fileElement = await page.$(`[${E2E_TEST_ID_ATTR_NAME}="${TEST_ID_STORE.UPLOAD_CLICK_AREA}"]`)
     const [fileChooser] = await Promise.all([
