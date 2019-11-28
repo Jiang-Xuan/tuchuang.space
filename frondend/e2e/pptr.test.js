@@ -4,6 +4,7 @@
 // 在访问 index.html
 // 然后进行测试
 const path = require('path')
+const { platform } = require('os')
 const express = require('express')
 const stoppable = require('stoppable')
 const http = require('http')
@@ -300,9 +301,15 @@ describe('ctrl + v 粘贴图片', () => {
     await copyLogoToClip()
 
     // act
-    await page.keyboard.down('ShiftLeft')
-    await page.keyboard.press('Insert')
-    await page.keyboard.up('ShiftLeft')
+    if (platform() === 'darwin') {
+      await page.keyboard.down('ShiftLeft')
+      await page.keyboard.press('Insert')
+      await page.keyboard.up('ShiftLeft')
+    } else if (platform() === 'win32') {
+      await page.keyboard.down('ControlLeft')
+      await page.keyboard.press('KeyV')
+      await page.keyboard.up('ControlLeft')
+    }
 
     // assert
     const request = await Promise.race([
