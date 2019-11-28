@@ -5,7 +5,7 @@
 // 然后进行测试
 const path = require('path')
 const { platform } = require('os')
-const { copyLogoToClip } = require('copy-logo-to-clipboard')
+const { copyLogoToClip } = require('copy-logo-to-clipboard/index')
 
 const E2E_TEST_ID_ATTR_NAME = 'data-e2e-test-id'
 
