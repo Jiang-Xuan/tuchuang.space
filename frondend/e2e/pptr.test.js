@@ -7,6 +7,7 @@ const path = require('path')
 const express = require('express')
 const stoppable = require('stoppable')
 const http = require('http')
+const { copyLogoToClip } = require('copy-logo-to-clipboard/index')
 const testApp = express()
 /** @type {10001} 用来托管 dist 目录的端口 */
 const distPort = 10001
@@ -263,6 +264,11 @@ describe('导航条导航', () => {
 })
 
 describe('ctrl + v 粘贴图片', () => {
+  let imagesUploadPromiseResolve = null
+  const imagesUploadPromise = new Promise((resolve) => {
+    imagesUploadPromiseResolve = resolve
+  })
+
   beforeAll(async () => {
     await new Promise(resolve => {
       testServer.listen(distPort, () => resolve())
@@ -271,9 +277,42 @@ describe('ctrl + v 粘贴图片', () => {
     await page.goto(`http://127.0.0.1:${distPort}`, {
       waitUntil: 'domcontentloaded'
     })
+    await page.setRequestInterception(true)
+    page.on('request', (interceptedRequest) => {
+      if (
+        interceptedRequest.url().includes('api/v1/images')
+      ) {
+        imagesUploadPromiseResolve(interceptedRequest)
+        return
+      }
+      interceptedRequest.continue()
+    })
+  })
+  afterAll(async () => {
+    await new Promise((resolve, reject) => {
+      testServer.stop(error => error ? reject(error) : resolve())
+    })
   })
 
-  it.skip('ctrl + v 粘贴 png 图片', () => {
+  it('当用户 ctrl + v 粘贴 png 图片的时候, 然后页面发起上传图片的 POST 请求, 带上合适的参数', async () => {
+    // arrange
+    await page.bringToFront()
+    await copyLogoToClip()
 
+    // act
+    await page.keyboard.down('ShiftLeft')
+    await page.keyboard.press('Insert')
+    await page.keyboard.up('ShiftLeft')
+
+    // assert
+    const request = await Promise.race([
+      imagesUploadPromise,
+      new Promise((resolve, reject) => {
+        setTimeout(reject, 2000, '超时, 没有在 2s 内发出上传图片的请求')
+      })
+    ])
+    expect(request.method()).toEqual('POST')
+    // https://github.com/GoogleChrome/puppeteer/issues/4414
+    expect(request.headers()['content-type'].includes('multipart/form-data;')).toEqual(true)
   })
 })
