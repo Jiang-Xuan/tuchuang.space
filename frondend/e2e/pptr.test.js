@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* global page */
+/* global page, */
 // 先打包
 // 在访问 index.html
 // 然后进行测试
@@ -262,6 +262,7 @@ describe('ctrl + v 粘贴图片', () => {
       await page.keyboard.up('ControlLeft')
     }
 
+    // await jestPuppeteer.debug()
     // assert
     const request = await Promise.race([
       imagesUploadPromise,

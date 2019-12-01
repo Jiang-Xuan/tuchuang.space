@@ -1,3 +1,5 @@
+/* global MutationObserver, Image */
+
 import React from 'react'
 import { Upload, Tabs, Empty, Icon } from 'antd'
 import CopyInput from './CopyInput'
@@ -5,10 +7,168 @@ import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
 
 import './home.less'
 
+/**
+ * @description 负责处理用户的 ctrl + x 粘贴图片的操作
+ */
+class PasteImage {
+  /**
+   * 在获取到用户 paste 的图片数据时的回调函数
+   * @param {(imageBlobData: Blob) => void} callback
+   */
+  constructor (callback) {
+    this._callBack = callback
+    /** @private {boolean} 用户是否正在按下 ctrl 键 */
+    this._ctrlPressed = false
+    /** @private {boolean} 用户是否正在按下 command 键, MacOS 系统下 */
+    this._commandPressed = false
+    /** @private {HTMLDivElement} 捕获用户粘贴的图片的容器 */
+    this._pasteCatcher = document.createElement('div')
+    /** @private {boolean} 是否支持 Native paste 事件 */
+    this._pasteEventSupport = false
+    /** @private {HTMLDivElement} 捕获用户粘贴的图片的容器的 ID */
+    this._pasteCatcherId = `paste-image-${Math.random()}`
+    this._pasteCatcher.setAttribute('id', this._pasteCatcherId)
+    this._pasteCatcher.setAttribute('contenteditable', '')
+    this._pasteCatcher.style.cssText = 'opacity:0;position:fixed;top:0px;left:0px;width:10px;margin-left:-20px;'
+    /**
+     * 处理页面按键按下
+     * @private
+     * @type {(event: KeyboardEvent) => void}
+     */
+    this._handleOnKeyDown = this._handleOnKeyDown.bind(this)
+    /**
+     * 处理页面按键释放
+     * @private
+     * @type {(event: KeyboardEvent) => void}
+     */
+    this._handleOnKeyUp = this._handleOnKeyUp.bind(this)
+    /**
+     * 处理页面的 paste 事件
+     * @private
+     * @type {(event: ClipboardEvent) => void}
+     */
+    this._handleOnPaste = this._handleOnPaste.bind(this)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (this._pasteEventSupport || this._ctrlPressed === false || mutation.type !== 'childList') {
+          return
+        }
+
+        if (mutation.addedNodes.length === 1) {
+          if (mutation.addedNodes[0].src !== undefined) {
+            this._pasteCreateImage(mutation.addedNodes[0].src)
+          }
+        }
+      })
+    })
+
+    observer.observe(this._pasteCatcher, {
+      childList: true,
+      attributes: true,
+      characterData: true
+    })
+  }
+
+  /**
+   * 处理非标准的 paste 事件, 从 image 标签中获取数据
+   * @private
+   * @param {string} source image 标签的 src 属性
+   */
+  _pasteCreateImage (source) {
+    const pasteImage = new Image()
+    pasteImage.src = source
+    console.log(source, pasteImage)
+  }
+
+  /**
+   * 处理页面按键按下
+   * @private
+   * @param {KeyboardEvent} event
+   */
+  _handleOnKeyDown (event) {
+
+  }
+
+  /**
+   * 处理页面按下释放
+   * @private
+   * @param {KeyboardEvent} event
+   */
+  _handleOnKeyUp (event) {
+    const { keyCode } = event
+
+    if (keyCode === 17 || event.metaKey || event.ctrlKey) {
+      if (this._ctrlPressed === false) {
+        this._ctrlPressed = true
+      }
+    }
+
+    if (keyCode === 86) {
+      if (document.activeElement !== null || document.activeElement.type === 'text') {
+        // 允许用户拷贝文字进入输入框
+        return false
+      }
+
+      if (this._ctrlPressed === true) {
+        this._pasteCatcher.focus()
+      }
+    }
+  }
+
+  /**
+   * 处理页面的 paste 事件
+   * @private
+   * @param {ClipboardEvent} event
+   */
+  _handleOnPaste (event) {
+    this._pasteCatcher.innerHTML = ''
+    if (event.clipboardData) {
+      const { items } = event.clipboardData
+
+      if (items) {
+        this._pasteEventSupport = true
+
+        ;[...items].forEach((item) => {
+          if (item.type.indexOf('image') !== -1) {
+            const blob = item.getAsFile()
+            console.log(blob)
+          }
+        })
+      }
+    }
+  }
+
+  /**
+   * 监听事件, 将 pasteCatcher 放入 body 中
+   * @public
+   */
+  install () {
+    document.body.appendChild(this._pasteCatcher)
+    document.addEventListener('keydown', this._handleOnKeyDown)
+    document.addEventListener('keyup', this._handleOnKeyUp)
+    document.addEventListener('paste', this._handleOnPaste)
+  }
+
+  uninstall () {
+    document.body.removeChild(this._pasteCatcher)
+    document.removeEventListener('keydown', this._handleOnKeyDown)
+    document.removeEventListener('keyup', this._handleOnKeyUp)
+    document.removeEventListener('paste', this._handleOnPaste)
+  }
+}
+
 const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/v1/images' : '/api/v1/images'
 
 const Home = () => {
   const [fileList, setFileList] = React.useState([])
+
+  React.useEffect(() => {
+    const pasteImage = new PasteImage((blob) => {
+      console.log(blob)
+    })
+    pasteImage.install()
+    return () => pasteImage.uninstall()
+  }, [])
 
   const tabsPanes = fileList.map(({ url, status, name, size, type, response }, index) => {
     let result
