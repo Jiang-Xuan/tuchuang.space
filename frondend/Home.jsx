@@ -1,7 +1,8 @@
-/* global MutationObserver, Image */
+/* global MutationObserver, Image, Blob, FormData */
 
 import React from 'react'
 import { Upload, Tabs, Empty, Icon } from 'antd'
+import axios from 'axios'
 import CopyInput from './CopyInput'
 import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
 
@@ -71,6 +72,13 @@ class PasteImage {
 
   /**
    * 处理非标准的 paste 事件, 从 image 标签中获取数据
+   * 目前支持的浏览器中只有 IE 11 不支持标准的 paste 事件
+   * IE 11 中粘贴的图片的格式为 [data url](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
+   *
+   * atob('MTIz') // 123
+   *
+   * Example: data:image/png;base64,MTIz
+   *
    * @private
    * @param {string} source image 标签的 src 属性
    */
@@ -78,6 +86,14 @@ class PasteImage {
     const pasteImage = new Image()
     pasteImage.src = source
     console.log(source, pasteImage)
+    axios.get(source, {
+      responseType: 'arraybuffer'
+    })
+      .then((response) => {
+        const uint8 = new Uint8Array(response)
+        const pngBlob = new Blob([uint8], { type: 'image/png' })
+        this._callBack(pngBlob)
+      })
   }
 
   /**
@@ -86,15 +102,6 @@ class PasteImage {
    * @param {KeyboardEvent} event
    */
   _handleOnKeyDown (event) {
-
-  }
-
-  /**
-   * 处理页面按下释放
-   * @private
-   * @param {KeyboardEvent} event
-   */
-  _handleOnKeyUp (event) {
     const { keyCode } = event
 
     if (keyCode === 17 || event.metaKey || event.ctrlKey) {
@@ -116,6 +123,23 @@ class PasteImage {
   }
 
   /**
+   * 处理页面按下释放
+   * @private
+   * @param {KeyboardEvent} event
+   */
+  _handleOnKeyUp (event) {
+    // ctrl
+    if (event.ctrlKey && this._ctrlPressed === true) {
+      this._ctrlPressed = false
+    }
+    // command
+    if (event.metaKey && this._commandPressed === true) {
+      this._commandPressed = false
+      this._ctrlPressed = false
+    }
+  }
+
+  /**
    * 处理页面的 paste 事件
    * @private
    * @param {ClipboardEvent} event
@@ -131,7 +155,7 @@ class PasteImage {
         ;[...items].forEach((item) => {
           if (item.type.indexOf('image') !== -1) {
             const blob = item.getAsFile()
-            console.log(blob)
+            this._callBack(blob)
           }
         })
       }
@@ -165,6 +189,16 @@ const Home = () => {
   React.useEffect(() => {
     const pasteImage = new PasteImage((blob) => {
       console.log(blob)
+      const formData = new FormData()
+      formData.append('images', blob, 'image_from_clipboard.png')
+
+      axios
+        .post(uploadUrl, formData)
+        .then((response) => {
+          if (response.status === 200) {
+
+          }
+        })
     })
     pasteImage.install()
     return () => pasteImage.uninstall()

@@ -247,6 +247,7 @@ describe('ctrl + v 粘贴图片', () => {
   })
 
   it('当用户 ctrl + v 粘贴 png 图片的时候, 然后页面发起上传图片的 POST 请求, 带上合适的参数', async () => {
+    jest.setTimeout(5000)
     // arrange
     await page.bringToFront()
     await copyLogoToClip()
@@ -264,12 +265,7 @@ describe('ctrl + v 粘贴图片', () => {
 
     // await jestPuppeteer.debug()
     // assert
-    const request = await Promise.race([
-      imagesUploadPromise,
-      new Promise((resolve, reject) => {
-        setTimeout(reject, 2000, '超时, 没有在 2s 内发出上传图片的请求')
-      })
-    ])
+    const request = await imagesUploadPromise
     expect(request.method()).toEqual('POST')
     // https://github.com/GoogleChrome/puppeteer/issues/4414
     expect(request.headers()['content-type'].includes('multipart/form-data;')).toEqual(true)
