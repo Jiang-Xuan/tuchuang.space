@@ -252,6 +252,7 @@ describe('ctrl + v 粘贴图片', () => {
     await page.bringToFront()
     await copyLogoToClip()
 
+    console.log(platform())
     // act
     if (platform() === 'darwin') {
       await page.keyboard.down('ShiftLeft')
