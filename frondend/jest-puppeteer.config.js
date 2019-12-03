@@ -2,8 +2,8 @@
 module.exports = {
   launch: {
     // dumpio: true,
-    headless: process.env.CI === 'true',
-    devtools: process.env.CI !== 'true'
+    headless: false,
+    devtools: false
   },
   server: {
     command: 'npm run start',
