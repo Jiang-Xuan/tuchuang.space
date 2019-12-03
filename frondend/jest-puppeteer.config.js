@@ -2,8 +2,9 @@
 module.exports = {
   launch: {
     // dumpio: true,
+    // https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-561012725
     headless: false,
-    devtools: false
+    devtools: true
   },
   server: {
     command: 'npm run start',
