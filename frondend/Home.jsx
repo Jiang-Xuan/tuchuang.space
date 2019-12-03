@@ -1,4 +1,4 @@
-/* global MutationObserver, Image, Blob, FormData */
+/* global MutationObserver, Blob, FormData */
 
 import React from 'react'
 import { Upload, Tabs, Empty, Icon } from 'antd'
@@ -83,9 +83,6 @@ class PasteImage {
    * @param {string} source image 标签的 src 属性
    */
   _pasteCreateImage (source) {
-    const pasteImage = new Image()
-    pasteImage.src = source
-    console.log(source, pasteImage)
     axios.get(source, {
       responseType: 'arraybuffer'
     })
@@ -189,15 +186,33 @@ const Home = () => {
   React.useEffect(() => {
     const pasteImage = new PasteImage((blob) => {
       console.log(blob)
+      const uid = Math.trunc(Math.random() * 100000)
+      const name = `image_from_clipboard-${uid}.png`
       const formData = new FormData()
-      formData.append('images', blob, 'image_from_clipboard.png')
-
+      formData.append('images', blob, name)
+      setFileList(prevFileList => ([...prevFileList, {
+        uid,
+        name,
+        status: 'uploading'
+      }]))
       axios
         .post(uploadUrl, formData)
         .then((response) => {
           if (response.status === 200) {
-
+            setFileList(prevFileList => {
+              return prevFileList.map((file) => {
+                if (file.uid === uid) {
+                  return { ...file, response: response.data, status: 'done' }
+                }
+                return file
+              })
+            })
+          } else {
+            return Promise.reject(response.data)
           }
+        })
+        .catch((error) => {
+          console.error(error)
         })
     })
     pasteImage.install()
