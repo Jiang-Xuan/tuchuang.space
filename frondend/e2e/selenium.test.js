@@ -4,7 +4,9 @@ const { Builder, By, Key } = require('selenium-webdriver')
 const { copyLogoToClip } = require('copy-logo-to-clipboard/index')
 const mockServer = require('@tuchuang.space/mock-server/app')
 
-console.log(process.env.PATH, process.env)
+if (process.env.CI === 'true') {
+  process.env.PATH = `${process.env.PATH};${process.env.GeckoWebDriver};${process.env.ChromeWebDriver};${process.env.IEWebDriver}`
+}
 
 jest.setTimeout(60000)
 
