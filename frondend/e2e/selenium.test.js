@@ -4,6 +4,8 @@ const { Builder, By, Key } = require('selenium-webdriver')
 const { copyLogoToClip } = require('copy-logo-to-clipboard/index')
 const mockServer = require('@tuchuang.space/mock-server/app')
 
+console.log(process.env.PATH)
+
 jest.setTimeout(60000)
 
 describe('ctrl+v 粘贴图片功能', () => {
