@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node devServer.js",
     "test": "npm run test:karma && npm run test:pptr",
+    "test:selenium": "jest --config ./selenium.jest.config.js",
     "test:karma": "karma start ./karma.config.js",
     "test:pptr": "jest --config ./pptr.jest.config.json",
     "test:pptr:watch": "jest --config ./pptr.jest.config.json --watch",
@@ -26,6 +27,7 @@
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
+    "@tuchuang.space/mock-server": "^0.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-import": "^1.12.1",
     "chai": "^4.2.0",
@@ -48,6 +50,7 @@
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "mocha": "^6.2.1",
+    "selenium-webdriver": "^4.0.0-alpha.5",
     "stoppable": "^1.1.0",
     "style-loader": "^1.0.0",
     "supertest": "^4.0.2",
