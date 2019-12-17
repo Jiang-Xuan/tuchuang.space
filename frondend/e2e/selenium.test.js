@@ -3,7 +3,8 @@
 const { platform } = require('os')
 const { Builder, Key, By } = require('selenium-webdriver')
 const md5 = require('md5')
-const { copyLogoToClip, logoMd5Hash } = require('copy-logo-to-clipboard/index')
+const jimp = require('jimp')
+const { copyLogoToClip, getLogoBitmap } = require('copy-logo-to-clipboard/index')
 const mockServer = require('@tuchuang.space/mock-server/app')
 
 if (process.env.CI === 'true') {
@@ -63,7 +64,9 @@ describe('ctrl+v 粘贴图片功能', () => {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const requests = mockServer.search({ path: '/api/v1/images' })
     console.log(requests, requests[0].files)
-    await new Promise((resolve) => setTimeout(resolve, 2000000))
-    expect(md5(requests[0].files[0].buffer)).toEqual(logoMd5Hash)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
+    const logoBitmap = await getLogoBitmap()
+    expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
   })
 })
