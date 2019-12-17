@@ -108,7 +108,7 @@ class PasteImage {
     }
 
     if (keyCode === 86) {
-      if (document.activeElement !== null || document.activeElement.type === 'text') {
+      if (document.activeElement !== null && document.activeElement.type === 'text') {
         // 允许用户拷贝文字进入输入框
         return false
       }
