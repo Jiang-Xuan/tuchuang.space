@@ -151,6 +151,7 @@ class PasteImage {
 
         ;[...items].forEach((item) => {
           if (item.type.indexOf('image') !== -1) {
+            console.log(item)
             const blob = item.getAsFile()
             this._callBack(blob)
           }
@@ -178,7 +179,11 @@ class PasteImage {
   }
 }
 
-const uploadUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4300/api/v1/images' : '/api/v1/images'
+const uploadUrl = process.env.SELENIUM
+  ? `${process.env.SELENIUM_MOCK_SERVER_URL}/api/v1/images`
+  : process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4300/api/v1/images'
+    : '/api/v1/images'
 
 const Home = () => {
   const [fileList, setFileList] = React.useState([])
@@ -187,7 +192,7 @@ const Home = () => {
     const pasteImage = new PasteImage((blob) => {
       console.log(blob)
       const uid = Math.trunc(Math.random() * 100000)
-      const name = `image_from_clipboard-${uid}.png`
+      const name = 'image_from_clipboard.png'
       const formData = new FormData()
       formData.append('images', blob, name)
       setFileList(prevFileList => ([...prevFileList, {
