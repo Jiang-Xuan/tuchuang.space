@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+const { platform } = require('os')
 const { Builder, Key, By } = require('selenium-webdriver')
 const md5 = require('md5')
 const { copyLogoToClip, logoMd5Hash } = require('copy-logo-to-clipboard/index')
@@ -46,10 +47,15 @@ describe('ctrl+v 粘贴图片功能', () => {
     // act
     await driver.findElement(By.css('body')).click()
     let actions
-    if (forBrowser === 'chrome') {
-      actions = driver.actions().keyDown(Key.SHIFT).keyDown(Key.INSERT).keyUp(Key.INSERT).keyUp(Key.SHIFT)
-    } else if (forBrowser === 'firefox') {
-      actions = driver.actions().keyDown(Key.COMMAND).keyDown('v').keyUp('v').keyUp(Key.COMMAND)
+
+    if (platform() === 'darwin') {
+      if (forBrowser === 'chrome') {
+        actions = driver.actions().keyDown(Key.SHIFT).keyDown(Key.INSERT).keyUp(Key.INSERT).keyUp(Key.SHIFT)
+      } else if (forBrowser === 'firefox') {
+        actions = driver.actions().keyDown(Key.COMMAND).keyDown('v').keyUp('v').keyUp(Key.COMMAND)
+      }
+    } else if (platform() === 'win32') {
+      actions = driver.actions().keyDown(Key.CONTROL).keyDown('v').keyUp('v').keyUp(Key.CONTROL)
     }
     await actions.perform()
 
