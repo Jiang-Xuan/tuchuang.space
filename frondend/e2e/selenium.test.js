@@ -12,7 +12,7 @@ if (process.env.CI === 'true') {
 
 jest.setTimeout(600000000)
 
-const forBrowser = 'firefox'
+const forBrowser = platform() === 'darwin' ? 'firefox' : 'internet explorer'
 
 describe('ctrl+v 粘贴图片功能', () => {
   let driver
