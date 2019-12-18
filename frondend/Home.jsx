@@ -3,6 +3,7 @@
 import React from 'react'
 import { Upload, Tabs, Empty, Icon } from 'antd'
 import axios from 'axios'
+import base64js from 'base64-js'
 import CopyInput from './CopyInput'
 import { FILE_MAX_SIZE, FILE_TYPE_ALLOWED } from '../shared/constants'
 
@@ -83,14 +84,11 @@ class PasteImage {
    * @param {string} source image 标签的 src 属性
    */
   _pasteCreateImage (source) {
-    axios.get(source, {
-      responseType: 'arraybuffer'
-    })
-      .then((response) => {
-        const uint8 = new Uint8Array(response)
-        const pngBlob = new Blob([uint8], { type: 'image/png' })
-        this._callBack(pngBlob)
-      })
+    const base64String = source.split(',')[1]
+    const buffer = base64js.toByteArray(base64String)
+    const uint8 = new Uint8Array(buffer)
+    const pngBlob = new Blob([uint8], { type: 'image/png' })
+    this._callBack(pngBlob)
   }
 
   /**
@@ -100,6 +98,7 @@ class PasteImage {
    */
   _handleOnKeyDown (event) {
     const { keyCode } = event
+    console.log(event)
 
     if (keyCode === 17 || event.metaKey || event.ctrlKey) {
       if (this._ctrlPressed === false) {

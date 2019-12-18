@@ -46,7 +46,7 @@ describe('ctrl+v 粘贴图片功能', () => {
     await driver.get('http://127.0.0.1:3400')
     await copyLogoToClip()
     // act
-    await driver.findElement(By.css('body')).click()
+    const body = await driver.findElement(By.css('body'))
     let actions
 
     if (platform() === 'darwin') {
@@ -55,18 +55,35 @@ describe('ctrl+v 粘贴图片功能', () => {
       } else if (forBrowser === 'firefox') {
         actions = driver.actions().keyDown(Key.COMMAND).keyDown('v').keyUp('v').keyUp(Key.COMMAND)
       }
+      await body.click()
+      await actions.perform()
     } else if (platform() === 'win32') {
       actions = driver.actions().keyDown(Key.CONTROL).keyDown('v').keyUp('v').keyUp(Key.CONTROL)
+      const controlKeyDown = driver.actions().keyDown(Key.CONTROL)
+      const vKeyDown = driver.actions().keyDown('v')
+      const vKeyUp = driver.actions().keyUp('v')
+      const controlKeyUp = driver.actions().keyUp(Key.CONTROL)
+
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await body.click()
+      await controlKeyDown.perform()
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      await vKeyDown.perform()
+      // await new Promise((resolve) => setTimeout(resolve, 500))
+      // await vKeyUp.perform()
+      // await new Promise((resolve) => setTimeout(resolve, 500))
+      // await controlKeyUp.perform()
     }
-    await actions.perform()
 
     // assert
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const requests = mockServer.search({ path: '/api/v1/images' })
-    console.log(requests, requests[0].files)
+    console.log(requests, requests[0].files[0].buffer)
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
     const logoBitmap = await getLogoBitmap()
+    console.log(outputLogoJimp.bitmap.data) // 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 00 02 00 00 00 02 08 06 00 00
+
     expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
   })
 })
