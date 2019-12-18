@@ -11,9 +11,9 @@ if (process.env.CI === 'true') {
   process.env.PATH = `${process.env.PATH};${process.env.GeckoWebDriver};${process.env.ChromeWebDriver};${process.env.IEWebDriver}`
 }
 
-jest.setTimeout(600000000)
+jest.setTimeout(60000)
 
-const forBrowser = platform() === 'darwin' ? 'firefox' : 'internet explorer'
+const forBrowser = process.env.SELENIUM_FOR_BROWSER
 
 describe('ctrl+v 粘贴图片功能', () => {
   let driver
@@ -69,20 +69,18 @@ describe('ctrl+v 粘贴图片功能', () => {
       await controlKeyDown.perform()
       await new Promise((resolve) => setTimeout(resolve, 500))
       await vKeyDown.perform()
-      // await new Promise((resolve) => setTimeout(resolve, 500))
-      // await vKeyUp.perform()
-      // await new Promise((resolve) => setTimeout(resolve, 500))
-      // await controlKeyUp.perform()
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      await vKeyUp.perform()
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      await controlKeyUp.perform()
     }
 
     // assert
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const requests = mockServer.search({ path: '/api/v1/images' })
-    console.log(requests, requests[0].files[0].buffer)
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
     const logoBitmap = await getLogoBitmap()
-    console.log(outputLogoJimp.bitmap.data) // 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 00 02 00 00 00 02 08 06 00 00
 
     expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
   })
