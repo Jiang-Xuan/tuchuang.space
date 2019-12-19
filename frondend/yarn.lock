@@ -7045,7 +7045,7 @@ jstoxml@^0.2.3:
   resolved "https://registry.npm.taobao.org/jstoxml/download/jstoxml-0.2.4.tgz#ff3fb67856883a032953c7ce8ce7486210f48447"
   integrity sha1-/z+2eFaIOgMpU8fOjOdIYhD0hEc=
 
-jszip@^3.1.5:
+jszip@^3.1.3:
   version "3.2.2"
   resolved "https://registry.npm.taobao.org/jszip/download/jszip-3.2.2.tgz#b143816df7e106a9597a94c77493385adca5bd1d"
   integrity sha1-sUOBbffhBqlZepTHdJM4WtylvR0=
@@ -10093,15 +10093,15 @@ select-hose@^2.0.0:
   resolved "https://registry.npm.taobao.org/select-hose/download/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-selenium-webdriver@^4.0.0-alpha.5:
-  version "4.0.0-alpha.5"
-  resolved "https://registry.npm.taobao.org/selenium-webdriver/download/selenium-webdriver-4.0.0-alpha.5.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fselenium-webdriver%2Fdownload%2Fselenium-webdriver-4.0.0-alpha.5.tgz#e4683b3dbf827d70df09a7e43bf02ebad20fa7c1"
-  integrity sha1-5Gg7Pb+CfXDfCafkO/AuutIPp8E=
+selenium-webdriver@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npm.taobao.org/selenium-webdriver/download/selenium-webdriver-3.6.0.tgz?cache=0&sync_timestamp=1567950534515&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fselenium-webdriver%2Fdownload%2Fselenium-webdriver-3.6.0.tgz#2ba87a1662c020b8988c981ae62cb2a01298eafc"
+  integrity sha1-K6h6FmLAILiYjJga5iyyoBKY6vw=
   dependencies:
-    jszip "^3.1.5"
-    rimraf "^2.6.3"
+    jszip "^3.1.3"
+    rimraf "^2.5.4"
     tmp "0.0.30"
-    xml2js "^0.4.19"
+    xml2js "^0.4.17"
 
 selfsigned@^1.10.7:
   version "1.10.7"
@@ -11856,7 +11856,7 @@ xml-parse-from-string@^1.0.0:
   resolved "https://registry.npm.taobao.org/xml-parse-from-string/download/xml-parse-from-string-1.0.1.tgz#a9029e929d3dbcded169f3c6e28238d95a5d5a28"
   integrity sha1-qQKekp09vN7RafPG4oI42VpdWig=
 
-xml2js@^0.4.16, xml2js@^0.4.19, xml2js@^0.4.5:
+xml2js@^0.4.16, xml2js@^0.4.17, xml2js@^0.4.5:
   version "0.4.22"
   resolved "https://registry.npm.taobao.org/xml2js/download/xml2js-0.4.22.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fxml2js%2Fdownload%2Fxml2js-0.4.22.tgz#4fa2d846ec803237de86f30aa9b5f70b6600de02"
   integrity sha1-T6LYRuyAMjfehvMKqbX3C2YA3gI=
