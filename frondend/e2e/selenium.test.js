@@ -41,50 +41,54 @@ describe('ctrl+v 粘贴图片功能', () => {
     await mockServer.close()
   })
 
-  it('当用户 ctrl+v 粘贴图片时, 发起请求并传递相应参数', async () => {
-    // arrange
-    await driver.get('http://127.0.0.1:3400')
-    await copyLogoToClip()
-    // act
-    const body = await driver.findElement(By.css('body'))
-    let actions
+  it(
+    forBrowser === 'chrome'
+      ? 'chrome 下, 当用户 ctrl+v 粘贴图片时, 上传的图片的 bitmap 和源图片的 bitmap 相同, 另见: https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-566868929'
+      : 'firefox, ie 下, 当用户 ctrl+v 粘贴图片时, 上传了图片并且图片是 png 格式, 另见: https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-566868929',
+    async () => {
+      // arrange
+      await driver.get('http://127.0.0.1:3400')
+      await copyLogoToClip()
+      // act
+      const body = await driver.findElement(By.css('body'))
+      let actions
 
-    if (platform() === 'darwin') {
-      if (forBrowser === 'chrome') {
-        actions = driver.actions().keyDown(Key.SHIFT).keyDown(Key.INSERT).keyUp(Key.INSERT).keyUp(Key.SHIFT)
-      } else if (forBrowser === 'firefox') {
-        actions = driver.actions().keyDown(Key.COMMAND).keyDown('v').keyUp('v').keyUp(Key.COMMAND)
+      if (platform() === 'darwin') {
+        if (forBrowser === 'chrome') {
+          actions = driver.actions().keyDown(Key.SHIFT).keyDown(Key.INSERT).keyUp(Key.INSERT).keyUp(Key.SHIFT)
+        } else if (forBrowser === 'firefox') {
+          actions = driver.actions().keyDown(Key.COMMAND).keyDown('v').keyUp('v').keyUp(Key.COMMAND)
+        }
+        await body.click()
+        await actions.perform()
+      } else if (platform() === 'win32') {
+        actions = driver.actions().keyDown(Key.CONTROL).keyDown('v').keyUp('v').keyUp(Key.CONTROL)
+        const controlKeyDown = driver.actions().keyDown(Key.CONTROL)
+        const vKeyDown = driver.actions().keyDown('v')
+        const vKeyUp = driver.actions().keyUp('v')
+        const controlKeyUp = driver.actions().keyUp(Key.CONTROL)
+
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await body.click()
+        await controlKeyDown.perform()
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        await vKeyDown.perform()
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        await vKeyUp.perform()
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        await controlKeyUp.perform()
       }
-      await body.click()
-      await actions.perform()
-    } else if (platform() === 'win32') {
-      actions = driver.actions().keyDown(Key.CONTROL).keyDown('v').keyUp('v').keyUp(Key.CONTROL)
-      const controlKeyDown = driver.actions().keyDown(Key.CONTROL)
-      const vKeyDown = driver.actions().keyDown('v')
-      const vKeyUp = driver.actions().keyUp('v')
-      const controlKeyUp = driver.actions().keyUp(Key.CONTROL)
 
+      // assert https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-566868929
       await new Promise((resolve) => setTimeout(resolve, 2000))
-      await body.click()
-      await controlKeyDown.perform()
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      await vKeyDown.perform()
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      await vKeyUp.perform()
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      await controlKeyUp.perform()
-    }
-
-    // assert https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-566868929
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    const requests = mockServer.search({ path: '/api/v1/images' })
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
-    const logoBitmap = await getLogoBitmap()
-    if (forBrowser === 'chrome') {
-      expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
-    } else {
-      expect(outputLogoJimp.getMIME()).toEqual('image/png')
-    }
-  })
+      const requests = mockServer.search({ path: '/api/v1/images' })
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
+      const logoBitmap = await getLogoBitmap()
+      if (forBrowser === 'chrome') {
+        expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
+      } else {
+        expect(outputLogoJimp.getMIME()).toEqual('image/png')
+      }
+    })
 })
