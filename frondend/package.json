@@ -59,7 +59,7 @@
     "less-loader": "^5.0.0",
     "md5": "^2.2.1",
     "mocha": "^6.2.1",
-    "selenium-webdriver": "3.6.0",
+    "selenium-webdriver": "4.0.0-alpha.1",
     "stoppable": "^1.1.0",
     "style-loader": "^1.0.0",
     "supertest": "^4.0.2",

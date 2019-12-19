@@ -62,7 +62,6 @@ describe('ctrl+v 粘贴图片功能', () => {
         await body.click()
         await actions.perform()
       } else if (platform() === 'win32') {
-        actions = driver.actions().keyDown(Key.CONTROL).keyDown('v').keyUp('v').keyUp(Key.CONTROL)
         const controlKeyDown = driver.actions().keyDown(Key.CONTROL)
         const vKeyDown = driver.actions().keyDown('v')
         const vKeyUp = driver.actions().keyUp('v')
