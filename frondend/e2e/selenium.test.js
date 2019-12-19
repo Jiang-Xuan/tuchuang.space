@@ -75,13 +75,16 @@ describe('ctrl+v 粘贴图片功能', () => {
       await controlKeyUp.perform()
     }
 
-    // assert
+    // assert https://github.com/Jiang-Xuan/tuchuang.space/issues/36#issuecomment-566868929
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const requests = mockServer.search({ path: '/api/v1/images' })
     await new Promise((resolve) => setTimeout(resolve, 2000))
     const outputLogoJimp = await jimp.read(requests[0].files[0].buffer)
     const logoBitmap = await getLogoBitmap()
-
-    expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
+    if (forBrowser === 'chrome') {
+      expect(md5(outputLogoJimp.bitmap.data)).toEqual(md5(logoBitmap))
+    } else {
+      expect(outputLogoJimp.getMIME()).toEqual('image/png')
+    }
   })
 })
