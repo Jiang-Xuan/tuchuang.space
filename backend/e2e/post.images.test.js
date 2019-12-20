@@ -412,5 +412,16 @@ describe('post images 上传图片', () => {
         res.body.images['svg.svg'].fileName
       }`)
     })
+
+    it('#79 images 参数缺失抛出 422 状态码, 错误信息为 { errorMsg: \'images 参数缺失\' }', async () => {
+      // act
+      const res = await request(app)
+        .post('/api/v1/images')
+        .field('images', 'string, not file')
+
+      // assert
+      expect(res.status).toEqual(422)
+      expect(res.body).toEqual({ errorMsg: 'images 参数缺失' })
+    })
   })
 })

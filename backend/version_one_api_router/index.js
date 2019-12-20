@@ -119,6 +119,8 @@ VersionOneApiRouter.route('/images')
       const { images } = req.files
       if (!images) {
         // 抛出错误
+        res.status(422).send({ errorMsg: 'images 参数缺失' })
+        return
       }
       const imagesRenamePromise = images.map(async (file) => {
         // 转移文件: 将文件命名为 md5 hash
