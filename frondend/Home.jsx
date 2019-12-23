@@ -85,9 +85,8 @@ class PasteImage {
    */
   _pasteCreateImage (source) {
     const base64String = source.split(',')[1]
-    const buffer = base64js.toByteArray(base64String)
-    const uint8 = new Uint8Array(buffer)
-    const pngBlob = new Blob([uint8], { type: 'image/png' })
+    const buffer = base64js.toByteArray(base64String).buffer
+    const pngBlob = new Blob([buffer], { type: 'image/png' })
     this._callBack(pngBlob)
   }
 
