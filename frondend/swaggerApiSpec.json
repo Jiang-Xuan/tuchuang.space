@@ -1,0 +1,241 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "图床系统",
+    "version": "v1",
+    "description": "[tuchuang.space](https://tuchuang.space) 的 RESTful API 文档\n",
+    "contact": {
+      "name": "Jiang-Xuan",
+      "url": "https://github.com/Jiang-Xuan",
+      "email": "645762213@qq.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://beta.tuchuang.space/api/v1",
+      "description": "beta 环境的 api"
+    },
+    {
+      "url": "https://tuchuang.space/api/v1",
+      "description": "生产环境的 api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "depercated",
+      "description": "被弃用的 api, 当前可用, 会在下一个版本的 api 中被移除"
+    },
+    {
+      "name": "image",
+      "description": "关于图片的操作"
+    }
+  ],
+  "paths": {
+    "/images": {
+      "post": {
+        "tags": [
+          "image"
+        ],
+        "summary": "上传图片,  创建一个/多个 image 实例",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "图床实例创建成功, 也就是图片上传成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "images": {
+                      "type": "object",
+                      "properties": {
+                        "<图片的原始命名>": {
+                          "$ref": "#/components/schemas/Image"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "images 参数缺失",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMsg": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "errorMsg": "images 参数缺失"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "image"
+        ],
+        "summary": "永久删除该系统中的某张图片",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "移除图片的 key",
+                    "required": [
+                      "key"
+                    ]
+                  }
+                },
+                "example": {
+                  "key": "c60ec1670dca7c13615b89eaca7d9a4f:c5b6a8374c30faf4c32b86f76699605acbda3f8f6ef7b137d3e563deba1dd7228e44287e0aa5042e6116428066384504"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "删除成功"
+          },
+          "400": {
+            "description": "请求的 content-type 不正确",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "message": "Body should be a JSON object"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "该系统中不存在该图片"
+          },
+          "422": {
+            "description": "请求的参数 缺失/类型错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "message": "Validation Failed",
+                    "errors": [
+                      {
+                        "field": "key",
+                        "type": "missing_field"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Image": {
+        "type": "object",
+        "properties": {
+          "cdnPath": {
+            "type": "string",
+            "description": "图片的 CDN 访问地址"
+          },
+          "ext": {
+            "type": "string",
+            "description": "图片的扩展名"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "图片被处理之后的命名, 全局唯一"
+          },
+          "originName": {
+            "type": "string",
+            "description": "图片的原始命名, 也就是上传的时候的图片的名称"
+          },
+          "md5": {
+            "type": "string",
+            "description": "图片的 MD5 哈希值"
+          },
+          "deleteKey": {
+            "type": "string",
+            "description": "图片的删除 key, 传递给删除图片的接口来永久的从系统中移除该图片"
+          },
+          "mimetype": {
+            "type": "string",
+            "description": "图片的 mimetype",
+            "externalDocs": {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types"
+            }
+          }
+        },
+        "example": {
+          "cdnPath": "https://i.tuchuang.space/b674825d3b110165ebfdf276c7b376b5.png",
+          "ext": ".png",
+          "fileName": "169640a6f82fbc6278cc4b6e39040764.png",
+          "originName": "download.png",
+          "md5": "6109872bbf8069d187b60b3ee04b375b",
+          "deleteKey": "277c9845f2ed779bdedff0d78cbd3654:5f69789d8d58e64cbe0ad1c8c46e8f6efea692de502cd6da5e328909c9b644e4b81a7871c443995b53b7787a52a7d201",
+          "mimetype": "image/png"
+        }
+      }
+    }
+  }
+}

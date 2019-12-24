@@ -53,6 +53,9 @@ module.exports = {
         }
       }]
     }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
+    }, {
       test: /\.[png|jpg|jpeg|svg]$/,
       loader: 'url-loader',
       options: {
