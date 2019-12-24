@@ -12,9 +12,9 @@ function isSingleRun () {
 
 const browsers = ['Chrome', 'Firefox']
 
-if (os.platform() === 'darwin') {
-  browsers.push('Safari')
-}
+// if (os.platform() === 'darwin') {
+//   browsers.push('Safari')
+// }
 
 if (os.platform() === 'win32') {
   browsers.push('IE')

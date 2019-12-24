@@ -1,9 +1,11 @@
 /* eslint-env jest */
-/* global page */
+/* global page, */
 // 先打包
 // 在访问 index.html
 // 然后进行测试
 const path = require('path')
+const { platform } = require('os')
+const { copyLogoToClip } = require('copy-logo-to-clipboard/index')
 
 const E2E_TEST_ID_ATTR_NAME = 'data-e2e-test-id'
 
@@ -218,5 +220,54 @@ describe('导航条导航', () => {
     const pathnameJsonValue = await pathname.jsonValue()
 
     expect(pathnameJsonValue).toEqual('/contact')
+  })
+})
+
+describe('ctrl + v 粘贴图片', () => {
+  let imagesUploadPromiseResolve = null
+  const imagesUploadPromise = new Promise((resolve) => {
+    imagesUploadPromiseResolve = resolve
+  })
+
+  beforeAll(async () => {
+    await global.jestPuppeteer.resetBrowser()
+    await page.goto(`http://127.0.0.1:${devServerPort}`, {
+      waitUntil: 'domcontentloaded'
+    })
+    await page.setRequestInterception(true)
+    page.on('request', (interceptedRequest) => {
+      if (
+        interceptedRequest.url().includes('api/v1/images')
+      ) {
+        imagesUploadPromiseResolve(interceptedRequest)
+        return
+      }
+      interceptedRequest.continue()
+    })
+  })
+
+  it('当用户 ctrl + v 粘贴 png 图片的时候, 然后页面发起上传图片的 POST 请求, 带上合适的参数', async () => {
+    jest.setTimeout(5000)
+    // arrange
+    await page.bringToFront()
+    await copyLogoToClip()
+
+    // act
+    if (platform() === 'darwin') {
+      await page.keyboard.down('ShiftLeft')
+      await page.keyboard.press('Insert')
+      await page.keyboard.up('ShiftLeft')
+    } else if (platform() === 'win32') {
+      await page.keyboard.down('ControlLeft')
+      await page.keyboard.press('KeyV')
+      await page.keyboard.up('ControlLeft')
+    }
+
+    // await jestPuppeteer.debug()
+    // assert
+    const request = await imagesUploadPromise
+    expect(request.method()).toEqual('POST')
+    // https://github.com/GoogleChrome/puppeteer/issues/4414
+    expect(request.headers()['content-type'].includes('multipart/form-data;')).toEqual(true)
   })
 })
