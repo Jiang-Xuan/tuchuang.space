@@ -79,6 +79,18 @@ describe('post images 上传图片', () => {
     expect(res).not.toEqual(undefined)
   })
 
+  // https://github.com/Jiang-Xuan/tuchuang.space/issues/83
+  it('当浏览器跨域请求 OPTIONS 时, 需要返回响应的跨域响应头', async () => {
+    // act
+    const response = await request(app)
+      .options('/api/v1/images')
+
+    // assert
+    expect(response.header['access-control-allow-methods']).toEqual('post, get, options, delete')
+    expect(response.header['access-control-allow-origin']).toEqual('*')
+    expect(response.header['access-control-allow-headers']).toEqual('*')
+  })
+
   it('当文件超出 MAX_FILES 的时候抛出错误', async () => {
     const filePath = path.resolve(__dirname, '../../shared/test_images/png.png')
     const resHandler = request(app)

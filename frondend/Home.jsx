@@ -59,6 +59,10 @@ class PasteImage {
         if (mutation.addedNodes.length === 1) {
           if (mutation.addedNodes[0].src !== undefined) {
             this._pasteCreateImage(mutation.addedNodes[0].src)
+
+            setTimeout(() => {
+              this._pasteCatcher.innerHTML = ''
+            }, 20)
           }
         }
       })
