@@ -68,3 +68,5 @@ dist
 
 # 前端中间层的 index.html 文件
 frondend/bff/index.html
+# 自部署的配置文件, 非敏感数据, 敏感数据在 .env 中配置
+self-hosted.config.js
