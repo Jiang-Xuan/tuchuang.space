@@ -16,19 +16,21 @@ if (NODE_ENV === 'beta') {
 if (NODE_ENV === 'test') {
   cdnDomain = TEST_CDN_DOMAIN
 }
-/**
- * 上传图片至 ali oss
- * @param {Express.Request}
- * @param {Express.Response}
- * @param {import("express").NextFunction}
- */
+
 const imagesFileStorageDestFolderPath = path.resolve(__dirname, '../../upload_images')
 
+/**
+ * 上传图片至 ali oss
+ * @param {import("express".Request)} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ */
 const uploadImagesToAliOss = async function (req, res, next) {
   const { images } = res.data
 
   const imagesNames = Object.keys(images)
 
+  const start = Date.now()
   const uploadPromises = imagesNames.map((imageName) => {
     const { fileName } = images[imageName]
 
@@ -36,6 +38,10 @@ const uploadImagesToAliOss = async function (req, res, next) {
   })
 
   const uploadResult = await Promise.all(uploadPromises)
+
+  const end = Date.now()
+
+  res.set('server-timing', `uploadImagesToStorage;dur=${end - start}`)
 
   const resData = imagesNames.reduce((curr, imageName) => {
     const { fileName } = images[imageName]
