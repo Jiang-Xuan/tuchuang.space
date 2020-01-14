@@ -117,13 +117,17 @@ const {
 } = process.env
 
 let bucketName
+let internal
 
 if (NODE_ENV === 'beta') {
   bucketName = 'tuchuang-space-beta'
+  internal = true
 } else if (NODE_ENV === 'production') {
   bucketName = 'tuchuang-space'
+  internal = true
 } else {
   bucketName = 'tuchuang-space-localdevelopmont'
+  internal = false
 }
 
 module.exports = new AppConfig({
@@ -135,7 +139,8 @@ module.exports = new AppConfig({
     accessKeyId: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID,
     accessKeySecret: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET,
     bucket: bucketName,
-    secure: true
+    secure: true,
+    internal: internal
   },
   imageNameSuffix: '',
   deleteKeyCryptoKey: process.env.BACKEND_DELETE_KEY_CRYPTO_KEY

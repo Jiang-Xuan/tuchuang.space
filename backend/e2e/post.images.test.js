@@ -86,7 +86,7 @@ describe('post images 上传图片', () => {
       .options('/api/v1/images')
 
     // assert
-    expect(response.header['access-control-allow-methods']).toEqual('post, get, options, delete')
+    expect(response.header['access-control-allow-methods']).toEqual('POST, GET, OPTIONS, DELETE')
     expect(response.header['access-control-allow-origin']).toEqual('*')
     expect(response.header['access-control-allow-headers']).toEqual('*')
   })
@@ -434,6 +434,20 @@ describe('post images 上传图片', () => {
       // assert
       expect(res.status).toEqual(422)
       expect(res.body).toEqual({ errorMsg: 'images 参数缺失' })
+    })
+
+    it('#95 响应 server-timeing 头', async () => {
+      // arrange
+      const filePath = path.resolve(__dirname, '../../shared/test_images/svg.svg')
+
+      const res = await request(app)
+        .post('/api/v1/images')
+        .attach('images', filePath)
+
+      // assert
+      expect(res.header['server-timing']).toEqual(
+        expect.stringMatching(/uploadImagesToStorage;dur=\d+/)
+      )
     })
   })
 })
