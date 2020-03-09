@@ -70,6 +70,8 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1",
     "@babel/polyfill": "^7.7.0",
     "ali-oss": "^6.1.1",
     "antd": "^3.23.2",
