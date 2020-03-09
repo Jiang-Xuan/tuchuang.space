@@ -23,5 +23,14 @@ if (!!bff === false) {
 } else if (Object.prototype.toString.call(bff) !== '[object Object]') {
   throw new Error('bff 配置无效, 请查阅文档 https://www.example.com')
 } else {
+  const { listenPort } = bff
+  if (typeof listenPort !== 'number') {
+    throw new Error('bff.listenPort 配置无效, 请查阅文档 https://www.example.com')
+  }
 
+  resultConfig.bff = {
+    listenPort
+  }
 }
+
+module.exports = Object.freeze(resultConfig)
