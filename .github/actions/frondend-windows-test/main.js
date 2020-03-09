@@ -13,7 +13,7 @@ call yarn run test:selenium:windows || exit 1
 
 try {
   console.log('start')
-  const commandChildProcess = exec(command)
+  const commandChildProcess = exec('yarn install')
 
   commandChildProcess.stdout.on('data', (data) => {
     console.log(data)
