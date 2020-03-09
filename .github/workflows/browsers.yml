@@ -13,24 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: ./.github/actions/frondend-windows-test
     - name: Cache node modules
       uses: actions/cache@v1
       with:
         path: frondend\node_modules
         key: frondend-windows-browsers-${{ hashFiles('frondend/yarn.lock') }}
-    - name: yarn install, test:karma, test:pptr
+    - name: yarn install
       shell: cmd
       run: |
-        cd .\frondend
         call yarn cache clean || exit 1
         call yarn install || exit 1
-        call yarn run test:karma || exit 1
-        call yarn run test:pptr || exit 1
-        call yarn run test:selenium:windows || exit 1
-      env:
-        CI: true
-        KARMA_SINGLE_MODE: on
+    - uses: ./.github/actions/frondend-windows-test
   # macos-browsers:
   #   runs-on: macos-latest
 
