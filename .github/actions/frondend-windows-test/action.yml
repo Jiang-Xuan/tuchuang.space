@@ -4,7 +4,7 @@ description: 在 Windows 才做系统下运行前端的测试用例, 包括 e2e 
 
 runs:
   using: 'node12'
-  main: 'frondend-windows-test.js'
+  main: 'main.js'
 
 outputs:
   test: 测试
