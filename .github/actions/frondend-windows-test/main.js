@@ -8,9 +8,9 @@ try {
     'cd .\\frondend',
     'yarn cache clean',
     'yarn install',
-    'yarn run test:karma',
     'yarn run test:pptr',
-    'yarn run test:selenium:windows'
+    'yarn run test:selenium:windows',
+    'yarn run test:karma'
   ].join(' && '))
 
   commandChildProcess.stdout.on('data', (data) => {
