@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: .github/actions/frondend-windows-test
+    - uses: ./.github/actions/frondend-windows-test
     - name: Cache node modules
       uses: actions/cache@v1
       with:
