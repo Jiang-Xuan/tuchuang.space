@@ -1,0 +1,18 @@
+name: 前端windows下的测试
+author: Jiang-Xuan
+description: 在 Windows 才做系统下运行前端的测试用例, 包括 e2e 测试, 单元测试, 集成测试
+
+runs:
+  using: 'node12'
+  main: 'frondend-windows-test.js'
+
+outputs:
+  test: 测试
+
+env:
+  CI: true
+  KARMA_SINGLE_MODE: on
+
+branding:
+  icon: 'coffee'
+  color: 'green'
