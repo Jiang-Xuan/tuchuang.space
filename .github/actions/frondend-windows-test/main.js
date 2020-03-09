@@ -19,6 +19,10 @@ try {
   commandChildProcess.stderr.on('data', (data) => {
     console.log(data)
   })
+
+  commandChildProcess.on('exit', (single) => {
+    process.exit(single)
+  })
 } catch (error) {
   console.log(error.message)
 }
