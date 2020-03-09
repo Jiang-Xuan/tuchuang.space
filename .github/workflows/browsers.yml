@@ -18,11 +18,6 @@ jobs:
       with:
         path: frondend\node_modules
         key: frondend-windows-browsers-${{ hashFiles('frondend/yarn.lock') }}
-    - name: yarn install
-      shell: cmd
-      run: |
-        call yarn cache clean || exit 1
-        call yarn install || exit 1
     - uses: ./.github/actions/frondend-windows-test
   # macos-browsers:
   #   runs-on: macos-latest
