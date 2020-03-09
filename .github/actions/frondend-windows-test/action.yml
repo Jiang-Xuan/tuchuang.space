@@ -6,9 +6,6 @@ runs:
   using: 'node12'
   main: 'main.js'
 
-outputs:
-  test: 测试
-
 env:
   CI: true
   KARMA_SINGLE_MODE: on
