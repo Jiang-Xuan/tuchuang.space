@@ -46,6 +46,7 @@ if (!!frondend === false) {
   } else if (Object.prototype.toString.call(frondend) !== '[object Object]') {
     throw new Error('frondend.asset 配置需要是 object, 请查阅文档 https://www.example.com')
   } else {
+    // eslint-disable-next-line
     const { useCloudStorage, cloudStorageUploadConfig, location, webpackPublicPath } = asset
   }
 }
