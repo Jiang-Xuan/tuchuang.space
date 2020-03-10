@@ -69,4 +69,7 @@ dist
 # 前端中间层的 index.html 文件
 frondend/bff/index.html
 
+# github action 的 node_module 需要被添加进代码仓库 https://help.github.com/en/actions/building-actions/creating-a-javascript-action#commit-tag-and-push-your-action-to-github
+!.github/**/node_modules
+
 self-hosted.config.js
