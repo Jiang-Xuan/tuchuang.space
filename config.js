@@ -33,4 +33,21 @@ if (!!bff === false) {
   }
 }
 
+const frondend = selfHostedConfig.frondend
+
+if (!!frondend === false) {
+  throw new Error('frondend 需要配置, 请查阅文档 https://www.example.com')
+} else if (Object.prototype.toString.call(frondend) !== '[object Object]') {
+  throw new Error('frondend 配置需要是 object, 请查阅文档 https://www.example.com')
+} else {
+  const { asset } = frondend
+  if (!!asset === false) {
+    throw new Error('frondend.asset 需要配置, 请查阅文档 https://www.example.com')
+  } else if (Object.prototype.toString.call(frondend) !== '[object Object]') {
+    throw new Error('frondend.asset 配置需要是 object, 请查阅文档 https://www.example.com')
+  } else {
+    const { useCloudStorage, cloudStorageUploadConfig, location, webpackPublicPath } = asset
+  }
+}
+
 module.exports = Object.freeze(resultConfig)
