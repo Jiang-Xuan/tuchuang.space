@@ -7,11 +7,11 @@ const jimp = require('jimp')
 const { copyLogoToClip, getLogoBitmap } = require('copy-logo-to-clipboard/index')
 const mockServer = require('@tuchuang.space/mock-server/app')
 
-console.log(process.env)
-
 if (process.env.CI === 'true') {
   process.env.PATH = `${process.env.PATH};${process.env.GeckoWebDriver};${process.env.ChromeWebDriver};${process.env.IEWebDriver}`
 }
+
+console.log(process.env, process.env.PATH)
 
 jest.setTimeout(60000)
 
