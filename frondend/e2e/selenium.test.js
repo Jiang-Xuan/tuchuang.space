@@ -11,8 +11,6 @@ if (process.env.CI === 'true') {
   process.env.PATH = `${process.env.PATH};${process.env.GeckoWebDriver};${process.env.ChromeWebDriver};${process.env.IEWebDriver}`
 }
 
-console.log(process.env, process.env.PATH)
-
 jest.setTimeout(60000)
 
 const forBrowser = process.env.SELENIUM_FOR_BROWSER

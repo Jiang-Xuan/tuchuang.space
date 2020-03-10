@@ -3,7 +3,6 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 
 try {
-  console.log(process.env)
   const commandChildProcess = exec([
     'dir',
     'cd .\\frondend',
