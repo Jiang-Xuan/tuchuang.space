@@ -1,6 +1,6 @@
 name: 前端windows下的测试
 author: Jiang-Xuan
-description: 在 Windows 才做系统下运行前端的测试用例, 包括 e2e 测试, 单元测试, 集成测试
+description: 在 Windows 系统下运行前端的测试用例, 包括 e2e 测试, 单元测试, 集成测试
 
 runs:
   using: 'node12'
