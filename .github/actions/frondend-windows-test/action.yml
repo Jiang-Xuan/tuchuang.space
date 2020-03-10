@@ -6,10 +6,6 @@ runs:
   using: 'node12'
   main: 'main.js'
 
-env:
-  CI: true
-  KARMA_SINGLE_MODE: on
-
 branding:
   icon: 'coffee'
   color: 'green'

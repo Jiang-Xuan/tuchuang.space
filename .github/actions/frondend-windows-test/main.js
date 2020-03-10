@@ -12,7 +12,15 @@ try {
     'yarn run test:pptr',
     'yarn run test:selenium:windows',
     'yarn run test:karma'
-  ].join(' && '))
+  ].join(' && '), {
+    env: {
+      ...process.env,
+      // CI 模式
+      CI: true
+      // karma 只运行一次, 然后程序退出
+      KARMA_SINGLE_MODE: on
+    }
+  })
 
   commandChildProcess.stdout.on('data', (data) => {
     console.log(data)
