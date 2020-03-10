@@ -16,9 +16,9 @@ try {
     env: {
       ...process.env,
       // CI 模式
-      CI: true
+      CI: 'true'
       // karma 只运行一次, 然后程序退出
-      KARMA_SINGLE_MODE: on
+      KARMA_SINGLE_MODE: 'on'
     }
   })
 
