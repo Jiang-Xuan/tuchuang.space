@@ -37,12 +37,10 @@ module.exports = {
       NODE_ENV: 'development'
     },
     env_production: {
-      NODE_ENV: 'production',
-      PORT: 4303
+      NODE_ENV: 'production'
     },
     env_beta: {
-      NODE_ENV: 'beta',
-      PORT: 4302
+      NODE_ENV: 'beta'
     }
   }],
   deploy: {

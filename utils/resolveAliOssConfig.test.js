@@ -47,13 +47,25 @@ describe('resolveAliossConfig', () => {
     })).toThrow(new TypeError('secure 必须是 boolean'))
   })
 
+  test('当参数 region 不是 string 时, 抛出错误 TypeError(region 必须是 string)', () => {
+    // arrange
+    const config = { accessKeyId: '', accessKeySecret: '', bucket: '', secure: true }
+
+    // act+assert
+    expect(() => resolveAliossConfig({
+      ...config,
+      region: 11
+    })).toThrow(new TypeError('region 必须是 string'))
+  })
+
   test('当参数正确, 返回一样的参数', () => {
     // arrange
     const config = {
       accessKeyId: 'id',
       accessKeySecret: 'secure',
       bucket: 'bucket',
-      secure: true
+      secure: true,
+      region: 'region'
     }
 
     // act+assert
@@ -66,7 +78,8 @@ describe('resolveAliossConfig', () => {
       accessKeyId: 'id',
       accessKeySecret: 'secure',
       bucket: 'bucket',
-      secure: true
+      secure: true,
+      region: 'region'
     }
 
     // act

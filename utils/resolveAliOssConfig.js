@@ -15,7 +15,7 @@ module.exports = function resolveAliOss (aliOssConfig) {
     throw new Error('aliOssConfig 必须是 object')
   }
 
-  const { accessKeyId, accessKeySecret, bucket, secure } = aliOssConfig
+  const { accessKeyId, accessKeySecret, bucket, secure, region } = aliOssConfig
 
   if (typeof accessKeyId !== 'string') {
     throw new TypeError('accessKeyId 必须是 string')
@@ -31,6 +31,10 @@ module.exports = function resolveAliOss (aliOssConfig) {
 
   if (typeof secure !== 'boolean') {
     throw new TypeError('secure 必须是 boolean')
+  }
+
+  if (typeof region !== 'string') {
+    throw new TypeError('region 必须是 string')
   }
 
   return Object.freeze({
