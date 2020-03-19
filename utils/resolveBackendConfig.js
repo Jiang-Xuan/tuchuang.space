@@ -31,8 +31,15 @@ module.exports = (backendConfig) => {
 
   const imageStorageConfig = resolveImageStorageConfig(imageStorage)
 
-  if (typeof listenPort !== 'number') {
-    throw new TypeError('listenPort 必须是 number')
+  let listenPortConfig
+  if (listenPort === undefined) {
+    listenPortConfig = 4300
+  } else {
+    if (typeof listenPort !== 'number') {
+      throw new TypeError('listenPort 必须是 number')
+    } else {
+      listenPortConfig = listenPort
+    }
   }
 
   if (typeof deleteKeyCryptoKey !== 'string') {
@@ -57,7 +64,7 @@ module.exports = (backendConfig) => {
 
   return Object.freeze({
     dbPath,
-    listenPort,
+    listenPort: listenPortConfig,
     deleteKeyCryptoKey,
     seconds,
     hours,

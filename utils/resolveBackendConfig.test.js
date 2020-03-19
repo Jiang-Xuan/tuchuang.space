@@ -42,9 +42,15 @@ describe('resolveBackendConfig', () => {
   })
 
   test('当 listenPort 参数不是 number 时, 抛错误 TypeError(listenPort 必须是 number)', () => {
-    delete config.listenPort
+    config.listenPort = {}
 
     expect(() => resolveBackendConfig(config)).toThrow(new TypeError('listenPort 必须是 number'))
+  })
+
+  test('当 listenPort 参数是 undefined 时, 默认为 4300', () => {
+    delete config.listenPort
+
+    expect(resolveBackendConfig(config).listenPort).toEqual(4300)
   })
 
   test('当 deleteKeyCryptoKey 参数不是 string 时, 抛错误 TypeError(deleteKeyCryptoKey 必须是 string)', () => {
