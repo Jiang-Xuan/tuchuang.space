@@ -1,5 +1,6 @@
 const { isArray, isInteger } = require('lodash')
 const Oss = require('ali-oss')
+const config = require('../config')
 
 class AppConfig {
   /**
@@ -112,36 +113,13 @@ class AppConfig {
   }
 }
 
-const {
-  NODE_ENV
-} = process.env
-
-let bucketName
-let internal
-
-if (NODE_ENV === 'beta') {
-  bucketName = 'tuchuang-space-beta'
-  internal = true
-} else if (NODE_ENV === 'production') {
-  bucketName = 'tuchuang-space'
-  internal = true
-} else {
-  bucketName = 'tuchuang-space-localdevelopmont'
-  internal = false
-}
-
 module.exports = new AppConfig({
   // 请求频率限制, 按照 秒 限制
-  seconds: [1, 10],
-  hours: [24, 5000],
+  seconds: config.backend.seconds,
+  hours: config.backend.hours,
   alioss: {
-    region: 'oss-cn-hangzhou',
-    accessKeyId: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID,
-    accessKeySecret: process.env.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET,
-    bucket: bucketName,
-    secure: true,
-    internal: internal
+    ...config.backend.imageStorage.alioss
   },
-  imageNameSuffix: '',
-  deleteKeyCryptoKey: process.env.BACKEND_DELETE_KEY_CRYPTO_KEY
+  imageNameSuffix: config.backend.imageNameSuffix,
+  deleteKeyCryptoKey: config.backend.deleteKeyCryptoKey
 })
