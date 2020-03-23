@@ -20,13 +20,13 @@ describe('resolveImageStorageConfig', () => {
     expect(() => resolveImageStorageConfig(undefined)).toThrow(new TypeError('imageStorageConfig 必须是 object'))
   })
 
-  test('当参数 alioss 没有提供时, 抛出错误 TypeError(alioss 必须提供, 目前只支持 alioss)', () => {
-    expect(() => resolveImageStorageConfig({})).toThrow(new TypeError('alioss 必须提供, 目前只支持 alioss'))
+  test('当参数 alioss 没有提供时, 抛出错误 TypeError(aliOss 必须提供, 目前只支持 aliOss)', () => {
+    expect(() => resolveImageStorageConfig({})).toThrow(new TypeError('aliOss 必须提供, 目前只支持 aliOss'))
   })
 
-  test('将参数 alioss 传递给 resolveAliOssConfig', () => {
+  test('将参数 aliOss 传递给 resolveAliOssConfig', () => {
     resolveImageStorageConfig({
-      alioss: {}
+      aliOss: {}
     })
 
     expect(resolveAliOssConfig.mock.calls[0][0]).toEqual({})
@@ -34,7 +34,7 @@ describe('resolveImageStorageConfig', () => {
 
   test('提供的参数合法, 返回的对象是冻结的', () => {
     const result = resolveImageStorageConfig({
-      alioss: {}
+      aliOss: {}
     })
 
     const isFrozen = Object.isFrozen(result)
@@ -44,19 +44,19 @@ describe('resolveImageStorageConfig', () => {
 
   test('提供的参数合法, 返回正确的对象 1', () => {
     expect(resolveImageStorageConfig({
-      alioss: {}
+      aliOss: {}
     })).toEqual({
-      alioss: {}
+      aliOss: {}
     })
   })
 
   test('提供的参数合法, 返回正确的对象 2', () => {
     expect(resolveImageStorageConfig({
-      alioss: {
+      aliOss: {
         foo: 123
       }
     })).toEqual({
-      alioss: {
+      aliOss: {
         foo: 123
       }
     })

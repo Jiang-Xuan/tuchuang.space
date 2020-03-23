@@ -13,15 +13,15 @@ module.exports = (imageStorageConfig) => {
     throw new TypeError('imageStorageConfig 必须是 object')
   }
 
-  const { alioss } = imageStorageConfig
+  const { aliOss } = imageStorageConfig
 
-  if (alioss === undefined) {
-    throw new TypeError('alioss 必须提供, 目前只支持 alioss')
+  if (aliOss === undefined) {
+    throw new TypeError('aliOss 必须提供, 目前只支持 aliOss')
   }
 
-  const aliossConfig = resolveAliOssConfig(alioss)
+  const aliossConfig = resolveAliOssConfig(aliOss)
 
   return Object.freeze({
-    alioss: aliossConfig
+    aliOss: aliossConfig
   })
 }

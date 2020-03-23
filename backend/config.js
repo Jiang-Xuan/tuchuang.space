@@ -9,7 +9,7 @@ class AppConfig {
    *  seconds?: [number, number],
    *  minutes?: [number, number],
    *  hours?: [number, number],
-   *  alioss: {
+   *  aliOss: {
    *    region: string,
    *    accessKeyId: string,
    *    accessKeySecret: string,
@@ -26,7 +26,7 @@ class AppConfig {
 
     this.config = config
     this.ossClient = new Oss({
-      ...config.alioss
+      ...config.aliOss
     })
 
     AppConfig.instance = this
@@ -117,8 +117,8 @@ module.exports = new AppConfig({
   // 请求频率限制, 按照 秒 限制
   seconds: config.backend.seconds,
   hours: config.backend.hours,
-  alioss: {
-    ...config.backend.imageStorage.alioss
+  aliOss: {
+    ...config.backend.imageStorage.aliOss
   },
   imageNameSuffix: config.backend.imageNameSuffix,
   deleteKeyCryptoKey: config.backend.deleteKeyCryptoKey
