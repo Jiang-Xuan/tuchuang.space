@@ -1,4 +1,5 @@
 const resolveAliOssConfig = require('./resolveAliOssConfig')
+const resolveLocalConfig = require('./resolveLocalConfig')
 
 /**
  * @typedef {object} IImageStorage
@@ -13,15 +14,26 @@ module.exports = (imageStorageConfig) => {
     throw new TypeError('imageStorageConfig 必须是 object')
   }
 
-  const { aliOss } = imageStorageConfig
+  const { aliOss, local } = imageStorageConfig
 
-  if (aliOss === undefined) {
-    throw new TypeError('aliOss 必须提供, 目前只支持 aliOss')
+  if (
+    aliOss === undefined &&
+    local === undefined
+  ) {
+    throw new TypeError('必须至少有一个图片存储源配置')
   }
 
-  const aliossConfig = resolveAliOssConfig(aliOss)
+  let aliossConfig
+  let localConfig
+
+  if (aliOss) {
+    aliossConfig = resolveAliOssConfig(aliOss)
+  } else {
+    localConfig = resolveLocalConfig(local)
+  }
 
   return Object.freeze({
-    aliOss: aliossConfig
+    aliOss: aliossConfig,
+    local: localConfig
   })
 }
