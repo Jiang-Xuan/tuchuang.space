@@ -1,4 +1,8 @@
-cd ./frondend/bff
+cd ./frondend
+
+node downloadIndexHtml.js
+
+cd ./bff
 
 yarn install
 

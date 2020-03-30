@@ -16,8 +16,18 @@ const config = {
   frondend: {
     /** @type {{}} 前端静态资源配置 */
     asset: {
-      /** @type {boolean} 是否使用云服务来存储自己的静态资源 */
-      useCloudStorage: false
+      /** @type {boolean} 是否使用云服务来存储自己的静态资源, CD 会用到这个配置 */
+      useCloudStorage: true,
+      cloudStorageUpload: {
+        aliOss: {
+          region: 'oss-cn-hangzhou',
+          accessKeyId: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID,
+          accessKeySecret: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET,
+          bucket: process.env.BACKEND_E2E_TEST_ALI_OSS_BUCKET,
+          secure: true,
+          internal: false
+        }
+      }
     }
   },
   /** @type {{}} 后端 */
