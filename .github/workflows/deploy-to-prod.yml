@@ -24,6 +24,7 @@ env:
   F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID }}
   F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET }}
   F2E_ASSETS_ALI_OSS_BUCKET: 'assets-tuchuang-space'
+  F2E_ASSETS_WEBPACK_PUBLIC_PATH: 'https://assets.tuchuang.space'
   # 前端资源的配置 END
 
 jobs:

@@ -27,7 +27,8 @@ const config = {
           secure: true,
           internal: false
         }
-      }
+      },
+      webpackPublicPath: process.env.F2E_ASSETS_WEBPACK_PUBLIC_PATH
     }
   },
   /** @type {{}} 后端 */
