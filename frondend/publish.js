@@ -8,7 +8,9 @@ const {
   frondend: {
     asset: {
       useCloudStorage,
-      aliOss,
+      cloudStorageUpload: {
+        aliOss
+      },
       location
     }
   }
