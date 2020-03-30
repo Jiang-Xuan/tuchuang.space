@@ -8,13 +8,13 @@ const {
   frondend: {
     asset: {
       useCloudStorage,
-      alioss,
+      aliOss,
       location
     }
   }
 } = config
 
-console.log(`当前发布静态资源的环境为: bucketName: ${alioss.bucket}`)
+console.log(`当前发布静态资源的环境为: bucketName: ${aliOss.bucket}`)
 
 const buildPath = path.resolve(__dirname, './dist')
 
@@ -26,7 +26,7 @@ if (buildPathState.isDirectory() === false) {
 
 function cloudUpload () {
   const client = new Oss({
-    ...alioss
+    ...aliOss
   })
 
   /**
