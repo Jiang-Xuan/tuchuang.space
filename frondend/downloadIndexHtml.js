@@ -31,7 +31,7 @@ if (useCloudStorage) {
   let indexPath
   // 如果 location === '.' 表示静态文件被保持在 fronend 目录下的 dist 目录
   if (location === '.') {
-    indexPath = path.resolve(process.cwd(), './frondend/dist/index.html')
+    indexPath = path.resolve(process.cwd(), './dist/index.html')
   } else {
     indexPath = path.resolve(process.cwd(), location, './dist/index.html')
   }
