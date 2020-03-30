@@ -21,9 +21,9 @@ const config = {
       cloudStorageUpload: {
         aliOss: {
           region: 'oss-cn-hangzhou',
-          accessKeyId: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID,
-          accessKeySecret: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET,
-          bucket: process.env.BACKEND_E2E_TEST_ALI_OSS_BUCKET,
+          accessKeyId: process.env.F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID,
+          accessKeySecret: process.env.F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET,
+          bucket: process.env.F2E_ASSETS_ALI_OSS_BUCKET,
           secure: true,
           internal: false
         }
