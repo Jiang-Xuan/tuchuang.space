@@ -103,6 +103,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: 生成 self-hosted.config.js
+      run: |
+        node ./scripts/generateSelfHostedConfigFromEnv.js
     - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
       run: |
         mkdir ~/.ssh
