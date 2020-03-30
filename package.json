@@ -4,8 +4,8 @@
   "description": "一个测试驱动的图床系统",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env KARMA_SINGLE_MODE=on npm run test:real",
-    "test:real": "cross-env-shell \"cd backend && yarn run test && cd ../frondend && yarn run test\""
+    "test": "jest --config ./jest.config.json",
+    "test:watch": "jest --watch --config ./jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "@types/mocha": "^5.2.7",
     "cross-env": "^6.0.0",
     "husky": "^3.1.0",
+    "jest": "^24.9.0",
     "standard": "^14.3.1"
   }
 }

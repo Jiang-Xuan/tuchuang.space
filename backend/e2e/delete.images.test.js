@@ -1,15 +1,6 @@
 /* eslint-env jest */
 /* eslint-env jest */
 const path = require('path')
-/**
- * @type {boolean}
- * @description 是否在 CI 环境
- */
-const isInCi = process.env.CI === 'true'
-
-if (!isInCi) {
-  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
-}
 
 const Oss = require('ali-oss')
 const uuidV1 = require('uuid/v1')
@@ -18,16 +9,19 @@ const app = require('../app')
 const request = require('supertest')
 const mongoose = require('mongoose')
 const UploadImages = require('../modals/uploadImages')
+const {
+  test: {
+    imageStorage: {
+      aliOss: aliOssConfig
+    }
+  }
+} = require('../../config')
 
 jest.setTimeout(30000)
 
 describe('delete images', () => {
   const testAliOssClient = new Oss({
-    region: 'oss-cn-hangzhou',
-    accessKeyId: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID,
-    accessKeySecret: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET,
-    bucket: 'tuchuang-space-test1',
-    secure: true
+    ...aliOssConfig
   })
   const imageNameSuffix = uuidV1()
   const imageNameSuffixBackup = appConfig.getImageNameSuffix()

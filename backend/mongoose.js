@@ -1,21 +1,20 @@
 const mongoose = require('mongoose')
+const config = require('../config')
 
 const { NODE_ENV } = process.env
 
-let dbPath
+const dbPath = config.backend.dbPath
 
-if (NODE_ENV === 'beta') {
-  // beta 环境
-  dbPath = 'mongodb://localhost:27017/beta-tuchuang-space'
-} else if (NODE_ENV === 'production') {
-  // 生产环境
-  dbPath = 'mongodb://localhost:27017/tuchuang-space'
-} else if (NODE_ENV === 'test') {
-  dbPath = global.__MONGO_URI__
-} else {
-  // 本地开发环境
-  dbPath = 'mongodb://localhost:3402/test'
-}
+// if (NODE_ENV === 'beta') {
+//   // beta 环境
+//   dbPath = 'mongodb://localhost:27017/beta-tuchuang-space'
+// } else if (NODE_ENV === 'production') {
+//   // 生产环境
+//   dbPath = 'mongodb://localhost:27017/tuchuang-space'
+// } else {
+//   // 本地开发环境
+//   dbPath = 'mongodb://localhost:3402/test'
+// }
 
 console.log(`mongoose.js dbPath: ${dbPath}, NODE_ENV: ${NODE_ENV}`)
 

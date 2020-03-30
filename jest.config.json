@@ -1,0 +1,6 @@
+{
+  "testRegex": [
+    "./utils/.*.test.js"
+  ],
+  "transform": {}
+}

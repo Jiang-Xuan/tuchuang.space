@@ -16,12 +16,20 @@ jobs:
       BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET }}
       BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID: ${{ secrets.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_ID }}
       BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.BACKEND_STORE_IMAGES_ALI_OSS_ACCESS_KEY_SECRET }}
+      # 前端资源的配置 目前配置文件必须有这个, 不然无法通过配置文件测试
+      F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID }}
+      F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET }}
+      F2E_ASSETS_ALI_OSS_BUCKET: 'assets-tuchuang-space'
+      # 前端资源的配置 END
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: [8.x, 10.x, 12.x]
     steps:
     - uses: actions/checkout@v1
+    - name: 生成 self-hosted.config.js
+      run: |
+        node ./scripts/generateSelfHostedConfigFromEnv.js
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
