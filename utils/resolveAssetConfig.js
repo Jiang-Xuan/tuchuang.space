@@ -13,7 +13,6 @@ module.exports = (assetConfig) => {
 
   let cloudStorageUploadConfig
   let locationConfig
-  let webpackPublicPathConfig
 
   if (useCloudStorage) {
     cloudStorageUploadConfig = resolveCloudStorageUploadConfig(cloudStorageUpload)
@@ -40,6 +39,6 @@ module.exports = (assetConfig) => {
     useCloudStorage,
     cloudStorageUpload: useCloudStorage ? cloudStorageUploadConfig : undefined,
     location: useCloudStorage ? undefined : locationConfig,
-    webpackPublicPath: webpackPublicPathConfig
+    webpackPublicPath: webpackPublicPath
   })
 }

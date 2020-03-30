@@ -99,10 +99,12 @@ describe('resolveAssetConfig', () => {
   test('提供的参数合法, 返回正确的对象 1', () => {
     expect(resolveAssetConfig({
       useCloudStorage: true,
-      cloudStorageUpload: {}
+      cloudStorageUpload: {},
+      webpackPublicPath: 'test'
     })).toEqual({
       useCloudStorage: true,
-      cloudStorageUpload: {}
+      cloudStorageUpload: {},
+      webpackPublicPath: 'test'
     })
   })
 })
