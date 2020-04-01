@@ -11,10 +11,10 @@ function Nav (props) {
     <>
       <div className='logo' />
       <Menu mode='horizontal' theme='dark' defaultSelectedKeys={['home']} selectedKeys={[pathname]} style={{ lineHeight: '64px' }}>
-        <Menu.Item key='/'><Link to='/'>Home</Link></Menu.Item>
-        <Menu.Item key='/about'><Link to='/about'>About</Link></Menu.Item>
-        <Menu.Item key='/contact' data-e2e-test-id='GOTO_CONTACT_BTN'><Link to='/contact'>Contact</Link></Menu.Item>
-        <Menu.Item data-e2e-test-id='GOTO_API_DOC_BTN' key='/api-doc'><Link to='/api-doc'>Api</Link></Menu.Item>
+        <Menu.Item key='/'><Link to='/'>上传</Link></Menu.Item>
+        <Menu.Item key='/about'><Link to='/about'>关于我</Link></Menu.Item>
+        <Menu.Item key='/contact' data-e2e-test-id='GOTO_CONTACT_BTN'><Link to='/contact'>联系我</Link></Menu.Item>
+        <Menu.Item data-e2e-test-id='GOTO_API_DOC_BTN' key='/api-doc'><Link to='/api-doc'>开发者</Link></Menu.Item>
       </Menu>
     </>
   )
