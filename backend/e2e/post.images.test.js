@@ -22,6 +22,13 @@ const UploadImages = require('../modals/uploadImages')
 const appConfig = require('../config')
 const app = require('../app')
 const promisifyFsAccess = promisify(fs.access)
+const {
+  test: {
+    imageStorage: {
+      aliOss: aliOssConfig
+    }
+  }
+} = require('../../config')
 // const { MAX_FILES } = require('../../shared/constants') // 10
 // const { FILE_MAX_SIZE } = require('../../shared/constants') // 10 * 1024 * 1024
 
@@ -31,11 +38,7 @@ jest.setTimeout(30000)
 
 describe('post images 上传图片', () => {
   const testAliOssClient = new Oss({
-    region: 'oss-cn-hangzhou',
-    accessKeyId: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_ID,
-    accessKeySecret: process.env.BACKEND_E2E_TEST_ALI_OSS_ACCESS_KEY_SECRET,
-    bucket: 'tuchuang-space-test1',
-    secure: true
+    ...aliOssConfig
   })
   const imageNameSuffix = uuidV1()
   const imageNameSuffixBackup = appConfig.getImageNameSuffix()

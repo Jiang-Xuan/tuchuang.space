@@ -1,33 +1,41 @@
 const fs = require('fs')
 const path = require('path')
 const Oss = require('ali-oss')
+const {
+  frondend: {
+    asset: {
+      useCloudStorage,
+      cloudStorageUpload,
+      location
+    }
+  }
+} = require('../config')
 
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+console.log(`downloadIndexHtml.js: useCloudStorage: ${useCloudStorage}`)
 
-const { DEPLOY_TYPE } = process.env
+if (useCloudStorage) {
+  const client = new Oss(cloudStorageUpload.aliOss)
+  const downloadIndexHtml = async () => {
+    const result = await client.getStream('index.html')
+    const writeStream = fs.createWriteStream(path.resolve(__dirname, './bff/index.html'))
+    result.stream.pipe(writeStream)
+  }
+  process.on('unhandledRejection', (reason, promise) => {
+    // https://nodejs.org/api/process.html#process_event_unhandledrejection
+    console.log('Unhandled Rejection at:', promise, 'reason:', reason)
+    process.exit(1)
+  })
 
-const bucketName = DEPLOY_TYPE === 'beta' ? 'beta-assets-tuchuang-space' : 'assets-tuchuang-space'
-
-console.log(`downloadIndexHtml.js: 当前发布静态资源的环境为: DEPLOY_TYPE: ${DEPLOY_TYPE}, bucketName: ${bucketName}`)
-
-const client = new Oss({
-  region: 'oss-cn-hangzhou',
-  accessKeyId: process.env.F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID,
-  accessKeySecret: process.env.F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET,
-  bucket: bucketName,
-  secure: true
-})
-
-const downloadIndexHtml = async () => {
-  const result = await client.getStream('index.html')
+  downloadIndexHtml()
+} else {
+  let indexPath
+  // 如果 location === '.' 表示静态文件被保持在 fronend 目录下的 dist 目录
+  if (location === '.') {
+    indexPath = path.resolve(process.cwd(), './dist/index.html')
+  } else {
+    indexPath = path.resolve(process.cwd(), location, './dist/index.html')
+  }
+  const read = fs.createReadStream(indexPath)
   const writeStream = fs.createWriteStream(path.resolve(__dirname, './bff/index.html'))
-  result.stream.pipe(writeStream)
+  read.pipe(writeStream)
 }
-
-process.on('unhandledRejection', (reason, promise) => {
-  // https://nodejs.org/api/process.html#process_event_unhandledrejection
-  console.log('Unhandled Rejection at:', promise, 'reason:', reason)
-  process.exit(1)
-})
-
-downloadIndexHtml()

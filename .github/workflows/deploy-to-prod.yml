@@ -23,6 +23,8 @@ env:
   # 前端资源的配置
   F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID }}
   F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET: ${{ secrets.F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET }}
+  F2E_ASSETS_ALI_OSS_BUCKET: 'assets-tuchuang-space'
+  F2E_ASSETS_WEBPACK_PUBLIC_PATH: 'https://assets.tuchuang.space'
   # 前端资源的配置 END
 
 jobs:
@@ -36,6 +38,9 @@ jobs:
         node: [8.x, 10.x, 12.x]
     steps:
     - uses: actions/checkout@v1
+    - name: 生成 self-hosted.config.js
+      run: |
+        node ./scripts/generateSelfHostedConfigFromEnv.js
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
@@ -54,18 +59,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: yarn install, test:karma, test:pptr
-      shell: cmd
-      run: |
-        cd .\frondend
-        call yarn cache clean || exit 1
-        call yarn install || exit 1
-        call yarn run test:karma || exit 1
-        call yarn run test:pptr || exit 1
-        call yarn run test:selenium:windows || exit 1
-      env:
-        CI: true
-        KARMA_SINGLE_MODE: on
+    - uses: ./.github/actions/frondend-windows-test
   bff-test:
     env:
       CI: true
@@ -110,6 +104,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: 生成 self-hosted.config.js
+      run: |
+        node ./scripts/generateSelfHostedConfigFromEnv.js
     - name: copy PROD_DEPLOY_SSH_PRIVATE_KEY
       run: |
         mkdir ~/.ssh
