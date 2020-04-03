@@ -68,7 +68,9 @@ describe('ctrl+v 粘贴图片功能', () => {
         const controlKeyUp = driver.actions().keyUp(Key.CONTROL)
 
         await new Promise((resolve) => setTimeout(resolve, 2000))
-        await body.click()
+        // 经测试, 不 click 也可以. selenium 目前无法指定点击的地方, 经常点击到文件上传框, 导致 selenium 报错
+        // UnexpectedAlertOpenError: Modal dialog preset with text:
+        // await body.click()
         await controlKeyDown.perform()
         await new Promise((resolve) => setTimeout(resolve, 500))
         await vKeyDown.perform()
