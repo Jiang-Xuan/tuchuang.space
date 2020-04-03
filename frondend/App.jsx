@@ -1,5 +1,5 @@
 import React from 'react'
-import { ConfigProvider, Layout, Icon } from 'antd'
+import { ConfigProvider, Layout, Icon, Alert } from 'antd'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import zhCN from 'antd/es/locale/zh_CN'
 import Home from './Home'
@@ -24,6 +24,7 @@ function App () {
     <ConfigProvider locale={zhCN}>
       <BrowserRouter basename={reactRouterBasename}>
         <Layout className='app'>
+          <Alert message='致敬抗疫的英雄, 西昌救火英雄。 愿英魂长存。' banner />
           <Layout.Header>
             <Nav />
           </Layout.Header>
