@@ -1,18 +1,21 @@
 const webpackMerge = require('webpack-merge')
 const webpackBaseConfig = require('./webpack.base.config')
+const {
+  frondend: {
+    asset: {
+      webpackPublicPath
+    }
+  }
+} = require('../config')
 
 const { DEPLOY_TYPE } = process.env
 
-const publicPath = DEPLOY_TYPE === 'beta'
-  ? 'https://beta.assets.tuchuang.space'
-  : 'https://assets.tuchuang.space'
-
-console.log(`webpack.prod.config.js  当前发布静态资源的环境为: DEPLOY_TYPE: ${DEPLOY_TYPE}, publicPath: ${publicPath}`)
+console.log(`webpack.prod.config.js  当前发布静态资源的环境为: DEPLOY_TYPE: ${DEPLOY_TYPE}, publicPath: ${webpackPublicPath}`)
 
 const webpackDevConfig = {
   devtool: 'source-map',
   output: {
-    publicPath,
+    publicPath: webpackPublicPath,
     filename: '[chunkhash].bundle.js'
   },
   mode: 'production',

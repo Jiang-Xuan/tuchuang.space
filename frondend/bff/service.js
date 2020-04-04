@@ -1,6 +1,7 @@
 const app = require('./app')
+const config = require('../../config')
 
-const PORT = process.env.PORT || 4303
+const PORT = config.bff.listenPort
 
 app.listen(PORT, () => {
   console.log(`server is listening at ${PORT} port`)

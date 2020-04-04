@@ -1,28 +1,18 @@
 const fs = require('fs')
 const path = require('path')
 const Oss = require('ali-oss')
-
-if (!process.env.CI) {
-  require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
-}
+const childProcess = require('child_process')
+const config = require('../config')
 
 const {
-  DEPLOY_TYPE,
-  F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID,
-  F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET
-} = process.env
-
-const bucketName = DEPLOY_TYPE === 'beta' ? 'beta-assets-tuchuang-space' : 'assets-tuchuang-space'
-
-console.log(`当前发布静态资源的环境为: DEPLOY_TYPE: ${DEPLOY_TYPE}, bucketName: ${bucketName}`)
-
-const client = new Oss({
-  region: 'oss-cn-hangzhou',
-  accessKeyId: F2E_ASSETS_ALI_OSS_ACCESS_KEY_ID,
-  accessKeySecret: F2E_ASSETS_ALI_OSS_ACCESS_KEY_SECRET,
-  bucket: bucketName,
-  secure: true
-})
+  frondend: {
+    asset: {
+      useCloudStorage,
+      cloudStorageUpload,
+      location
+    }
+  }
+} = config
 
 const buildPath = path.resolve(__dirname, './dist')
 
@@ -32,38 +22,47 @@ if (buildPathState.isDirectory() === false) {
   process.exit(1)
 }
 
-/**
- * 上传目录下所有文件
- * @param {string} dir 目录路径
- */
-const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve()) => {
-  const children = fs.readdirSync(walkDir)
-
-  children.forEach(child => {
-    const childPath = path.resolve(walkDir, child)
-    if (
-      fs.statSync(childPath).isDirectory()
-    ) {
-      walkDirAndUploadFile(childPath, `${ossDir}/${child}`, exector)
-    } else if (
-      fs.statSync(childPath).isFile()
-    ) {
-      exector = exector.then(async () => {
-        console.log(`开始分片上传文件 ${childPath}`)
-        const progress = async (percentage, checkpoint, res) => {
-          console.log(`percentage: ${percentage * 100}%, checkpoint: ${JSON.stringify(checkpoint)}, res: ${JSON.stringify(res)}`)
-        }
-        await client.multipartUpload(`${ossDir}/${child}`, childPath, {
-          progress,
-          parallel: 1,
-          partSize: 100 * 1024
-        })
-        console.log(`上传文件 ${childPath} 结束`)
-
-        return Promise.resolve()
-      })
-    }
+function cloudUpload () {
+  console.log(`当前发布静态资源的环境为: bucketName: ${cloudStorageUpload.aliOss.bucket}`)
+  const client = new Oss({
+    ...cloudStorageUpload.aliOss
   })
+
+  /**
+   * 上传目录下所有文件
+   * @param {string} dir 目录路径
+   */
+  const walkDirAndUploadFile = (walkDir, ossDir = '', exector = Promise.resolve()) => {
+    const children = fs.readdirSync(walkDir)
+
+    children.forEach(child => {
+      const childPath = path.resolve(walkDir, child)
+      if (
+        fs.statSync(childPath).isDirectory()
+      ) {
+        walkDirAndUploadFile(childPath, `${ossDir}/${child}`, exector)
+      } else if (
+        fs.statSync(childPath).isFile()
+      ) {
+        exector = exector.then(async () => {
+          console.log(`开始分片上传文件 ${childPath}`)
+          const progress = async (percentage, checkpoint, res) => {
+            console.log(`percentage: ${percentage * 100}%, checkpoint: ${JSON.stringify(checkpoint)}, res: ${JSON.stringify(res)}`)
+          }
+          await client.multipartUpload(`${ossDir}/${child}`, childPath, {
+            progress,
+            parallel: 1,
+            partSize: 100 * 1024
+          })
+          console.log(`上传文件 ${childPath} 结束`)
+
+          return Promise.resolve()
+        })
+      }
+    })
+  }
+
+  walkDirAndUploadFile(buildPath)
 }
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -72,4 +71,13 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1)
 })
 
-walkDirAndUploadFile(buildPath)
+if (useCloudStorage) {
+  cloudUpload()
+} else {
+  const targetPath = path.resolve(process.cwd(), location)
+
+  if (location !== '.') {
+    childProcess.spawnSync('cp', ['-r', buildPath, targetPath])
+  }
+  // 复制 dist 目录到 targetPath
+}
