@@ -1,6 +1,6 @@
 {
   "name": "tuchuang.space",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "一个测试驱动的图床系统",
   "main": "index.js",
   "scripts": {
