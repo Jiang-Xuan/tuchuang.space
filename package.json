@@ -34,7 +34,7 @@
     "@types/express": "^4.17.1",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.149",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^8.0.0",
     "cross-env": "^6.0.0",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
