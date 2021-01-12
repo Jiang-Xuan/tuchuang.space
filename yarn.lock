@@ -384,13 +384,14 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express@^4.17.1":
-  version "4.17.1"
-  resolved "https://registry.npm.taobao.org/@types/express/download/@types/express-4.17.1.tgz#4cf7849ae3b47125a567dfee18bfca4254b88c5c"
-  integrity sha1-TPeEmuO0cSWlZ9/uGL/KQlS4jFw=
+"@types/express@^4.17.10":
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.10.tgz#850fe07d6d887412d522a4295fb84a685e69f683"
+  integrity sha512-GRwKdE+iV6mA8glCvQ7W5iaoIhd6u1HDsNTF76UPRi7T89SLjOfeCLShVmQSgpXzcpf3zgcz2SbMiCcjnYRRxQ==
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
+    "@types/qs" "*"
     "@types/serve-static" "*"
 
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
@@ -454,6 +455,11 @@
   version "15.7.3"
   resolved "https://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha1-KrDV2i5YFflLC51LldHl8kOrLKc=
+
+"@types/qs@*":
+  version "6.9.5"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.5.tgz#434711bdd49eb5ee69d90c1d67c354a9a8ecb18b"
+  integrity sha512-/JHkVHtx/REVG0VVToGRGH2+23hsYLHdyG+GrvoUGlGAd0ErauXDyvHtRI/7H7mzLm+tBCKA7pfcpkQ1lf58iQ==
 
 "@types/range-parser@*":
   version "1.2.3"
