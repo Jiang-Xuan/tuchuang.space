@@ -344,10 +344,10 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/chai@^4.2.3":
-  version "4.2.3"
-  resolved "https://registry.npm.taobao.org/@types/chai/download/@types/chai-4.2.3.tgz?cache=0&sync_timestamp=1568717883463&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fchai%2Fdownload%2F%40types%2Fchai-4.2.3.tgz#419477a3d5202bad19e14c787940a61dc9ea6407"
-  integrity sha1-QZR3o9UgK60Z4Ux4eUCmHcnqZAc=
+"@types/chai@^4.2.20":
+  version "4.2.20"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.20.tgz#bb02e7d02b6c452f6bbb8fe575b56e180644de67"
+  integrity sha512-E121rHk/4BlcEwANZOwcHl8L/Sl0zyIFXJoyggXkl7FCT/4MTf5u25f+qiphe0V5ELaFIkCptgvbf4whCJUVMA==
 
 "@types/cheerio@*":
   version "0.22.13"
