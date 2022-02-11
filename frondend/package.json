@@ -47,7 +47,7 @@
     "jest-dev-server": "^4.3.0",
     "jest-puppeteer": "^4.3.0",
     "jimp": "^0.9.3",
-    "karma": "^4.3.0",
+    "karma": "^6.3.14",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.2.0",
