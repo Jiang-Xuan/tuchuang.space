@@ -80,6 +80,6 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.2",
-    "swagger-ui-react": "^3.24.3"
+    "swagger-ui-react": "^4.1.3"
   }
 }
